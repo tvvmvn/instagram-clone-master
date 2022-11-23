@@ -79,7 +79,7 @@ function Details({username}) {
       <div className="mb-4 px-2">
         <div className="flex items-center flex-col">
           <img 
-            src={`${process.env.REACT_APP_HOSTNAME}/users/${profile.image || "avatar.jpeg"}`} 
+            src={`${process.env.REACT_APP_HOSTNAME}/data/users/${profile.image || "avatar.jpeg"}`} 
             className="w-36 h-36 object-cover rounded-full"
           />
           <h3 className="font-bold">{profile.username}</h3>

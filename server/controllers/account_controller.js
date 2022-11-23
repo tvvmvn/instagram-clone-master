@@ -38,6 +38,7 @@ exports.login = async (req, res, next) => {
 }
 
 exports.register = [
+  // validate user data
   async (req, res, next) => {
     try {
       const {username, email, password} = req.body;
@@ -72,8 +73,6 @@ exports.register = [
   async (req, res, next) => {
     try {
       const {username, email, password} = req.body;
-
-      // return console.log(req.body);
 
       const salt = crypto.randomBytes(16).toString("hex");
       const hashedPassword = crypto

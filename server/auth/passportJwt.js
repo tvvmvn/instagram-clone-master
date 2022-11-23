@@ -9,9 +9,7 @@ opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
 opts.secretOrKey = process.env.SECRET;
 
 passport.use(new JwtStrategy(opts, (jwt_payload, done) => {
-
   User.findOne({ username: jwt_payload.username }, function (err, user) {
-    
     if (err) {
       return done(err, false);
     } 
@@ -22,6 +20,5 @@ passport.use(new JwtStrategy(opts, (jwt_payload, done) => {
       // or you could create a new account
     }
   });
-
 }));
 

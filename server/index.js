@@ -3,7 +3,6 @@ const app = express();
 const port = process.env.PORT || 3000;
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
-const path = require("path");
 const indexRouter = require("./routes/index");
 require('dotenv').config();
 
@@ -11,7 +10,7 @@ require('dotenv').config();
 const mongoose = require("mongoose");
 const mongoDB = process.env.MONGODB_URI;
 mongoose.connect(mongoDB, {useNewUrlParser: true, useUnifiedTopology: true});
-// require("./seed");
+// const seed = require("./seed");
 
 // # MIDDLEWARE
 app.use(express.json());
@@ -20,6 +19,8 @@ app.use(cookieParser());
 app.use(cors());
 app.use(express.static("public"));
 app.use(express.static("data"));
+app.use('/static', express.static('public'));
+app.use('/data', express.static('data'));
 app.use('/', indexRouter);
 
 // # ERROR HANDLER

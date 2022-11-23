@@ -3,6 +3,7 @@ const router = express.Router();
 const passport = require("passport");
 const auth = passport.authenticate("jwt", { session: false });
 require("../auth/passportJwt");
+
 const auth_controller = require("../controllers/auth_controller");
 const account_controller = require("../controllers/account_controller");
 const article_controller = require("../controllers/article_controller");
@@ -10,23 +11,23 @@ const comment_controller = require("../controllers/comment_controller");
 const search_controller = require("../controllers/search_controller");
 const profile_controller = require("../controllers/profile_controller");
 
-// router handles 404 NotFound
-// auth handles 401 NotAuthorized
-// They do not use error handler
 
-// INDEX
+// # HTTP Request Methods
+// GET: read data
+// POST: create data
+// PUT: update data
+// DELETE: delete data
+
+// router.httpRequestMethod(endPoint, controllers)
 router.get('/', (req, res) => {
   res.json({ message: "hello express" })
 })
 
-router.get('/test', (req, res) => {
-  console.log(req.cookies)
-})
 
 // AUTH
 router.get('/user', auth, auth_controller.user)
 
-// ACCOUNTS 
+// ACCOUNTS T
 router.post('/accounts/login', account_controller.login)
 router.post('/accounts/register', account_controller.register)
 router.post('/accounts/edit', auth, account_controller.edit)
