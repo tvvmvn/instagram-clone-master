@@ -9,7 +9,7 @@ export default function Carousel({images}) {
     <div className="overflow-x-hidden relative">
       <ul className="flex transition" style={{transform: `translateX(-${index*100}%)`}}>
         {images.map(image => (
-          <li key={image} className="w-full h-80 shrink-0">
+          <li key={image} className="w-full h-96 shrink-0">
             <img
               src={`${process.env.REACT_APP_HOSTNAME}/articles/${image}`}
               className="w-full h-full object-cover"
@@ -40,11 +40,11 @@ export default function Carousel({images}) {
       </div>
 
       <ul className="absolute bottom-0 w-full py-2 flex justify-center gap-1 ">
-        {images.map((image, i) => (
+        {images.map((image, dot) => (
           <li 
-            key={i} 
+            key={dot} 
             className="w-2 h-2 rounded-full bg-white/[0.4]" 
-            style={{ backgroundColor: i === index && "#555" }}
+            style={{ backgroundColor: dot === index && "white" }}
           >
           </li>
         ))}

@@ -7,12 +7,12 @@ async function createUser(username, email, password = "123") {
   const hashedPassword = crypto.pbkdf2Sync(password, salt, 310000, 32, "sha256")
   .toString("hex")
   
-  const files = fs.readdirSync(`${__dirname}/seeds/profiles`)
+  const files = fs.readdirSync(`seeds/profiles`)
   const file = files.find(file => file.startsWith(username));
   const newFile = `${crypto.randomBytes(24).toString("hex")}.${file.split(".")[1]}`;
   
-  const oldPath = `${__dirname}/seeds/profiles/${file}`;
-  const newPath = `${__dirname}/data/users/${newFile}`;
+  const oldPath = `seeds/profiles/${file}`;
+  const newPath = `data/users/${newFile}`;
 
   fs.copyFileSync(oldPath, newPath);
 
@@ -22,7 +22,7 @@ async function createUser(username, email, password = "123") {
     password: hashedPassword,
     salt,
     bio: `I'm ${username}`,
-    photo: newFile
+    image: newFile
   })
   await user.save();
 
@@ -32,14 +32,14 @@ async function createUser(username, email, password = "123") {
 async function createArticle(username, postId) {
   const user = await User.findOne({username});
 
-  const files = fs.readdirSync(`${__dirname}/seeds/${username}/`);
+  const files = fs.readdirSync(`seeds/${username}/`);
   const fileList = files.filter(file => file.startsWith(username + postId));
 
   const newFiles = fileList.map(file => {
     const newFile = `${crypto.randomBytes(24).toString("hex")}.${file.split(".")[1]}`;
     
-    const oldPath = `${__dirname}/seeds/${username}/${file}`;
-    const newPath = `${__dirname}/data/articles/${newFile}`;
+    const oldPath = `seeds/${username}/${file}`;
+    const newPath = `data/articles/${newFile}`;
     fs.copyFileSync(oldPath, newPath);
 
     return newFile;
