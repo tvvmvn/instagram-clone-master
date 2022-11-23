@@ -1,0 +1,35 @@
+/* * {
+  box-sizing: border-box;
+}
+img {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  vertical-align: middle;
+}
+a {
+  color: #000;
+}
+label {
+  display: block;
+}
+input[type=text], input[type=password] {
+  padding: 0.25rem;
+  width: 100%;
+  outline: none;
+}
+textarea {
+  width: 100%;
+  outline: none;
+  padding: 0.25rem;
+}
+small {
+  color: #888;
+}
+
+.mb-2 {
+  margin-bottom: 0.5rem;
+}
+.hidden {
+  display: none;  
+} */

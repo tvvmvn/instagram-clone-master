@@ -1,0 +1,7 @@
+/* 
+Add the `@tailwind` directives for each of Tailwind's layer 
+to your `./src/index.css file.`
+*/
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
