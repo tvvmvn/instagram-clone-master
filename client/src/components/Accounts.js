@@ -100,6 +100,7 @@ function Image({user, uploadImage, deleteImage}) {
       <img 
         src={`${process.env.REACT_APP_HOSTNAME}/data/users/${user.image || "avatar.jpeg"}`} 
         className="w-24 h-24 object-cover rounded-full"
+        accept="image/*"
       />
       {user.image ? (
         <button 

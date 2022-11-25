@@ -77,7 +77,7 @@ export default function Login() {
         </button>
       </div>
       <div>
-        <Link to="/register">Create account</Link>
+        <Link to="/register" className="text-blue-500">Create account</Link>
       </div>
     </form>
   )

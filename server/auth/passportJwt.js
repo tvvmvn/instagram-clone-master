@@ -9,10 +9,12 @@ opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
 opts.secretOrKey = process.env.SECRET;
 
 passport.use(new JwtStrategy(opts, (jwt_payload, done) => {
+  // find user from JWT
   User.findOne({ username: jwt_payload.username }, function (err, user) {
     if (err) {
       return done(err, false);
     } 
+    
     if (user) {
       return done(null, user);
     } else {

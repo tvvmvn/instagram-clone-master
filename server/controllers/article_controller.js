@@ -40,10 +40,7 @@ exports.create = async (req, res, next) => {
         return next(err);
       }
 
-      const images = files.images instanceof Array ? 
-        files.images 
-        : 
-        new Array(files.images);
+      const images = files.images instanceof Array ? files.images : new Array(files.images);
 
       if (!images[0].originalFilename) {
         const err = new Error("Image must be specified");
@@ -54,12 +51,12 @@ exports.create = async (req, res, next) => {
       // validate image...
       
       const photos = images.map(photo => {
-        const oldpath = photo.filepath;
+        const oldPath = photo.filepath;
         const ext = photo.originalFilename.split(".")[1]
         const newName = photo.newFilename + "." + ext;
-        const newpath = "data/articles/" + newName;
+        const newPath = `${__dirname}/../data/articles/${newName}`;
 
-        fs.renameSync(oldpath, newpath);
+        fs.renameSync(oldPath, newPath);
 
         return newName;
       })

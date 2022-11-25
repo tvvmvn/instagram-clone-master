@@ -6,7 +6,7 @@
 
 # make directory social-media-app/server
 - make this folder node project with 'npm init' command
-- add devstart script for development enviroment
+- add start and devstart script for development enviroment
 
 # Setup
 - installing packages
@@ -14,22 +14,31 @@
 - create .env file to store envoriment variables
 - make directories and files 
 auth, models, controllers, routes, public, data, .env
+- install MongoDB, MongoDBCompass
+
+# Models
+- Database architecture
+- mongoose, ODM and ORM (query to DATABASE using Model);
+- Schema
+
+# Auth 
+- JWT(json web token)
+json formatted token
+server issue when login success 
+user send it with every single request.
+- create passport local strategy 
+Authorization using JWT
 
 # index.js 
 - explain package and middleware, error handler, etc.
 they are a bundle of codes for application
 
-# Models
-- create database Schema in model.js
+# Routes
+- create routers/index 
+- test api server with get('/') request using POSTMAN
 
 # POSTMAN download 
 - Software for testing API Server
-
-# Authentication 
-- create passport local strategy 
-
-# Routes
-- test api server with get('/') request using POSTMAN
 
 # Routes/Controller
 - Auth

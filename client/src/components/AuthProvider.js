@@ -17,6 +17,7 @@ export default function AuthProvider({children}) {
       setUser(data)
     })
     .catch(error => {
+      console.log(error)
       setError(error);
     })
     .finally(() => setIsLoaded(true));

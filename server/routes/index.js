@@ -11,7 +11,6 @@ const comment_controller = require("../controllers/comment_controller");
 const search_controller = require("../controllers/search_controller");
 const profile_controller = require("../controllers/profile_controller");
 
-
 // # HTTP Request Methods
 // GET: read data
 // POST: create data
@@ -23,11 +22,10 @@ router.get('/', (req, res) => {
   res.json({ message: "hello express" })
 })
 
-
 // AUTH
 router.get('/user', auth, auth_controller.user)
 
-// ACCOUNTS T
+// ACCOUNTS 
 router.post('/accounts/login', account_controller.login)
 router.post('/accounts/register', account_controller.register)
 router.post('/accounts/edit', auth, account_controller.edit)

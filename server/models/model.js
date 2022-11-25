@@ -11,16 +11,14 @@ const userSchema = new Schema({
 })
 
 const followSchema = new Schema({
-  follower: {type: String, ref: 'User'},
-  following: {type: String, ref: 'User'}
+  follower: {type: Schema.ObjectId, ref: 'User'},
+  following: {type: Schema.ObjectId, ref: 'User'}
 })
 
 const articleSchema = new Schema({
   description: {type: String},
   photos: [{type: String}],
   created: {type: Date, default: Date.now},
-  updated: {type: Date, default: Date.now},
-  tagList: [{type: String}],
   user: {type: Schema.ObjectId, ref: 'User'},
   favoriteCount: {type: Number, default: 0}
 })

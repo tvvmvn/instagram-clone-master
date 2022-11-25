@@ -1,23 +1,28 @@
 # SERVER
 
+# MERN Stack
+M(MongoDB): Database
+E(Express): Server Framework
+R(React): Client Framework
+N(Node.js): Server development programming language
 
-# Directory
- index.js
+# Directories and files
+- index.js
 Entry point to application
 - package.json
 Information of application
 - .env
 Store enviroment variables used for all of application
-- routes
+- routes/
 Routes end point(sent url from user) to controllers
-- controllers
+- controllers/
 Backend logic 
 e.g) hadling data from client, sent query to DATABASE
-- models
+- models/
 define database structrue
-- auth
+- auth/
 Authentication & Authorization
-- data
+- data/
 Store uploaded files from users
 e.g) profile image, users's post image
 
