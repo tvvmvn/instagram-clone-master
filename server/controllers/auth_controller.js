@@ -1,6 +1,6 @@
 exports.user = async (req, res, next) => {
   try {
-    // a user found by JWT
+    // send login user date to client
     res.json(req.user);
   } catch (error) {
     next(error)

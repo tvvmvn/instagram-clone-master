@@ -7,14 +7,18 @@ exports.feed = async (req, res, next) => {
     const loginUser = req.user;
     const follows = await Follow.find({ follower: loginUser._id });
 
+    const users = [...follows.map(follow => follow.following), loginUser._id]
+    
+    // get articles from login user's following user and user self.
     const articles = await Article
-      .find({ user: [...follows.map(follow => follow.following), loginUser._id]})
+      .find({ user: {$in: users}})
       .sort([["created", "descending"]])
       .populate("user")
       .skip(req.query.skip)
       .limit(req.query.limit)
       .lean();
 
+    // add isFavorite property to article
     for (let article of articles) {
       const favorite = await Favorite
         .findOne({ user: loginUser._id, article: article._id });
@@ -42,6 +46,7 @@ exports.create = async (req, res, next) => {
 
       const images = files.images instanceof Array ? files.images : new Array(files.images);
 
+      // when no image is uploaded.
       if (!images[0].originalFilename) {
         const err = new Error("Image must be specified");
         err.status = 400;
@@ -54,6 +59,7 @@ exports.create = async (req, res, next) => {
         const oldPath = photo.filepath;
         const ext = photo.originalFilename.split(".")[1]
         const newName = photo.newFilename + "." + ext;
+        // save images into data directory
         const newPath = `${__dirname}/../data/articles/${newName}`;
 
         fs.renameSync(oldPath, newPath);
@@ -61,6 +67,7 @@ exports.create = async (req, res, next) => {
         return newName;
       })
           
+      // save new article data
       const article = new Article({
         description: fields.description,
         photos,
@@ -82,6 +89,7 @@ exports.article_list = async (req, res, next) => {
     console.log(req.cookies);
     console.log(req.headers);
 
+    // get all articles from collection
     const articles = await Article.find()
       .sort([["created", "descending"]])
       .populate("user")
@@ -104,6 +112,7 @@ exports.article = async (req, res, next) => {
       .populate("user")
       .lean();
     
+    // when article does not exist.
     if (!article) {
       const err = new Error("Article not found");
       err.status = 404;
@@ -128,6 +137,7 @@ exports.delete = async (req, res, next) => {
     const article = await Article
       .findById(id);
 
+    // when article does not exist.
     if (!article) {
       const err = new Error("Article not found")
       err.status = 404;
@@ -151,21 +161,22 @@ exports.favorite = async (req, res, next) => {
     const favorite = await Favorite
       .findOne({ user: loginUser._id, article: article._id })
 
+    // when user's already favorite article
     if (favorite) {
       const err = new Error("Already favorite article");
       err.status = 400;
       return next(err)
     }
 
+    // save new favorite data
     const newFavorite = new Favorite({
       user: loginUser._id,
       article: article._id
     })
-
     await newFavorite.save();
 
+    // increment favorite count of an article
     article.favoriteCount++;
-
     await article.save();
 
     res.end();
@@ -183,6 +194,7 @@ exports.unfavorite = async (req, res, next) => {
     const favorite = await Favorite
       .findOne({ user: loginUser._id, article: article._id })
 
+    // when article is already unfavorite one.
     if (!favorite) {
       const err = new Error("No article to unfavorite");
       err.status = 400;
@@ -191,6 +203,7 @@ exports.unfavorite = async (req, res, next) => {
 
     await favorite.delete();
 
+    // decrement favorite count of article.
     article.favoriteCount--;
     await article.save();
 

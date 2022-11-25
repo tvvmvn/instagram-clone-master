@@ -10,7 +10,7 @@ exports.register = [
     try {
       const {username, email, password} = req.body;
 
-      {
+      { // validate username 
         const user = await User.findOne({username});
         
         if (user) {
@@ -20,7 +20,7 @@ exports.register = [
         }
       }
 
-      {
+      { // validate email
         const user = await User.findOne({email});
         
         if (user) {
@@ -38,11 +38,12 @@ exports.register = [
   },
 
   async (req, res, next) => {
-    // process to save user in DB
+    // save user in DB
     try {
       const {username, email, password} = req.body;
 
       const salt = crypto.randomBytes(16).toString("hex");
+      // encrypt password
       const hashedPassword = crypto
         .pbkdf2Sync(password, salt, 310000, 32, "sha256")
         .toString("hex")
@@ -67,10 +68,9 @@ exports.login = async (req, res, next) => {
   try {
     const {email, password} = req.body;
 
-    console.log(req.user);
-
     const user = await User.findOne({email});
 
+    // when user not found
     if (!user) {
       const err = new Error("User not found");
       err.status = 401;
@@ -81,12 +81,14 @@ exports.login = async (req, res, next) => {
       .pbkdf2Sync(password, user.salt, 310000, 32, "sha256")
       .toString("hex")
     
+    // when assword not match
     if (user.password !== hashedPassword) {
       const err = new Error("Password not match");
       err.status = 401;
       return next(err);
     }
 
+    // issue token 
     const token = jwt.sign({ username: user.username }, process.env.SECRET);
 
     res.json({ user, token })
@@ -112,10 +114,12 @@ exports.upload_image = async (req, res, next) => {
       const oldPath = image.filepath;
       const ext = image.originalFilename.split(".")[1];
       const newName = image.newFilename + "." + ext;
+      // save profile image in data directory
       const newPath = `${__dirname}/../data/users/${newName}`;
 
       fs.renameSync(oldPath, newPath);
 
+      // save profile image into db
       user.image = newName;
       await user.save();
       
@@ -132,6 +136,7 @@ exports.delete_image = async (req, res, next) => {
     const loginUser = req.user;
     const user = await User.findById(loginUser._id);
 
+    // update profile image to null
     user.image = null;
     await user.save();
 
@@ -148,6 +153,7 @@ exports.edit = async (req, res, next) => {
     const user = await User.findById(loginUser._id);
     const bio = req.body.bio;
   
+    // update bio
     user.bio = bio;
     await user.save();
   

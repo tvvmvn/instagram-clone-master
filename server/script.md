@@ -26,8 +26,8 @@ auth, models, controllers, routes, public, data, .env
 json formatted token
 server issue when login success 
 user send it with every single request.
-- create passport local strategy 
-Authorization using JWT
+- Make authorization and authentication with passport
+passportJwt
 
 # index.js 
 - explain package and middleware, error handler, etc.
