@@ -5,11 +5,11 @@ const fs = require("fs");
 exports.feed = async (req, res, next) => {
   try {
     const loginUser = req.user;
-    const follows = await Follow.find({ follower: loginUser._id });
-
-    const users = [...follows.map(follow => follow.following), loginUser._id]
     
-    // get articles from login user's following user and user self.
+    // get articles from users followed by user and login user.
+    const follows = await Follow.find({ follower: loginUser._id });
+    const users = [...follows.map(follow => follow.following), loginUser._id];
+
     const articles = await Article
       .find({ user: {$in: users}})
       .sort([["created", "descending"]])
@@ -18,7 +18,7 @@ exports.feed = async (req, res, next) => {
       .limit(req.query.limit)
       .lean();
 
-    // add isFavorite property to article
+    // add property 'isFavorite' to article data
     for (let article of articles) {
       const favorite = await Favorite
         .findOne({ user: loginUser._id, article: article._id });
@@ -28,6 +28,53 @@ exports.feed = async (req, res, next) => {
 
     res.json(articles)
 
+  } catch (error) {
+    next(error)
+  }
+}
+
+exports.article_list = async (req, res, next) => {
+  try {
+    // get all articles from collection
+    const articles = await Article.find()
+      .sort([["created", "descending"]])
+      .populate("user")
+      .skip(req.query.skip)
+      .limit(req.query.limit);
+
+      res.json(articles);
+
+  } catch (error) {
+    next(error)
+  }
+}
+
+exports.article = async (req, res, next) => {
+  try {   
+    const loginUser = req.user;
+
+    // get id from req.params (request url)
+    const id = req.params.id;
+    const article = await Article
+      .findById(id)
+      .populate("user")
+      .lean();
+    
+    // when article does not exist.
+    if (!article) {
+      const err = new Error("Article not found");
+      err.status = 404;
+      return next(err);
+    }
+
+    // add property 'isFavorite' to article data
+    // isFavorite: show user's favorite article or not
+    const favorite = await Favorite
+      .findOne({ user: loginUser._id, article: article._id }); 
+    article.isFavorite = !!favorite;
+
+    res.json(article);
+ 
   } catch (error) {
     next(error)
   }
@@ -48,87 +95,39 @@ exports.create = async (req, res, next) => {
 
       // when no image is uploaded.
       if (!images[0].originalFilename) {
-        const err = new Error("Image must be specified");
+        const err = new Error("image must be specified");
         err.status = 400;
         return next(err);
       }
 
       // validate image...
+      // size, type, ...
       
+      // save images from client to data directory
       const photos = images.map(photo => {
         const oldPath = photo.filepath;
         const ext = photo.originalFilename.split(".")[1]
         const newName = photo.newFilename + "." + ext;
-        // save images into data directory
         const newPath = `${__dirname}/../data/articles/${newName}`;
-
         fs.renameSync(oldPath, newPath);
 
         return newName;
       })
           
-      // save new article data
+      // save new article
       const article = new Article({
         description: fields.description,
         photos,
         user: loginUser._id
       })
-
       await article.save();
 
-      res.json(photos)
+      res.json(article);
 
     } catch (error) {
       next(error)
     }
   });
-}
-
-exports.article_list = async (req, res, next) => {
-  try {
-    console.log(req.cookies);
-    console.log(req.headers);
-
-    // get all articles from collection
-    const articles = await Article.find()
-      .sort([["created", "descending"]])
-      .populate("user")
-      .skip(req.query.skip)
-      .limit(req.query.limit);
-
-      res.json(articles);
-
-  } catch (error) {
-    next(error)
-  }
-}
-
-exports.article = async (req, res, next) => {
-  try {   
-    const loginUser = req.user;
-    const id = req.params.id;
-    const article = await Article
-      .findById(id)
-      .populate("user")
-      .lean();
-    
-    // when article does not exist.
-    if (!article) {
-      const err = new Error("Article not found");
-      err.status = 404;
-      return next(err);
-    }
-
-    const favorite = await Favorite
-      .findOne({ user: loginUser._id, article: article._id })      
-    
-    article.isFavorite = !!favorite;
-
-    res.json(article);
- 
-  } catch (error) {
-    next(error)
-  }
 }
 
 exports.delete = async (req, res, next) => {
@@ -157,11 +156,13 @@ exports.favorite = async (req, res, next) => {
   try { 
     const loginUser = req.user;
     const id = req.params.id;
-    const article = await Article.findById(id)
+
+    const article = await Article.findById(id);
+    
+    // already favorite article
     const favorite = await Favorite
       .findOne({ user: loginUser._id, article: article._id })
 
-    // when user's already favorite article
     if (favorite) {
       const err = new Error("Already favorite article");
       err.status = 400;
@@ -179,6 +180,7 @@ exports.favorite = async (req, res, next) => {
     article.favoriteCount++;
     await article.save();
 
+    // response end (status code: 200 OK)
     res.end();
 
   } catch (error) {
@@ -190,20 +192,23 @@ exports.unfavorite = async (req, res, next) => {
   try {
     const loginUser = req.user;
     const id = req.params.id
+    
     const article = await Article.findById(id)
+    
+    // when unfavorite article
     const favorite = await Favorite
-      .findOne({ user: loginUser._id, article: article._id })
+      .findOne({ user: loginUser._id, article: article._id });
 
-    // when article is already unfavorite one.
     if (!favorite) {
       const err = new Error("No article to unfavorite");
       err.status = 400;
       return next(err);
     }
 
+    // delete favorite data
     await favorite.delete();
 
-    // decrement favorite count of article.
+    // decrement favorite count of an article.
     article.favoriteCount--;
     await article.save();
 

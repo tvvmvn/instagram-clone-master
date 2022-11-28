@@ -8,10 +8,11 @@ const indexRouter = require("./routes/index");
 require('dotenv').config();
 
 // # DATABASE connection
-const mongoose = require("mongoose");
-const mongoDB = process.env.MONGODB_URI;
-mongoose.connect(mongoDB, {useNewUrlParser: true, useUnifiedTopology: true});
-// const seed = require("./seed");
+async function main() {
+  const mongoose = require("mongoose");
+  await mongoose.connect(process.env.MONGODB_URI);
+}
+main().catch(err => console.log(err));
 
 // # execute MIDDLEWARE(Codes for application)
 app.use(express.json());

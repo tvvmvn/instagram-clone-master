@@ -17,6 +17,7 @@ const profile_controller = require("../controllers/profile_controller");
 // PUT: update data
 // DELETE: delete data
 
+// # Router
 // router.httpRequestMethod(endPoint, controllers)
 router.get('/', (req, res) => {
   res.json({ message: "hello express" })
@@ -34,9 +35,9 @@ router.delete('/accounts/edit/image', auth, account_controller.delete_image)
 
 // ARTICLES 
 router.get('/feed', auth, article_controller.feed)
-router.post('/articles', auth, article_controller.create)
 router.get('/articles', auth, article_controller.article_list)
 router.get('/articles/:id', auth, article_controller.article)
+router.post('/articles', auth, article_controller.create)
 router.delete('/articles/:id', auth, article_controller.delete)
 router.post('/articles/:id/favorite', auth, article_controller.favorite)
 router.delete('/articles/:id/favorite', auth, article_controller.unfavorite)
