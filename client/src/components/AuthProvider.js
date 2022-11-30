@@ -12,7 +12,7 @@ export default function AuthProvider({children}) {
       return setIsLoaded(true);
     }
 
-    fetchData(`${process.env.REACT_APP_HOSTNAME}/user`)
+    fetchData(`${process.env.REACT_APP_SERVER}/user`)
     .then(data => {
       setUser(data)
     })

@@ -23,7 +23,7 @@ function Details({username}) {
   useEffect(() => {
     setIsLoaded(false);
 
-    fetchData(`${process.env.REACT_APP_HOSTNAME}/profiles/${username}`)
+    fetchData(`${process.env.REACT_APP_SERVER}/profiles/${username}`)
     .then(data => {
       setProfile(data);
     })
@@ -34,7 +34,7 @@ function Details({username}) {
   }, [username])
 
   function follow() {
-    fetch(`${process.env.REACT_APP_HOSTNAME}/profiles/${profile.username}/follow`, {
+    fetch(`${process.env.REACT_APP_SERVER}/profiles/${profile.username}/follow`, {
       method: 'POST',
       headers: { 'Authorization': `Bearer ${localStorage.getItem("token")}` }
     })
@@ -51,7 +51,7 @@ function Details({username}) {
   } 
 
   function unfollow() {
-    fetch(`${process.env.REACT_APP_HOSTNAME}/profiles/${profile.username}/follow`, {
+    fetch(`${process.env.REACT_APP_SERVER}/profiles/${profile.username}/follow`, {
       method: 'DELETE',
       headers: { 'Authorization': `Bearer ${localStorage.getItem("token")}` }
     })
@@ -79,7 +79,7 @@ function Details({username}) {
       <div className="mb-4 px-2">
         <div className="flex items-center flex-col">
           <img 
-            src={`${process.env.REACT_APP_HOSTNAME}/data/users/${profile.image || "avatar.jpeg"}`} 
+            src={`${process.env.REACT_APP_SERVER}/data/users/${profile.image || "avatar.jpeg"}`} 
             className="w-36 h-36 object-cover rounded-full"
           />
           <h3 className="font-bold">{profile.username}</h3>
@@ -136,7 +136,7 @@ function Timeline({username}) {
   useEffect(() => {
     setIsLoaded(false);
 
-    fetchData(`${process.env.REACT_APP_HOSTNAME}/profiles/${username}/articles`)
+    fetchData(`${process.env.REACT_APP_SERVER}/profiles/${username}/articles`)
     .then(data => {
       setArticles(data)
     })
@@ -150,7 +150,7 @@ function Timeline({username}) {
     <li key={article._id} className="h-40">
       <Link key={article._id} to={`/article/${article._id}`}>
         <img
-          src={`${process.env.REACT_APP_HOSTNAME}/articles/${article.photos[0]}`}
+          src={`${process.env.REACT_APP_SERVER}/data/articles/${article.photos[0]}`}
           className="w-full h-full object-cover"
         />
       </Link>

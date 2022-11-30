@@ -12,7 +12,7 @@ export default function ArticleCreate() {
 
     const formData = new FormData(e.target);
 
-    fetch(`${process.env.REACT_APP_HOSTNAME}/articles`, {
+    fetch(`${process.env.REACT_APP_SERVER}/articles`, {
       method: "POST",
       headers: { 
         "Authorization": `Bearer ${localStorage.getItem("token")}`

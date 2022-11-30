@@ -1,3 +1,13 @@
+// argument vector
+const userArgs = process.argv.slice(2);
+
+if (!userArgs[0].startsWith('mongodb')) {
+  console.log('Error: You need to specify a valid mongodb URL as the first argument');
+  return;
+}
+
+const mongoose = require("mongoose");
+const mongoDB = userArgs[0];
 const {User, Article, Follow} = require("./models/model");
 const crypto = require("crypto")
 const fs = require("fs");
@@ -7,12 +17,12 @@ async function createUser(username, email, password = "123") {
   const hashedPassword = crypto.pbkdf2Sync(password, salt, 310000, 32, "sha256")
   .toString("hex")
   
-  const files = fs.readdirSync(`seeds/profiles`)
+  const files = fs.readdirSync(`./seeds/profiles`);
   const file = files.find(file => file.startsWith(username));
   const newFile = `${crypto.randomBytes(24).toString("hex")}.${file.split(".")[1]}`;
   
-  const oldPath = `seeds/profiles/${file}`;
-  const newPath = `data/users/${newFile}`;
+  const oldPath = `./seeds/profiles/${file}`;
+  const newPath = `./data/users/${newFile}`;
 
   fs.copyFileSync(oldPath, newPath);
 
@@ -26,20 +36,20 @@ async function createUser(username, email, password = "123") {
   })
   await user.save();
 
-  return 0;
+  return console.log(user);
 }
 
 async function createArticle(username, postId) {
   const user = await User.findOne({username});
 
-  const files = fs.readdirSync(`seeds/${username}/`);
+  const files = fs.readdirSync(`./seeds/${username}/`);
   const fileList = files.filter(file => file.startsWith(username + postId));
 
   const newFiles = fileList.map(file => {
     const newFile = `${crypto.randomBytes(24).toString("hex")}.${file.split(".")[1]}`;
     
-    const oldPath = `seeds/${username}/${file}`;
-    const newPath = `data/articles/${newFile}`;
+    const oldPath = `./seeds/${username}/${file}`;
+    const newPath = `./data/articles/${newFile}`;
     fs.copyFileSync(oldPath, newPath);
 
     return newFile;
@@ -53,10 +63,10 @@ async function createArticle(username, postId) {
   })
   await article.save();
 
-  return 0;
+  return console.log(article);
 }
 
-async function createFollowing(follower, following) {
+async function createFollow(follower, following) {
   const _follower = await User.findOne({username: follower});
   const _following = await User.findOne({username: following});
 
@@ -67,11 +77,13 @@ async function createFollowing(follower, following) {
 
   await follow.save();
 
-  return 0;
+  return console.log(follow);
 }
 
-async function plantSeeds() {
+async function createData() {
   try {
+    await mongoose.connect(mongoDB);
+
     await createUser("bunny", "bunny@example.com");
     await createUser("cat", "cat@example.com");
     await createUser("bird", "bird@example.com");
@@ -82,10 +94,10 @@ async function plantSeeds() {
     await createUser("quokka", "quokka@example.com");
     await createUser("monkey", "monkey@example.com");
   
-    await createFollowing("pug", "bunny");
-    await createFollowing("bunny", "cat");
-    await createFollowing("bunny", "quokka");
-    await createFollowing("bunny", "dog");
+    await createFollow("pug", "bunny");
+    await createFollow("bunny", "cat");
+    await createFollow("bunny", "quokka");
+    await createFollow("bunny", "dog");
 
     await createArticle("bunny", "1")
     await createArticle("bunny", "2")
@@ -117,13 +129,13 @@ async function plantSeeds() {
 
     await createArticle("monkey", "1")
     await createArticle("monkey", "2")
-    await createArticle("monkey", "3")
-  
-    console.log(".");
+    await createArticle("monkey", "3");
+
+    mongoose.connection.close();
 
   } catch (error) {
-    console.error(error)
+    console.error(error);
   }
 }
 
-// plantSeeds();
+createData();

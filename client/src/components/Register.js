@@ -24,7 +24,7 @@ export default function Register() {
 
     const formData = {username, email, password};
 
-    fetch(`${process.env.REACT_APP_HOSTNAME}/accounts/register`, {
+    fetch(`${process.env.REACT_APP_SERVER}/accounts/register`, {
       method: "POST",
       headers: {"Content-Type": "application/json"},
       body: JSON.stringify(formData)

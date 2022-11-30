@@ -12,7 +12,7 @@ export default function Comments() {
   const [comments, setComments] = useState([]);
 
   useEffect(() => {
-    fetchData(`${process.env.REACT_APP_HOSTNAME}/articles/${articleId}/comments`)
+    fetchData(`${process.env.REACT_APP_SERVER}/articles/${articleId}/comments`)
     .then(data => {
       setComments(data)
     })
@@ -25,7 +25,7 @@ export default function Comments() {
   function createComment(text, setText) {
     const formData = JSON.stringify({ content: text });
 
-    fetch(`${process.env.REACT_APP_HOSTNAME}/articles/${articleId}/comments`, {
+    fetch(`${process.env.REACT_APP_SERVER}/articles/${articleId}/comments`, {
       method: "POST",
       headers: { 
         "Authorization": `Bearer ${localStorage.getItem("token")}`,
@@ -49,7 +49,7 @@ export default function Comments() {
   }
 
   function deleteComment(commentId) {
-    fetch(`${process.env.REACT_APP_HOSTNAME}/comments/${commentId}`, {
+    fetch(`${process.env.REACT_APP_SERVER}/comments/${commentId}`, {
       method: "DELETE",
       headers: { "Authorization": `Bearer ${localStorage.getItem("token")}` },
     })
@@ -66,7 +66,7 @@ export default function Comments() {
   }
 
   function unfavorite(commentId) {
-    fetch(`${process.env.REACT_APP_HOSTNAME}/comments/${commentId}/favorite`, {
+    fetch(`${process.env.REACT_APP_SERVER}/comments/${commentId}/favorite`, {
       method: 'DELETE',
       headers: { 'Authorization': `Bearer ${localStorage.getItem("token")}` }
     })
@@ -88,7 +88,7 @@ export default function Comments() {
   }
 
   function favorite(commentId) {
-    fetch(`${process.env.REACT_APP_HOSTNAME}/comments/${commentId}/favorite`, {
+    fetch(`${process.env.REACT_APP_SERVER}/comments/${commentId}/favorite`, {
       method: 'POST',
       headers: { 'Authorization': `Bearer ${localStorage.getItem("token")}` }
     })

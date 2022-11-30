@@ -16,7 +16,7 @@ export default function ArticleList() {
 
     console.log(process.env)
 
-    fetchData(`${process.env.REACT_APP_HOSTNAME}/articles/?limit=${limit}&skip=${skip}`)
+    fetchData(`${process.env.REACT_APP_SERVER}/articles/?limit=${limit}&skip=${skip}`)
     .then(data => {
       setArticles([...articles, ...data])
     })
@@ -41,7 +41,7 @@ export default function ArticleList() {
           <li key={article._id} className="h-40">
             <Link to={`/article/${article._id}`}>
               <img
-                src={`${process.env.REACT_APP_HOSTNAME}/articles/${article.photos[0]}`}
+                src={`${process.env.REACT_APP_SERVER}/data/articles/${article.photos[0]}`}
                 className="w-full h-full object-cover"
               />
             </Link>

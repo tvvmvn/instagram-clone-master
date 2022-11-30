@@ -14,7 +14,7 @@ export default function Search() {
       return setUsers([])
     }
 
-    fetchData(`${process.env.REACT_APP_HOSTNAME}/search/?username=${username}`)
+    fetchData(`${process.env.REACT_APP_SERVER}/search/?username=${username}`)
     .then(data => {
       setUsers(data)
     })

@@ -11,7 +11,7 @@ export default function AccountsTemplate() {
     const formData = new FormData();
     formData.append("image", files[0]);
 
-    fetch(`${process.env.REACT_APP_HOSTNAME}/accounts/edit/image`, {
+    fetch(`${process.env.REACT_APP_SERVER}/accounts/edit/image`, {
       method: "POST",
       headers: { "Authorization": `Bearer ${localStorage.getItem("token")}` },
       body: formData
@@ -33,7 +33,7 @@ export default function AccountsTemplate() {
   }
 
   function deleteImage() {
-    fetch(`${process.env.REACT_APP_HOSTNAME}/accounts/edit/image`, {
+    fetch(`${process.env.REACT_APP_SERVER}/accounts/edit/image`, {
       method: "DELETE",
       headers: { "Authorization": `Bearer ${localStorage.getItem("token")}` }
     })
@@ -52,7 +52,7 @@ export default function AccountsTemplate() {
   function editBio(bio, setBio) {
     const formData = {bio};
 
-    fetch(`${process.env.REACT_APP_HOSTNAME}/accounts/edit`, {
+    fetch(`${process.env.REACT_APP_SERVER}/accounts/edit`, {
       method: "POST",
       headers: { 
         "Authorization": `Bearer ${localStorage.getItem("token")}`,
@@ -98,7 +98,7 @@ function Image({user, uploadImage, deleteImage}) {
   return (
     <div className="mb-4">
       <img 
-        src={`${process.env.REACT_APP_HOSTNAME}/data/users/${user.image || "avatar.jpeg"}`} 
+        src={`${process.env.REACT_APP_SERVER}/data/users/${user.image || "avatar.jpeg"}`} 
         className="w-24 h-24 object-cover rounded-full"
         accept="image/*"
       />

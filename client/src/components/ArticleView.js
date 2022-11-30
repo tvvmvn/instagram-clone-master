@@ -11,7 +11,7 @@ export default function ArticleView() {
   const navigate = useNavigate()
 
   useEffect(() => {
-    fetchData(`${process.env.REACT_APP_HOSTNAME}/articles/${articleId}`)
+    fetchData(`${process.env.REACT_APP_SERVER}/articles/${articleId}`)
     .then(data => {
       setArticle(data);
     })
@@ -22,7 +22,7 @@ export default function ArticleView() {
   }, [])
 
   function favorite(articleId) {
-    fetch(`${process.env.REACT_APP_HOSTNAME}/articles/${articleId}/favorite`, {
+    fetch(`${process.env.REACT_APP_SERVER}/articles/${articleId}/favorite`, {
       method: 'POST',
       headers: { 'Authorization': `Bearer ${localStorage.getItem("token")}` }
     })
@@ -39,7 +39,7 @@ export default function ArticleView() {
   }
 
   function unfavorite(articleId) {
-    fetch(`${process.env.REACT_APP_HOSTNAME}/articles/${articleId}/favorite`, {
+    fetch(`${process.env.REACT_APP_SERVER}/articles/${articleId}/favorite`, {
       method: 'DELETE',
       headers: { 'Authorization': `Bearer ${localStorage.getItem("token")}` },
     })
@@ -56,9 +56,7 @@ export default function ArticleView() {
   }
 
   function deleteArticle(articleId) { 
-    return console.log(articleId);
-
-    fetch(`${process.env.REACT_APP_HOSTNAME}/articles/${articleId}`, {
+    fetch(`${process.env.REACT_APP_SERVER}/articles/${articleId}`, {
       method: 'DELETE',
       headers: { 'Authorization': `Bearer ${localStorage.getItem("token")}` }
     })

@@ -14,7 +14,7 @@ export default function Feed() {
     setIsLoaded(false);
     setError(null);
 
-    fetchData(`${process.env.REACT_APP_HOSTNAME}/feed/?limit=${limit}&skip=${skip}`)
+    fetchData(`${process.env.REACT_APP_SERVER}/feed/?limit=${limit}&skip=${skip}`)
     .then(data => {
       setArticles([...articles, ...data])
     })
@@ -25,7 +25,7 @@ export default function Feed() {
   }, [skip])
 
   function unfavorite(articleId) {
-    fetch(`${process.env.REACT_APP_HOSTNAME}/articles/${articleId}/favorite`, {
+    fetch(`${process.env.REACT_APP_SERVER}/articles/${articleId}/favorite`, {
       method: 'DELETE',
       headers: { 'Authorization': `Bearer ${localStorage.getItem("token")}` }
     })
@@ -47,7 +47,7 @@ export default function Feed() {
   }
 
   function favorite(articleId) {
-    fetch(`${process.env.REACT_APP_HOSTNAME}/articles/${articleId}/favorite`, {
+    fetch(`${process.env.REACT_APP_SERVER}/articles/${articleId}/favorite`, {
       method: 'POST',
       headers: { 'Authorization': `Bearer ${localStorage.getItem("token")}` }
     })
@@ -69,9 +69,7 @@ export default function Feed() {
   }
 
   function deleteArticle(articleId) {
-    return console.log(articleId);
-
-    fetch(`${process.env.REACT_APP_HOSTNAME}/articles/${articleId}`, {
+    fetch(`${process.env.REACT_APP_SERVER}/articles/${articleId}`, {
       method: 'DELETE',
       headers: { 'Authorization': `Bearer ${localStorage.getItem("token")}` }
     })
