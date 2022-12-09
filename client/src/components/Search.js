@@ -1,7 +1,7 @@
 import {useState, useEffect, useRef} from "react";
 import {Link} from "react-router-dom";
 import Avatar from "./Avatar";
-import fetchData from "./fetchData";
+import fetchData from "../utils/fetchData";
 
 export default function Search() {
   const [users, setUsers] = useState([]);

@@ -1,5 +1,4 @@
 import {BrowserRouter as Router, Routes, Route} from "react-router-dom";
-import './App.css';
 import AuthProvider from './components/AuthProvider';
 import AuthRequired from "./components/AuthRequired";
 import Layout from "./components/Layout";
@@ -20,6 +19,7 @@ function App() {
     <Router>
       <AuthProvider>
         <Routes>
+          {/* routes that auth is required */}
           <Route path="/" element={
             <AuthRequired>
               <Layout />
@@ -37,6 +37,7 @@ function App() {
             <Route path="accounts/edit" element={<Accounts />} />
           </Route>
 
+          {/* routes that auth is not required */}
           <Route path="login" element={<Login />} />
           <Route path="register" element={<Register />} />
           <Route path="*" element={<NotFound />} />

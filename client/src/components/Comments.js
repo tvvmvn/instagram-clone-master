@@ -3,7 +3,7 @@ import {Link, useParams} from "react-router-dom";
 import AuthContext from "./AuthContext";
 import Modal from "./Modal";
 import Avatar from "./Avatar";
-import fetchData from "./fetchData";
+import fetchData from "../utils/fetchData";
 
 export default function Comments() {
   const {articleId} = useParams();

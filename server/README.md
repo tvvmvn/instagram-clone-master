@@ -1,11 +1,3 @@
-# SERVER
-
-# MERN Stack
-M(MongoDB): Database
-E(Express): Server Framework
-R(React): Client Framework
-N(Node.js): Server development programming language
-
 # Directories and files
 - index.js
 Entry point to application

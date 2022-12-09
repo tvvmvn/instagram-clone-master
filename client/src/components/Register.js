@@ -12,7 +12,7 @@ export default function Register() {
   function handleSubmit(e) {
     e.preventDefault();
 
-    if (password.length < 5) {
+    if (password.length < 3) {
       alert("Not safe password");
       return;
     }
@@ -37,7 +37,6 @@ export default function Register() {
     })
     .then(data => {
       navigate('/login');
-      console.log(data);
     })
     .catch(error => {
       if (error.status===400) {

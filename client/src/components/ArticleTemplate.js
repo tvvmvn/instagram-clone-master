@@ -44,8 +44,8 @@ export default function ArticleTemplate({article, favorite, unfavorite, deleteAr
 
       <div className="px-2">
         <div className="flex">
-          <button type="button" className={article.isFavorite && 'text-red-400'} onClick={toggleFavorite}>
-            Favorite
+          <button type="button" onClick={toggleFavorite}>
+            {article.isFavorite ? 'Unfavorite' : 'Favorite'}
           </button>
           <div className="ml-1">{article.favoriteCount} likes</div>
         </div>

@@ -1,7 +1,7 @@
 import {useState, useEffect, useContext} from "react";
 import {useParams, Link} from "react-router-dom";
 import AuthContext from "./AuthContext";
-import fetchData from "./fetchData";
+import fetchData from "../utils/fetchData";
 
 export default function Profile() {
   const {username} = useParams();

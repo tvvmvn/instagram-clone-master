@@ -1,7 +1,7 @@
 import {useState, useEffect} from "react";
 import {useParams, useNavigate} from "react-router-dom";
 import ArticleTemplate from "./ArticleTemplate";
-import fetchData from "./fetchData";
+import fetchData from "../utils/fetchData";
 
 export default function ArticleView() {
   const {articleId} = useParams();
@@ -16,6 +16,7 @@ export default function ArticleView() {
       setArticle(data);
     })
     .catch(error => {
+      console.log(error)
       setError(error)
     })
     .finally(() => setIsLoaded(true))

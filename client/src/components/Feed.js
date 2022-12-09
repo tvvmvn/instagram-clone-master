@@ -1,6 +1,6 @@
 import {useState, useEffect, Suspense} from "react"
 import ArticleTemplate from "./ArticleTemplate";
-import fetchData from "./fetchData";
+import fetchData from "../utils/fetchData";
 
 const limit = 5;
 

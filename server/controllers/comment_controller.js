@@ -77,7 +77,7 @@ exports.favorite = async (req, res, next) => {
     .findOne({ user: loginUser._id, comment: comment._id });
 
     if (favoriteComment) {
-      const err = new Error("Something's broken");
+      const err = new Error("Already favorite article");
       err.status = 400;
       return next(err)
     }
@@ -109,7 +109,7 @@ exports.unfavorite = async (req, res, next) => {
       .findOne({user: loginUser._id, comment: comment._id});
 
     if (!favoriteComment) {
-      const err = new Error("Something's broken");
+      const err = new Error("No comment to unfavorite");
       err.status = 400;
       return next(err)
     }

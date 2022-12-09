@@ -7,6 +7,7 @@ export default function Layout() {
 
   return (
     <div className="max-w-md mx-auto pt-16">
+      {/* Navigation */}
       <nav className="fixed top-0 left-0 w-full border-b z-10 bg-white/80">
         <ul className="flex">
           <li>
@@ -24,6 +25,7 @@ export default function Layout() {
         </ul>
       </nav>
 
+      {/* Children route  */}
       <Outlet />
     </div>
   )

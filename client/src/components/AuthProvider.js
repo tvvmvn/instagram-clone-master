@@ -1,6 +1,6 @@
 import {useEffect, useState} from "react";
 import AuthContext from "./AuthContext";
-import fetchData from "./fetchData";
+import fetchData from "../utils/fetchData";
 
 export default function AuthProvider({children}) {
   const [error, setError] = useState(null);

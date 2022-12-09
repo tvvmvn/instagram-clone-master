@@ -1,6 +1,6 @@
 import {useState, useEffect, Suspense} from "react";
 import {Link} from "react-router-dom";
-import fetchData from "./fetchData";
+import fetchData from "../utils/fetchData";
 
 const limit = 9;
 
@@ -13,8 +13,6 @@ export default function ArticleList() {
   useEffect(() => {
     setIsLoaded(false);
     setError(null);
-
-    console.log(process.env)
 
     fetchData(`${process.env.REACT_APP_SERVER}/articles/?limit=${limit}&skip=${skip}`)
     .then(data => {
