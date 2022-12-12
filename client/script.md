@@ -8,12 +8,14 @@ react router
 - style
 tailwindcss
 
+> server start
+
 # Guide 
 - List components
 README.md
 
 # Start making view
-- Sequence
+- Create components
 index App
 NotFound
 fetchData
