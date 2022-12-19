@@ -1,7 +1,7 @@
 import {useState, useEffect, useContext} from "react";
 import AuthContext from "./AuthContext";
 
-export default function AccountsTemplate() {
+export default function Accounts() {
   const auth = useContext(AuthContext);
   const {user, setUser} = auth;
 

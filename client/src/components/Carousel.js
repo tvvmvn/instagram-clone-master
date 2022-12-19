@@ -21,9 +21,8 @@ export default function Carousel({images}) {
 
       <div className="absolute top-0 left-0 h-full flex items-center">
         <button
-          className="bg-white px-2 hidden"
+          className={"bg-white px-2 " + (index === 0 && "hidden")}
           onClick={() => setIndex(index - 1)}
-          style={{display: index !==0 && "block"}}
         >
           &#10094;
         </button>
@@ -31,9 +30,8 @@ export default function Carousel({images}) {
 
       <div className="absolute top-0 right-0 h-full flex items-center">
         <button
-          className="bg-white px-2 hidden"
+          className={"bg-white px-2 " + (index === images.length-1 && "hidden")}
           onClick={() => setIndex(index + 1)}
-          style={{display: index !== images.length - 1 && "block"}}
         >
           &#10095;
         </button>
@@ -43,8 +41,7 @@ export default function Carousel({images}) {
         {images.map((image, dot) => (
           <li 
             key={dot} 
-            className="w-2 h-2 rounded-full bg-white/[0.4]" 
-            style={{ backgroundColor: dot === index && "white" }}
+            className={"w-2 h-2 rounded-full " + (dot === index ? "bg-white" : "bg-white/[0.5]")}
           >
           </li>
         ))}

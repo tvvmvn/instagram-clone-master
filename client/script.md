@@ -22,11 +22,15 @@ fetchData
 AuthContext AuthProvider AuthRequired
 Layout
 Login Register
+ArticleCreate
 ArticleList
 ArticleView
-ArticleCreate
+ArticleTemplate
+Avatar
+Modal
+Carousel
+Feed
 Comments
 Search
-Feed
 Profile FollowersList FollowingList
 Account

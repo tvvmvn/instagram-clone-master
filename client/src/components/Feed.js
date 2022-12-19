@@ -102,7 +102,7 @@ export default function Feed() {
         {articleList}
       </ul>
       <div className="flex justify-center my-2">
-        <button className="p-1 text-blue-500" onClick={() => setSkip(skip + limit)}>Load +</button>
+        <button className="p-1 text-blue-500" onClick={() => setSkip(skip + limit)}>More</button>
       </div>
 
       {!isLoaded && <p>fetching feed...</p>}

@@ -13,6 +13,7 @@ export default function Profile() {
     </>  
   )
 }
+
 function Details({username}) {
   const [profile, setProfile] = useState(null);
   const auth = useContext(AuthContext);
@@ -84,19 +85,24 @@ function Details({username}) {
           />
           <h3 className="font-bold">{profile.username}</h3>
           <p className="">{profile.bio}</p>
-          {isMaster && <Link to="/accounts/edit" className="text-xs text-gray-400">Edit profile</Link>}
+          {isMaster && (
+          <div className="">
+            <Link to="/accounts/edit" className="text-xs text-gray-400">
+              Edit profile
+            </Link> {" "}
+            <button className="text-xs text-red-500" onClick={auth.signOut}>
+              Logout
+            </button>
+          </div>
+          )}
         </div>
 
         {!isMaster && (
-          profile.isFollowing ? (
-            <button className="mt-2 border border-black p-1 w-full" onClick={unfollow}>
-              Following
-            </button>
-          ) : (
-            <button className="mt-2 border border-blue-500 text-blue-500 p-1 w-full" onClick={follow}>
-              Follow
-            </button>
-          )
+          <button 
+            className={"mt-2 border p-1 w-full " + (profile.isFollowing ? "border-black before:content-['Following']" : "border-blue-500 text-blue-500 before:content-['Follow']")}
+            onClick={profile.isFollowing ? unfollow : follow}
+          >
+          </button>
         )}
       </div>
 
