@@ -8,7 +8,7 @@ export default function Feed() {
   const [error, setError] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [articles, setArticles] = useState([]);
-  const [skip, setSkip] = useState(limit);
+  const [skip, setSkip] = useState(0);
 
   useEffect(() => {
     setIsLoaded(false);

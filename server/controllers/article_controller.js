@@ -10,6 +10,8 @@ exports.feed = async (req, res, next) => {
     const follows = await Follow.find({ follower: loginUser._id });
     const users = [...follows.map(follow => follow.following), loginUser._id];
 
+    console.log(users)
+
     const articles = await Article
       .find({ user: {$in: users}})
       .sort([["created", "descending"]])
