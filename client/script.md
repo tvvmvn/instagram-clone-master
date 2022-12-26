@@ -8,14 +8,10 @@ react router
 - style
 tailwindcss
 
-> server start
-
-# Guide 
-- List components
+# List components
 README.md
 
-# Start making view
-- Create components
+# Components
 index App
 NotFound
 fetchData
@@ -32,5 +28,5 @@ Carousel
 Feed
 Comments
 Search
-Profile FollowersList FollowingList
+Profile FollowerList FollowingList
 Account

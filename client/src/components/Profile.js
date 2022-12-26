@@ -86,20 +86,25 @@ function Details({username}) {
           <h3 className="font-bold">{profile.username}</h3>
           <p className="">{profile.bio}</p>
           {isMaster && (
-          <div className="">
-            <Link to="/accounts/edit" className="text-xs text-gray-400">
-              Edit profile
-            </Link> {" "}
-            <button className="text-xs text-red-500" onClick={auth.signOut}>
-              Logout
-            </button>
-          </div>
+            <div className="">
+              <Link to="/accounts/edit" className="text-xs text-gray-400">
+                Edit profile
+              </Link> {" "}
+              <button className="text-xs text-red-500" onClick={auth.signOut}>
+                Logout
+              </button>
+            </div>
           )}
         </div>
 
         {!isMaster && (
           <button 
-            className={"mt-2 border p-1 w-full " + (profile.isFollowing ? "border-black before:content-['Following']" : "border-blue-500 text-blue-500 before:content-['Follow']")}
+            className={
+              "mt-2 border p-1 w-full " + (
+                profile.isFollowing ? "border-black before:content-['Following']" 
+                : "border-blue-500 text-blue-500 before:content-['Follow']"
+              )
+            }
             onClick={profile.isFollowing ? unfollow : follow}
           >
           </button>
@@ -110,15 +115,17 @@ function Details({username}) {
         <ul className="flex border-y">
           <li className="flex flex-col items-center w-1/3">
             <div>Follower</div>
-            <div>{profile.followersCount}</div>
+            <Link to={`/profile/${username}/followers`}>
+              {profile.followersCount}
+            </Link>
           </li>
           <li className="flex flex-col items-center w-1/3">
             <div>
               Following
             </div>
-            <div>
+            <Link to={`/profile/${username}/following`}>
               {profile.followingCount}
-            </div>
+            </Link>
           </li>
           <li className="flex flex-col items-center w-1/3">
             <div>

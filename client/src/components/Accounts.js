@@ -134,18 +134,38 @@ function Form({user, editBio}) {
     <form onSubmit={handleSubmit}>
       <div className="mb-2">
         <label htmlFor="">Username</label>
-        <input type="text" className="border px-2 py-1 w-full" value={user.username} disabled={true} />
+        <input type="text" 
+          className="border px-2 py-1 w-full" 
+          value={user.username} 
+          disabled={true} 
+        />
       </div>
       <div className="mb-2">
         <label htmlFor="">Email</label>
-        <input type="text" className="border px-2 py-1 w-full" value={user.email} disabled={true} />
+        <input 
+          type="text" 
+          className="border px-2 py-1 w-full" 
+          value={user.email} 
+          disabled={true} 
+        />
       </div>
       <div className="mb-2">
         <label htmlFor="">Bio</label> 
-        <textarea rows="3" className="border px-2 py-1 w-full" defaultValue={user.bio} onChange={(e) => setBio(e.target.value)} />
+        <textarea 
+          rows="3" 
+          className="border px-2 py-1 w-full" 
+          defaultValue={user.bio} 
+          onChange={(e) => setBio(e.target.value)} 
+        />
       </div>
       <div>
-        <button type="submit" className="border border-black px-2 disabled:opacity-[0.2]" disabled={!bio.trim()}>Submit</button>
+        <button 
+          type="submit" 
+          className="border border-black px-2 disabled:opacity-[0.2]" 
+          disabled={!bio.trim()}
+        >
+          Submit
+        </button>
       </div>
     </form>
   )

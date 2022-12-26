@@ -11,6 +11,8 @@ import Search from "./components/Search";
 import Login from "./components/Login";
 import Register from "./components/Register";
 import Profile from "./components/Profile";
+import FollowerList from "./components/FollowerList";
+import FollowingList from "./components/FollowingList";
 import Accounts from "./components/Accounts";
 import NotFound from "./components/NotFound";
 
@@ -33,7 +35,11 @@ function App() {
               <Route index element={<ArticleView />} />
               <Route path="comments" element={<Comments />} />
             </Route>
-            <Route path="profile/:username" element={<Profile />} />
+            <Route path="profile/:username">
+              <Route index element={<Profile />} />
+              <Route path="followers" element={<FollowerList />} />
+              <Route path="following" element={<FollowingList />} />
+            </Route>
             <Route path="accounts/edit" element={<Accounts />} />
           </Route>
 
