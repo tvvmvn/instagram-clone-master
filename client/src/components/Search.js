@@ -1,51 +1,78 @@
-import {useState, useEffect, useRef} from "react";
-import {Link} from "react-router-dom";
-import Avatar from "./Avatar";
-import fetchData from "../utils/fetchData";
+import { useState, useEffect, useRef } from "react";
+import User from './User';
+import { searchUserByUsername } from "../utils/requests";
+import Spinner from './Spinner';
 
 export default function Search() {
+
+  const [error, setError] = useState(null);
+  const [isLoaded, setIsLoaded] = useState(true);
   const [users, setUsers] = useState([]);
-  const inputRef = useRef(null)
+  const inputEl = useRef(null);
 
   function handleChange(e) {
     const username = e.target.value;
 
-    if (!username.trim()) {
-      return setUsers([])
+    if (!username) {
+      return setUsers([]);
     }
 
-    fetchData(`${process.env.REACT_APP_SERVER}/search/?username=${username}`)
-    .then(data => {
-      setUsers(data)
-    })
-    .catch(error => {
-      alert("Something's broken");
-    })
+    setError(null);
+    setIsLoaded(false);
+
+    searchUserByUsername(username)
+      .then(data => {
+        setUsers(data.users);
+      })
+      .catch(error => {
+        setError(error);
+      })
+      .finally(() => setIsLoaded(true));
   }
 
   useEffect(() => {
-    inputRef.current.focus();
+    inputEl.current.focus();
   })
 
+  useEffect(() => {
+    document.title = `Instagram`
+  }, [])
+
   return (
-    <div className="px-2">
-      <div className="mb-4">
+    <div className="px-4">
+      <label className="block mt-8 mb-4">
         <input
           type="text"
-          className="border px-2 py-1 w-full"
+          className="border px-2 py-1 rounded w-full"
           onChange={handleChange}
           placeholder="Search"
-          ref={inputRef}
+          ref={inputEl}
         />
-      </div>
+      </label>
 
-      <ul>
-        {users.map((user, index) => (
-          <li key={index}>
-            <Avatar user={user} />
-          </li>
-        ))}
-      </ul>
+      <Result 
+        error={error} 
+        isLoaded={isLoaded} 
+        users={users} 
+      />
     </div>
   )
 }
+
+function Result({ error, isLoaded, users }) {
+  if (error) {
+    return <p className="text-red-500">{error.message}</p>
+  }
+  
+  if (!isLoaded) {
+    return <Spinner />
+  }
+
+  return users.map(user => (
+    <div key={user.username} className="flex items-center my-2">
+      <User user={user}/>
+      {user.isFollowing && <span className="ml-2 text-blue-500 text-sm">Following</span>}
+    </div>
+  ))
+}
+

@@ -4,9 +4,9 @@ import AuthContext from "./AuthContext";
 
 export default function AuthRequired({children}) {
   
-  const auth = useContext(AuthContext);
+  const {user} = useContext(AuthContext);
   
-  if (!auth.user) {
+  if (!user) {
     return <Navigate to="/login" replace={true} />
   }
 

@@ -1,84 +1,95 @@
-import {useState, useContext} from "react";
-import {Link, useNavigate} from "react-router-dom";
+import { useState, useContext, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import AuthContext from "./AuthContext";
+import { loginReq } from "../utils/requests";
 
 export default function Login() {
+
+  const { signIn } = useContext(AuthContext);
   const navigate = useNavigate();
-  const auth = useContext(AuthContext);
-  
+  const [error, setError] = useState(null);
   const [email, setEmail] = useState(localStorage.getItem("email") || "");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
-  function handleSubmit(e) {
-    e.preventDefault();
+  async function handleSubmit(e) {
+    try {
+      e.preventDefault();
 
-    const formData = {email, password}
+      setError(null);
 
-    fetch(`${process.env.REACT_APP_SERVER}/accounts/login`, {
-      method: "POST",
-      headers: {"Content-Type": "application/json"},
-      body: JSON.stringify(formData)
-    })
-    .then(res => {
-      if (!res.ok) {
-        throw res;
-      }
-      return res.json()
-    })
-    .then(data => {
-      auth.signIn(data, () => navigate("/", {replace: true}));
-      localStorage.setItem("email", email)
-    })
-    .catch(error => {
-      if (error.status===401) {
-        return alert("User not found")
-      } 
-      alert("Something's broken")
-    })
+      const formData = JSON.stringify({ email, password });
+      const data = await loginReq(formData);
+
+      signIn(data.user);
+
+      localStorage.setItem('email', email);
+      localStorage.setItem("token", data.token);
+      
+      setTimeout(() => {
+        navigate('/');
+      }, 1000);
+      
+    } catch (error) {
+      setError(error);
+    }
   }
 
+  useEffect(() => {
+    document.title = `Login - Instagram`
+  }, [])
+
   return (
-    <form onSubmit={handleSubmit} className="max-w-xs px-2 mx-auto">
-      <div className="mb-4 h-48 flex justify-center items-center">
-        <h1 className="text-2xl">SocialMediaApp</h1>
+    <form onSubmit={handleSubmit} className="max-w-xs p-4 mt-16 mx-auto">
+      <div className="mt-4 mb-4 flex justify-center">
+        <img src="/images/logo.png" className="w-36" />
       </div>
+
       <div className="mb-2">
-        <label htmlFor="">Email</label>
-        <input 
-          type="text" 
-          className="border px-2 py-1 w-full"
-          value={email} 
-          onChange={(e) => setEmail(e.target.value)} 
-        />
-      </div>
-      <div className="mb-2">
-        <label htmlFor="">Password</label>
-        <input 
-          type={showPassword ? "text" : "password"} 
-          className="border px-2 py-1 w-full"
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <label>
-          <input 
-            type="checkbox" 
-            onChange={(e) => setShowPassword(e.target.checked)} 
-          /> {" "}
-          Show password
+        <label className="block">
+          <input
+            type="text"
+            className="border px-2 py-1 w-full rounded"
+            value={email}
+            onChange={({ target }) => setEmail(target.value)}
+          />
         </label>
       </div>
+
       <div className="mb-2">
-        <button 
-          type="submit" 
-          className="border border-blue-500 text-blue-500 p-1 w-full disabled:opacity-[0.2]"
-          disabled={!email.trim() || !password.trim()}
-        >
-          Login
-        </button>
+        <label className="block relative">
+          <input
+            type={showPassword ? "text" : "password"}
+            className="border px-2 py-1 w-full rounded"
+            value={password}
+            onChange={({ target }) => setPassword(target.value)}
+          />
+          {password.trim().length > 0 && (
+            <button
+              type="button"
+              className="absolute right-0 h-full px-4 py-2 text-sm font-semibold"
+              onClick={() => setShowPassword(!showPassword)}
+            >
+              {showPassword ? 'Hide' : 'Show'}
+            </button>
+          )}
+        </label>
       </div>
-      <div>
-        <Link to="/register" className="text-blue-500">Create account</Link>
-      </div>
+
+      <button
+        type="submit"
+        className="bg-blue-500 text-sm text-white font-semibold rounded-lg px-4 py-2 w-full disabled:opacity-[0.5]"
+        disabled={!email.trim() || password.trim().length < 3}
+      >
+        Login
+      </button>
+
+      {error && <p className="my-4 text-center text-red-500">{error.message}</p>}
+
+      <p className="text-center">
+        Don't have an account ?  {" "}
+        <Link to="/register" className="text-blue-500 font-semibold">Sign Up</Link>
+      </p>
     </form>
   )
 }

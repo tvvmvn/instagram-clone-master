@@ -1,90 +1,69 @@
-import {useState, useEffect} from "react";
-import {useParams, useNavigate} from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import ArticleTemplate from "./ArticleTemplate";
-import fetchData from "../utils/fetchData";
+import { fetchArticle, favoriteReq, deleteArticleReq } from "../utils/requests";
 
 export default function ArticleView() {
-  const {articleId} = useParams();
+
+  const { slug } = useParams();
   const [error, setError] = useState(null)
   const [article, setArticle] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   useEffect(() => {
-    fetchData(`${process.env.REACT_APP_SERVER}/articles/${articleId}`)
-    .then(data => {
-      setArticle(data);
-    })
-    .catch(error => {
-      console.log(error)
-      setError(error)
-    })
-    .finally(() => setIsLoaded(true))
+    fetchArticle(slug)
+      .then(data => {
+        setArticle(data.article);
+      })
+      .catch(error => {
+        setError(error);
+      })
+      .finally(() => setIsLoaded(true));
   }, [])
 
-  function favorite(articleId) {
-    fetch(`${process.env.REACT_APP_SERVER}/articles/${articleId}/favorite`, {
-      method: 'POST',
-      headers: { 'Authorization': `Bearer ${localStorage.getItem("token")}` }
-    })
-    .then(res => {
-      if (!res.ok) {
-        throw res;
+  async function toggleFavorite(slug, isFavorite) {
+    try {
+      await favoriteReq(slug, isFavorite);
+
+      const updatedArticle = {
+        ...article,
+        isFavorite: !isFavorite,
+        favoriteCount: article.favoriteCount + (isFavorite ? - 1 : + 1)
       }
-      const editedArticle = {...article, isFavorite: true, favoriteCount: article.favoriteCount + 1 };
-      setArticle(editedArticle);
-    })
-    .catch(error => {
-      alert("Something's broken")
-    })
+  
+      setArticle(updatedArticle);
+    
+    } catch (error) {
+      alert(error)
+    }
   }
 
-  function unfavorite(articleId) {
-    fetch(`${process.env.REACT_APP_SERVER}/articles/${articleId}/favorite`, {
-      method: 'DELETE',
-      headers: { 'Authorization': `Bearer ${localStorage.getItem("token")}` },
-    })
-    .then(res => {
-      if (!res.ok) {
-        throw res;
-      }
-      const editedArticle = {...article, isFavorite: false, favoriteCount: article.favoriteCount - 1 };
-      setArticle(editedArticle);
-    })
-    .catch(error => {
-      alert("Something's broken")
-    })
-  }
-
-  function deleteArticle(articleId) { 
-    fetch(`${process.env.REACT_APP_SERVER}/articles/${articleId}`, {
-      method: 'DELETE',
-      headers: { 'Authorization': `Bearer ${localStorage.getItem("token")}` }
-    })
-    .then(res => {
-      if (!res.ok) {
-        throw res;
-      }
-      navigate("/", { replace: true })
-    })
-    .catch(error => {
-      alert("Something's broken")
-    })
+  async function deleteArticle(slug) {
+    try {
+      await deleteArticleReq(slug);
+      
+      navigate('/', { replace: true });
+    
+    } catch (error) {
+      alert(error)
+    }
   }
 
   if (error) {
-    return <p>failed to fetch article</p>
+    return <p className="text-red-500">{error.message}</p>
   }
+
   if (!isLoaded) {
-    return <p>fetching article...</p>
+    return <p>fetching an article...</p>
   }
-  return(
+
+  return (
     <ArticleTemplate
-      article={article} 
-      favorite={favorite}
-      unfavorite={unfavorite}
+      article={article}
+      toggleFavorite={toggleFavorite}
       deleteArticle={deleteArticle}
-    />    
+    />
   )
 }
 

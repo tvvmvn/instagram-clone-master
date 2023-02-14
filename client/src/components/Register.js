@@ -1,103 +1,144 @@
-import {useState} from "react";
-import {Link, useNavigate} from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { createUserReq, fetchUserByEmail, fetchUserByUsername } from "../utils/requests";
 
 export default function Register() {
-  const navigate = useNavigate();
 
+  const navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [passwordConfirm, setPasswordConfirm] = useState("");
+  const [fullName, setFullName] = useState("");
+  const [error, setError] = useState(null);
 
-  function handleSubmit(e) {
-    e.preventDefault();
+  async function handleSubmit(e) {
+    try {
+      e.preventDefault();
 
-    if (password.length < 3) {
-      alert("Not safe password");
-      return;
-    }
+      const _error = {};
 
-    if (password !== passwordConfirm) {
-      alert("Password not match")
-      return;
-    }
-
-    const formData = {username, email, password};
-
-    fetch(`${process.env.REACT_APP_SERVER}/accounts/register`, {
-      method: "POST",
-      headers: {"Content-Type": "application/json"},
-      body: JSON.stringify(formData)
-    })
-    .then(res => {
-      if (!res.ok) {
-        throw res;
+      if (username.length < 3) {
+        _error.username = 'Username is too short';
       }
-      return res.json();
-    })
-    .then(data => {
-      navigate('/login');
-    })
-    .catch(error => {
-      if (error.status===400) {
-        return alert("Username and email must be unique");
+
+      const userByUsername = await fetchUserByUsername(username);
+
+      if (userByUsername.user) {
+        _error.username = 'Username already in use';
       }
-      alert("Something's broken");
-    })
+
+      // const userByEmail = await fetchUserByEmail(email);
+
+      // if (userByEmail) {
+      //   _error.email = 'Email already in use';
+      // }
+
+      if (password.length < 3) {
+        _error.password = 'Password is too short';
+      }
+
+      const isError = Object.keys(_error).length > 0;
+
+      if (isError) {
+        throw _error;
+      }
+
+      const formData = JSON.stringify({ 
+        email, 
+        fullName, 
+        username, 
+        password 
+      });
+      
+      await createUserReq(formData);
+
+      alert(`Welcome, ${fullName}!`);
+
+      navigate('/');
+
+    } catch (error) {
+      setError(error);
+    }
   }
 
-  const disabled = !username.trim() || !email.trim() || !password.trim() || !passwordConfirm.trim();
+  useEffect(() => {
+    document.title = `Sign Up - Instagram`
+  }, [])
 
   return (
-    <form onSubmit={handleSubmit} className="max-w-xs mx-auto px-2">
-      <div className="mb-4 flex h-24 items-end">
-        <h1 className="text-2xl">Sign up</h1>
+    <form onSubmit={handleSubmit} className="max-w-xs mx-auto p-4 mt-16">
+      <div className="mt-4 mb-4 flex justify-center">
+        <img src="/images/logo.png" className="w-36" />
       </div>
 
       <div className="mb-2">
-        <label htmlFor="">Username</label>
-        <input 
-          type="text" 
-          className="border px-2 py-1 w-full" 
-          onChange={(e) => setUsername(e.target.value)} 
-        />
+        <label className="block">
+          <input
+            type="text"
+            name="email"
+            className="border px-2 py-1 rounded w-full"
+            onChange={({ target }) => setEmail(target.value)}
+            placeholder="Email address"
+          />
+        </label>
+        {error && <p className="text-red-500">{error.email}</p>}
       </div>
+
       <div className="mb-2">
-        <label htmlFor="">Email</label>
-        <input 
-          type="text" 
-          className="border px-2 py-1 w-full" 
-          onChange={(e) => setEmail(e.target.value)} 
-        />
+        <label className="block">
+          <input
+            type="text"
+            name="fullName"
+            className="border rounded px-2 py-1 w-full"
+            onChange={({ target }) => setFullName(target.value)}
+            placeholder="Full Name"
+          />
+        </label>
       </div>
+
       <div className="mb-2">
-        <label htmlFor="">Password</label>
-        <input 
-          type="password" 
-          className="border px-2 py-1 w-full" 
-          onChange={(e) => setPassword(e.target.value)} 
-        />
+        <label className="block">
+          <input
+            type="text"
+            name="username"
+            className="border px-2 py-1 rounded w-full"
+            onChange={({ target }) => setUsername(target.value)}
+            placeholder="Username"
+          />
+        </label>
+        {error && <p className="text-red-500">{error.username}</p>}
       </div>
+
       <div className="mb-2">
-        <label htmlFor="">Password confirm</label>
-        <input 
-          type="password" 
-          className="border px-2 py-1 w-full" 
-          onChange={(e) => setPasswordConfirm(e.target.value)} 
-        />
+        <label className="block">
+          <input
+            type="password"
+            name="password"
+            className="border rounded px-2 py-1 w-full"
+            onChange={({ target }) => setPassword(target.value)}
+            placeholder="Password"
+          />
+        </label>
+        {error && <p className="text-red-500">{error.password}</p>}
       </div>
+
       <div className="mb-2">
-        <button 
+        <button
           type="submit"
-          className="border border-blue-500 text-blue-500 px-2 py-1 w-full disabled:opacity-[0.2]"
-          disabled={disabled}
+          className="bg-blue-500 rounded-lg text-sm font-semibold px-4 py-2 text-white w-full disabled:opacity-[0.5]"
+          disabled={!email.trim() || !password.trim()}
         >
-          Submit
+          Sign Up
         </button>
+        {error && <p className="text-red-500 text-center my-4">{error.message}</p>}
       </div>
-      <div>
-        <Link to="/login" className="text-blue-500">Login</Link>
-      </div>
+
+      <p className="text-center mt-4">
+        Don't have an account ?  {" "}
+        <Link to="/login" className="text-blue-500 font-semibold">
+          Login
+        </Link>
+      </p>
     </form>
   )
 }

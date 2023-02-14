@@ -1,183 +1,174 @@
-import {useState, useEffect, useContext} from "react";
-import {useParams, Link} from "react-router-dom";
+import { useState, useEffect, useContext, useRef } from "react";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import AuthContext from "./AuthContext";
-import fetchData from "../utils/fetchData";
+import ArticleCreate from "./ArticleCreate";
+import Timeline from "./Timeline";
+import { fetchTimeline, fetchProfile, followReq } from "../utils/requests";
+import NotFound from './NotFound';
 
 export default function Profile() {
-  const {username} = useParams();
-
-  return (
-    <>
-      <Details username={username} />
-      <Timeline username={username} />
-    </>  
-  )
-}
-
-function Details({username}) {
-  const [profile, setProfile] = useState(null);
-  const auth = useContext(AuthContext);
-  const isMaster = auth.user.username === username;
+  const { username } = useParams();
+  const { user, signOut } = useContext(AuthContext);
+  const isMaster = user.username === username;
   const [error, setError] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
+  const [profile, setProfile] = useState(null);
+  const [articles, setArticles] = useState(null);
+  const [articleCount, setArticleCount] = useState(0);
+  const [active, setActive] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     setIsLoaded(false);
 
-    fetchData(`${process.env.REACT_APP_SERVER}/profiles/${username}`)
-    .then(data => {
-      setProfile(data);
-    })
-    .catch(error => {
-      setError(error)
-    })
-    .finally(() => setIsLoaded(true))
-  }, [username])
+    Promise.all([
+      fetchProfile(username),
+      fetchTimeline(username)
+    ])
+      .then(([profile, timeline]) => {
+        setProfile(profile.profile)
+        setArticles(timeline.articles);
+        setArticleCount(timeline.articleCount)
+      })
+      .catch(error => {
+        setError(error)
+      })
+      .finally(() => setIsLoaded(true));
 
-  function follow() {
-    fetch(`${process.env.REACT_APP_SERVER}/profiles/${profile.username}/follow`, {
-      method: 'POST',
-      headers: { 'Authorization': `Bearer ${localStorage.getItem("token")}` }
-    })
-    .then(res => {
-      if (!res.ok) {
-        throw res;
-      }
-      const editedProfile = {...profile, isFollowing: true}
-      setProfile(editedProfile);
-    })
-    .catch(error => {
-      alert("Something's broken")
-    })
-  } 
+  }, [username]);
 
-  function unfollow() {
-    fetch(`${process.env.REACT_APP_SERVER}/profiles/${profile.username}/follow`, {
-      method: 'DELETE',
-      headers: { 'Authorization': `Bearer ${localStorage.getItem("token")}` }
-    })
-    .then(res => {
-      if (!res.ok) {
-        throw res;
-      }
-      const editedProfile = {...profile, isFollowing: false}
-      setProfile(editedProfile);
-    })
-    .catch(error => {
-      alert("Something's broken")
-    })
+  function handleSignOut() {
+    const confirmed = window.confirm('Are you sure to log out?');
+
+    if (confirmed) {
+      signOut();
+      localStorage.removeItem("token");
+    }
   }
+
+  async function handleFollow() {
+    try {
+
+      await followReq(username, profile.isFollowing); 
+      setProfile({ ...profile, isFollowing: !profile.isFollowing })
+
+    } catch (error) {
+      alert(error)
+    }
+  }
+
+  useEffect(() => {
+    if (active) {
+      document.title = `Create new post - Instagram`;
+    } else {
+      document.title = `${username} - Instagram`;
+    }
+  }, [active])
 
   if (error) {
-    return <p>failed to fetch profile</p>
+    return <NotFound />
+    // return <p className="text-red-500">{error.message}</p>
   }
+
   if (!isLoaded) {
     return <p>fetching profile...</p>
   }
 
   return (
     <>
-      <div className="mb-4 px-2">
-        <div className="flex items-center flex-col">
-          <img 
-            src={`${process.env.REACT_APP_SERVER}/data/users/${profile.image || "avatar.jpeg"}`} 
-            className="w-36 h-36 object-cover rounded-full"
+      <div className="px-4 my-8">
+        <div className="flex">
+          <img
+            src={profile.image ? `${process.env.REACT_APP_SERVER}/files/profiles/${profile.image}` : '/images/default.png'}
+            className="w-20 h-20 object-cover border rounded-full"
           />
-          <h3 className="font-bold">{profile.username}</h3>
-          <p className="">{profile.bio}</p>
-          {isMaster && (
-            <div className="">
-              <Link to="/accounts/edit" className="text-xs text-gray-400">
-                Edit profile
-              </Link> {" "}
-              <button className="text-xs text-red-500" onClick={auth.signOut}>
-                Logout
+
+          <div className="grow ml-4">
+            <div className="flex items-center mb-4">
+              <h3 className="font-semibold">
+                {profile.username}
+              </h3>
+
+              <div className="ml-2">
+                {isMaster ? (
+                  <Link to="/accounts/edit" className="bg-gray-200 rounded-lg px-4 py-2 text-sm font-semibold">
+                    Edit profile
+                  </Link>
+                ) : (
+                  <button 
+                    className={`text-sm px-4 py-2 font-semibold p-2 rounded-lg ${profile.isFollowing ? 'bg-gray-200' : 'bg-blue-500 text-white'}`}
+                    onClick={handleFollow}
+                  >
+                    {profile.isFollowing ? 'Following' : 'Follow'}
+                  </button>
+                )}
+              </div>
+            </div>
+
+            <ul className="flex items-center">
+              <li className="w-1/3">
+                <div className="text-sm">
+                  <span className="font-semibold">
+                    {profile.articleCount}
+                  </span>
+                  {" "}
+                  photos
+                </div>
+              </li>
+              <li className="w-1/3">
+                <Link to={`/profile/${username}/followers`} className="block text-sm">
+                  <span className="font-semibold">
+                    {profile.followerCount}
+                  </span>
+                  {" "}
+                  follower
+                </Link>
+              </li>
+              <li className="w-1/3">
+                <Link to={`/profile/${username}/following`} className="block text-sm">
+                  <span className="font-semibold">
+                    {profile.followingCount}
+                  </span>
+                  {" "}
+                  following
+                </Link>
+              </li>
+            </ul>
+            <p className="text-sm my-4">
+              {profile.bio}
+            </p>
+
+            {isMaster && (
+              <button
+                className="text-sm text-red-500 font-semibold"
+                onClick={handleSignOut}
+              >
+                Log Out
               </button>
-            </div>
-          )}
+            )}
+            
+            <button
+              className="fixed right-8 bottom-8 animate-bounce"
+              onClick={() => setActive(true)}
+            >
+              <svg 
+                className="w-6"
+                xmlns="http://www.w3.org/2000/svg" 
+                viewBox="0 0 448 512"
+              >
+                <path d="M200 344V280H136C122.7 280 112 269.3 112 256C112 242.7 122.7 232 136 232H200V168C200 154.7 210.7 144 224 144C237.3 144 248 154.7 248 168V232H312C325.3 232 336 242.7 336 256C336 269.3 325.3 280 312 280H248V344C248 357.3 237.3 368 224 368C210.7 368 200 357.3 200 344zM0 96C0 60.65 28.65 32 64 32H384C419.3 32 448 60.65 448 96V416C448 451.3 419.3 480 384 480H64C28.65 480 0 451.3 0 416V96zM48 96V416C48 424.8 55.16 432 64 432H384C392.8 432 400 424.8 400 416V96C400 87.16 392.8 80 384 80H64C55.16 80 48 87.16 48 96z"/>
+              </svg>
+            </button>
+
+          </div>
         </div>
-
-        {!isMaster && (
-          <button 
-            className={
-              "mt-2 border p-1 w-full " + (
-                profile.isFollowing ? "border-black before:content-['Following']" 
-                : "border-blue-500 text-blue-500 before:content-['Follow']"
-              )
-            }
-            onClick={profile.isFollowing ? unfollow : follow}
-          >
-          </button>
-        )}
       </div>
 
-      <div className="mb-4">
-        <ul className="flex border-y">
-          <li className="flex flex-col items-center w-1/3">
-            <div>Follower</div>
-            <Link to={`/profile/${username}/followers`}>
-              {profile.followersCount}
-            </Link>
-          </li>
-          <li className="flex flex-col items-center w-1/3">
-            <div>
-              Following
-            </div>
-            <Link to={`/profile/${username}/following`}>
-              {profile.followingCount}
-            </Link>
-          </li>
-          <li className="flex flex-col items-center w-1/3">
-            <div>
-              Articles
-            </div>
-            <div>
-              {profile.articlesCount}
-            </div>
-          </li>
-        </ul>
-      </div>
-    </>  
-  )
-}
+      <hr className="mb-8" />
 
-function Timeline({username}) {
-  const [articles, setArticles] = useState([]);
-  const [error, setError] = useState(null);
-  const [isLoaded, setIsLoaded] = useState(false);
+      <Timeline articles={articles} articleCount={articleCount} />
 
-  useEffect(() => {
-    setIsLoaded(false);
-
-    fetchData(`${process.env.REACT_APP_SERVER}/profiles/${username}/articles`)
-    .then(data => {
-      setArticles(data)
-    })
-    .catch(error => {
-      setError(error)
-    })
-    .finally(() => setIsLoaded(true))
-  }, [username])
-
-  const articleList = articles.map(article => (
-    <li key={article._id} className="h-40">
-      <Link key={article._id} to={`/article/${article._id}`}>
-        <img
-          src={`${process.env.REACT_APP_SERVER}/data/articles/${article.photos[0]}`}
-          className="w-full h-full object-cover"
-        />
-      </Link>
-    </li>
-  ))
-
-  return (
-    <>
-      <ul className="grid grid-cols-3 gap-1 mb-2">
-        {articleList}
-      </ul>
-
-      {!isLoaded && <p>fetching timeline...</p>}
-      {error && <p>failed to fetch timeline</p>}
-    </>  
+      <ArticleCreate active={active} setActive={setActive} />
+    </>
   )
 }

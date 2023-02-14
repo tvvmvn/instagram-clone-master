@@ -2,62 +2,43 @@ const express = require('express')
 const router = express.Router();
 const passport = require("passport");
 const auth = passport.authenticate("jwt", { session: false });
-require("../auth/passportJwt");
+require("../auth/passportJWT");
+const articleController = require("../controllers/articleController");
+const commentController = require("../controllers/commentController");
+const userController = require("../controllers/userController");
+const profileController = require("../controllers/profileController");
 
-const auth_controller = require("../controllers/auth_controller");
-const account_controller = require("../controllers/account_controller");
-const article_controller = require("../controllers/article_controller");
-const comment_controller = require("../controllers/comment_controller");
-const search_controller = require("../controllers/search_controller");
-const profile_controller = require("../controllers/profile_controller");
-
-// # HTTP Request Methods
-// GET: read data
-// POST: create data
-// PUT: update data
-// DELETE: delete data
-
-// # Router
-// router.httpRequestMethod(endPoint, controllers)
+// INDEX
 router.get('/', (req, res) => {
-  res.json({ message: "hello express" })
+  res.json({ message: "hello express" });
 })
 
-// AUTH
-router.get('/user', auth, auth_controller.user)
-
-// ACCOUNTS 
-router.post('/accounts/login', account_controller.login)
-router.post('/accounts/register', account_controller.register)
-router.post('/accounts/edit', auth, account_controller.edit)
-router.post('/accounts/edit/image', auth, account_controller.upload_image)
-router.delete('/accounts/edit/image', auth, account_controller.delete_image)
+// USERS
+router.get('/users', auth, userController.users);
+router.post('/users', userController.register);
+// router.get('/users/:username', userController.username);
+// router.get('/users/:email', userController.email);
+router.get('/user', auth, userController.user); 
+router.put('/user', auth, userController.edit);
+router.post('/user/login', userController.login);
 
 // ARTICLES 
-router.get('/feed', auth, article_controller.feed)
-router.get('/articles', auth, article_controller.article_list)
-router.get('/articles/:id', auth, article_controller.article)
-router.post('/articles', auth, article_controller.create)
-router.delete('/articles/:id', auth, article_controller.delete)
-router.post('/articles/:id/favorite', auth, article_controller.favorite)
-router.delete('/articles/:id/favorite', auth, article_controller.unfavorite)
+router.get('/feed', auth, articleController.feed)
+router.get('/articles', auth, articleController.articles)
+router.post('/articles', auth, articleController.create)
+router.get('/articles/:slug', auth, articleController.article)
+router.delete('/articles/:slug', auth, articleController.delete)
+router.post('/articles/:slug/favorite', auth, articleController.favorite)
+router.delete('/articles/:slug/favorite', auth, articleController.unfavorite)
 
 // COMMENTS
-router.get('/articles/:id/comments', auth, comment_controller.comment_list)
-router.post('/articles/:id/comments', auth, comment_controller.create)
-router.delete('/comments/:id', auth, comment_controller.delete)
-router.post('/comments/:id/favorite', auth, comment_controller.favorite)
-router.delete('/comments/:id/favorite', auth, comment_controller.unfavorite)
-
-// SEARCH
-router.get('/search', auth, search_controller.username);
+router.get('/articles/:slug/comments', auth, commentController.comments)
+router.post('/articles/:slug/comments', auth, commentController.create)
+router.delete('/articles/:slug/comments/:id', auth, commentController.delete)
 
 // PROFILES
-router.get('/profiles/:username', auth, profile_controller.profile)
-router.get('/profiles/:username/articles', auth, profile_controller.timeline)
-router.get('/profiles/:username/followers', auth, profile_controller.follower_list)
-router.get('/profiles/:username/following', auth, profile_controller.following_list)
-router.post('/profiles/:username/follow', auth, profile_controller.follow)
-router.delete('/profiles/:username/follow', auth, profile_controller.unfollow)
+router.get('/profiles/:username', auth, profileController.details)
+router.post('/profiles/:username/follow', auth, profileController.follow)
+router.delete('/profiles/:username/follow', auth, profileController.unfollow)
 
 module.exports = router;

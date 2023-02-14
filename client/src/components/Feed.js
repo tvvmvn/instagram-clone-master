@@ -1,112 +1,108 @@
-import {useState, useEffect, Suspense} from "react"
+import {useState, useEffect, useContext} from "react"
 import ArticleTemplate from "./ArticleTemplate";
-import fetchData from "../utils/fetchData";
+import { fetchFeed, favoriteReq, deleteArticleReq } from "../utils/requests";
+import Spinner from './Spinner';
 
 const limit = 5;
 
 export default function Feed() {
+  
   const [error, setError] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [articles, setArticles] = useState([]);
   const [skip, setSkip] = useState(0);
+  const [articleCount, setArticleCount] = useState(0);
 
   useEffect(() => {
     setIsLoaded(false);
-    setError(null);
-
-    fetchData(`${process.env.REACT_APP_SERVER}/feed/?limit=${limit}&skip=${skip}`)
-    .then(data => {
-      setArticles([...articles, ...data])
-    })
-    .catch(error => {
-      setError(error)
-    })
-    .finally(() => setIsLoaded(true))
+    
+    fetchFeed(limit, skip)
+      .then(data => {
+        setArticleCount(data.articleCount);
+          
+        let updatedArticles = [...articles, ...data.articles];
+        setArticles(updatedArticles);
+      })
+      .catch(error => {
+        setError(error);
+      })
+      .finally(() => setIsLoaded(true))
+      
   }, [skip])
 
-  function unfavorite(articleId) {
-    fetch(`${process.env.REACT_APP_SERVER}/articles/${articleId}/favorite`, {
-      method: 'DELETE',
-      headers: { 'Authorization': `Bearer ${localStorage.getItem("token")}` }
-    })
-    .then(res => {
-      if (!res.ok) {
-        throw res;
-      }
-      const editedArticles = articles.map(article => {
-        if (articleId === article._id) {
-          return { ...article, isFavorite: false, favoriteCount: article.favoriteCount - 1 };
+  async function toggleFavorite(slug, isFavorite) {
+    try {
+      await favoriteReq(slug, isFavorite);
+
+      const updatedArticles = articles.map(article => {
+        if (article.slug === slug) {
+          return {
+            ...article,
+            isFavorite: !isFavorite,
+            favoriteCount: article.favoriteCount + (isFavorite ? - 1 : + 1)
+          }
         }
         return article;
       })
-      setArticles(editedArticles);
-    })
-    .catch(error => {
-      alert("Something's broken")
-    });
-  }
-
-  function favorite(articleId) {
-    fetch(`${process.env.REACT_APP_SERVER}/articles/${articleId}/favorite`, {
-      method: 'POST',
-      headers: { 'Authorization': `Bearer ${localStorage.getItem("token")}` }
-    })
-    .then(res => {
-      if (!res.ok) {
-        throw res;
-      }
-      const editedArticles = articles.map(article => {
-        if (articleId === article._id) {
-          return { ...article, isFavorite: true, favoriteCount: article.favoriteCount + 1 };
-        }
-        return article;
-      })
-      setArticles(editedArticles);
-    })
-    .catch(error => {
-      alert("Something's broken")
-    });
-  }
-
-  function deleteArticle(articleId) {
-    fetch(`${process.env.REACT_APP_SERVER}/articles/${articleId}`, {
-      method: 'DELETE',
-      headers: { 'Authorization': `Bearer ${localStorage.getItem("token")}` }
-    })
-    .then(res => {
-      if (!res.ok) {
-        throw res;
-      }
-      const updatedArticles = articles.filter(article => articleId !== article._id);
+  
       setArticles(updatedArticles);
-    })
-    .catch(error => {
-      alert("Something's broken")
-    })
+
+    } catch (error) {
+      alert(error)
+    }
+  }
+
+  async function deleteArticle(slug) {
+    try {
+      await deleteArticleReq(slug); 
+
+      const remainingArticles = articles.filter(article => {
+        if (slug !== article.slug) {
+          return article;
+        }
+      });
+  
+      setArticles(remainingArticles);
+    
+    } catch (error) {
+      alert(error)
+    }
   }
 
   const articleList = articles.map(article => (
-    <li key={article._id} className="mb-4">
+    <li key={article.slug} className="border-b pb-4">
       <ArticleTemplate
-        article={article} 
-        favorite={favorite}
-        unfavorite={unfavorite}
+        article={article}
+        toggleFavorite={toggleFavorite}
         deleteArticle={deleteArticle}
       />
     </li>
   ))
+
+  const moreButton = (articleCount > limit && articleCount > articles.length) && (
+    <div className="flex justify-center my-2">
+      <button 
+        className="p-1 text-blue-500" 
+        onClick={() => setSkip(skip + limit)}
+      >
+        More
+      </button>
+    </div>
+  )
+
+  useEffect(() => {
+    document.title = `Instagram`;
+  }, [])
 
   return (
     <>
       <ul className="">
         {articleList}
       </ul>
-      <div className="flex justify-center my-2">
-        <button className="p-1 text-blue-500" onClick={() => setSkip(skip + limit)}>More</button>
-      </div>
 
-      {!isLoaded && <p>fetching feed...</p>}
-      {error && <p>failed to fetch feed</p>}
+      {isLoaded ? moreButton : <Spinner />}
+      {error && <p className="text-red-500">{error.message}</p>}
     </>  
   )
 }
+

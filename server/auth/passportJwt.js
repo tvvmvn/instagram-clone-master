@@ -1,30 +1,26 @@
 const JwtStrategy = require('passport-jwt').Strategy;
 const ExtractJwt = require('passport-jwt').ExtractJwt;
-const { User } = require('../models/model');
+const User = require('../models/User');
 const passport = require('passport');
 const opts = {};
 require('dotenv').config();
 
-// extract JWT from 'Authorization' property of HTTP request header.
 opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
-// secret key for encrypting token 
-// get secrey key from enviroment variables
 opts.secretOrKey = process.env.SECRET;
+// opts.issuer = 'accounts.examplesoft.com';
+// opts.audience = 'yoursite.net';
 
 passport.use(new JwtStrategy(opts, (jwt_payload, done) => {
-  // find user from JWT data
   User.findOne({ username: jwt_payload.username }, function (err, user) {
     if (err) {
       return done(err, false);
-    } 
-
-    if (user) { // user ok, assign user data to req.user variable.
-      return done(null, user);
-    } 
-    else { // user no, server send 401 Unauthorized to client
-      return done(null, false);
-      // or you could create a new account
     }
+
+    if (user) {
+      return done(null, user);
+    }
+    
+    return done(null, false);
   });
 }));
 

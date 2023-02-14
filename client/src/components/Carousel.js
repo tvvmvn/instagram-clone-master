@@ -1,17 +1,21 @@
-import {useState} from "react";
+import { useState } from "react";
 
-export default function Carousel({images}) {
+export default function Carousel({ images }) {
+
   const [index, setIndex] = useState(0);
 
   console.log(index);
 
   return (
     <div className="overflow-x-hidden relative">
-      <ul className="flex transition" style={{transform: `translateX(-${index*100}%)`}}>
+      <ul
+        className="flex transition"
+        style={{ transform: `translateX(-${index * 100}%)` }}
+      >
         {images.map(image => (
           <li key={image} className="w-full h-96 shrink-0">
             <img
-              src={`${process.env.REACT_APP_SERVER}/data/articles/${image}`}
+              src={`${process.env.REACT_APP_SERVER}/files/articles/${image}`}
               className="w-full h-full object-cover"
               alt={image}
             />
@@ -21,7 +25,7 @@ export default function Carousel({images}) {
 
       <div className="absolute top-0 left-0 h-full flex items-center">
         <button
-          className={"bg-white px-2 " + (index === 0 && "hidden")}
+          className={"px-2 bg-white " + (index === 0 && "hidden")}
           onClick={() => setIndex(index - 1)}
         >
           &#10094;
@@ -30,7 +34,7 @@ export default function Carousel({images}) {
 
       <div className="absolute top-0 right-0 h-full flex items-center">
         <button
-          className={"bg-white px-2 " + (index === images.length-1 && "hidden")}
+          className={"px-2 bg-white " + (index === images.length - 1 && "hidden")}
           onClick={() => setIndex(index + 1)}
         >
           &#10095;
@@ -39,8 +43,8 @@ export default function Carousel({images}) {
 
       <ul className="absolute bottom-0 w-full py-2 flex justify-center gap-1 ">
         {images.map((image, dot) => (
-          <li 
-            key={dot} 
+          <li
+            key={dot}
             className={"w-2 h-2 rounded-full " + (dot === index ? "bg-white" : "bg-white/[0.5]")}
           >
           </li>

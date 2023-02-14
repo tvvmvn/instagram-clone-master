@@ -3,8 +3,6 @@ import AuthProvider from './components/AuthProvider';
 import AuthRequired from "./components/AuthRequired";
 import Layout from "./components/Layout";
 import Feed from "./components/Feed";
-import ArticleList from "./components/ArticleList";
-import ArticleCreate from "./components/ArticleCreate";
 import ArticleView from "./components/ArticleView";
 import Comments from "./components/Comments";
 import Search from "./components/Search";
@@ -28,10 +26,8 @@ function App() {
             </AuthRequired> 
           }>
             <Route index element={<Feed />} />
-            <Route path="articles" element={<ArticleList />} />
             <Route path="search" element={<Search />} />
-            <Route path="create" element={<ArticleCreate />} />
-            <Route path="article/:articleId">
+            <Route path="article/:slug">
               <Route index element={<ArticleView />} />
               <Route path="comments" element={<Comments />} />
             </Route>
