@@ -1,23 +1,22 @@
 # SEVER
 
 
-## BACK-END FRAMEWORK
-Express.js
+- Client & Server Model 
+[https://upload.wikimedia.org/wikipedia/commons/thumb/c/c9/Client-server-model.svg/1200px-Client-server-model.svg.png]
 
+- MVC Architecture 
+[https://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/MVC-Process.svg/1200px-MVC-Process.svg.png]
 
-## DATABASE
-MongoDB
-MongoDB Compass
+- Install MongoDB & MongoDBCompass
 
+- Install POSTMAN for API Test
 
-## API SERVER TEST
-POSTMAN
+- Express
+Index > Model > Authorization 
 
+* TESTING
+Seed > Router > Controller 
 
-- - -
-* ORDER
-
-Model > Authorization > Controller
 
 * FILES
 - articles
