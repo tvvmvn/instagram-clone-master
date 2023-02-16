@@ -1,4 +1,4 @@
-import {BrowserRouter as Router, Routes, Route} from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import AuthProvider from './components/AuthProvider';
 import AuthRequired from "./components/AuthRequired";
 import Layout from "./components/Layout";
@@ -24,7 +24,7 @@ function App() {
           <Route path="/" element={
             <AuthRequired>
               <Layout />
-            </AuthRequired> 
+            </AuthRequired>
           }>
             <Route index element={<Feed />} />
             <Route path="search" element={<Search />} />

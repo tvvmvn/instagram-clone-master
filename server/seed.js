@@ -17,19 +17,19 @@ async function seedDatabase() {
       {
         username: 'cat',
         email: 'cat@example.com',
-        bio: 'Meow!',
+        bio: 'Meow',
         image: 'cat.jpeg'
       },
       {
         username: 'dog',
         email: 'dot@example.com',
-        bio: 'Bark!',
+        bio: 'Bark',
         image: 'dog.jpeg'
       },
       {
         username: 'bird',
         email: 'bird@example.com',
-        bio: 'I can fly!',
+        bio: '',
         image: 'bird.jpeg'
       }
     ]
