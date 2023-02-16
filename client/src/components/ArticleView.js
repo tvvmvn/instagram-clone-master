@@ -6,9 +6,7 @@ import { fetchArticle, favoriteReq, deleteArticleReq } from "../utils/requests";
 export default function ArticleView() {
 
   const { slug } = useParams();
-  const [error, setError] = useState(null)
   const [article, setArticle] = useState(null);
-  const [isLoaded, setIsLoaded] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -17,9 +15,8 @@ export default function ArticleView() {
         setArticle(data.article);
       })
       .catch(error => {
-        setError(error);
+        navigate('/notfound', { replace: true });
       })
-      .finally(() => setIsLoaded(true));
   }, [])
 
   async function toggleFavorite(slug, isFavorite) {
@@ -50,11 +47,7 @@ export default function ArticleView() {
     }
   }
 
-  if (error) {
-    return <p className="text-red-500">{error.message}</p>
-  }
-
-  if (!isLoaded) {
+  if (!article) {
     return <p>fetching an article...</p>
   }
 

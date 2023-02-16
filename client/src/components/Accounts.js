@@ -1,52 +1,24 @@
-import { useState, useContext, useEffect } from "react";
+import { useState, useContext, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
+import { fetchUser, updateAccountReq, updateProfileImageReq } from "../utils/requests";
 import AuthContext from "./AuthContext";
-import { updateAccountReq } from "../utils/requests";
 
 export default function Accounts() {
   const { user, setUser } = useContext(AuthContext);
-  const [updatedUser, setUpdatedUser] = useState({});
-  const [active, setActive] = useState(false)
+  const [active, setActive] = useState(false);
+  const navigate = useNavigate();
+  const [account, setAccount] = useState(null);
+  const [updatedAccount, setUpdatedAccount] = useState({})
 
-  async function handleUpload(e) {
-    try {
-      const file = e.target.files[0];
-
-      if (file.size > 1e7) {
-        throw new Error('Too big');
-      }
-      
-      const formData = new FormData();
-      formData.append('image', file);
-
-      const data = await updateAccountReq(formData);
-
-      setUser(data.user);
-
-      setActive(false);
-      alert('Successfully uploaded');
-
-    } catch (error) {
-      alert(error)
-    }
-  }
-
-  async function handleDelete(e) {
-    try {
-      const formData = new FormData();
-
-      formData.append('image', '');
-
-      const data = await updateAccountReq(formData);
-
-      setUser(data.user);
-
-      setActive(false);
-      alert('Successfully deleted');
-
-    } catch (error) {
-      alert(error)
-    }
-  }
+  useEffect(() => {
+    fetchUser()
+      .then(data => {
+        setAccount(data.account)
+      })
+      .catch(error => {
+        navigate('/notfound', { replace: true });
+      })
+  }, [])
 
   async function handleSubmit(e) {
     try {
@@ -54,19 +26,32 @@ export default function Accounts() {
 
       const formData = new FormData();
 
-      for (let prop in updatedUser) {
-        formData.append(prop, updatedUser[prop])
-      }
+      Object.keys(updatedAccount).map(prop => {
+        formData.append(prop, updatedAccount[prop])
+      })
 
       const data = await updateAccountReq(formData);
+      setAccount(data.account);
 
-      setUser(data.user);
+      const updatedUser = { ...user, image: data.account.image };
+      setUser(updatedUser);
+      localStorage.setItem('user', JSON.stringify(updatedUser));
 
-      setUpdatedUser({});
-      alert("account is updated");
+      setUpdatedAccount({});
+      alert('Successfully updated');
 
     } catch (error) {
-      alert(error);
+      alert(error)
+    }
+  }
+
+  console.log(updatedAccount);
+
+  function handleUpload(e) {
+    const file = e.target.files[0];
+    
+    if (file) {
+      setUpdatedAccount({ ...updatedAccount, image: file })
     }
   }
 
@@ -74,76 +59,44 @@ export default function Accounts() {
     const name = e.target.name;
     const value = e.target.value;
 
-    setUpdatedUser({ ...updatedUser, [name]: value });
-  }
-
-  function close(e) {
-    if (e.target === e.currentTarget) {
-      setActive(false)
-    }
+    setUpdatedAccount({ ...updatedAccount, [name]: value });
   }
 
   useEffect(() => {
-    document.title = `Edit profile - Instagram`
+    document.title = `Edit profile - Instagram`;
   }, [])
 
-  console.log(updatedUser);
-
-  const modal = (
-    <div className="fixed inset-0 flex justify-center items-center bg-black/[0.2] z-10" onClick={close}>
-      <ul className="bg-white w-60 rounded-lg">
-        <li className="border-b">
-          <label className="block text-center w-full p-2 text-sm font-semibold text-blue-500 cursor-pointer">
-            <input 
-              type="file" 
-              className="hidden" 
-              onChange={handleUpload} 
-              accept="image/*"
-            />
-            Upload Photo
-          </label>
-        </li>
-        <li className="border-b">
-          <button
-            type="button"
-            className="w-full p-2 text-red-500 text-sm font-semibold"
-            onClick={handleDelete}
-          >
-            Remove Current Photo
-          </button>
-        </li>
-        <li>
-          <button
-            type="button"
-            className="w-full p-2 text-sm font-semibold"
-            onClick={() => setActive(false)}
-          >
-            Cancel
-          </button>
-        </li>
-      </ul>
-    </div>
-  )
+  if (!account) {
+    return <p>fetching account...</p>
+  }
 
   return (
     <div className="mt-8 px-4">
+      {Object.keys(updatedAccount).length > 0 && (
+        <p className="mb-4 bg-blue-500 text-white p-2">
+          Click to save updated
+        </p>
+      )}
       <div className="flex mb-4">
         <img
-          src={user.image ? `${process.env.REACT_APP_SERVER}/files/profiles/${user.image}` : '/images/default.png'}
-          className="w-20 h-20 object-cover rounded-full border"
-        />
+          src={
+            updatedAccount.image ? URL.createObjectURL(updatedAccount.image)
+            : `${process.env.REACT_APP_SERVER}/files/profiles/${account.image}`
+          }
+          className="w-16 h-16 object-cover rounded-full border"
+          />
         <div className="flex flex-col grow items-start ml-4">
-          <h3>{user.username}</h3>
+          <h3>{account.username}</h3>
 
-          {active && modal}
-
-          <button
-            type="button"
-            className="text-sm font-semibold"
-            onClick={() => setActive(true)}
-          >
-            Change profile photo
-          </button>
+          <label className="text-sm font-semibold text-blue-500 cursor-pointer">
+            <input
+              type="file"
+              className="hidden"
+              onChange={handleUpload}
+              accept="image/*"
+            />
+            Change Photo
+          </label>
         </div>
       </div>
 
@@ -154,7 +107,7 @@ export default function Accounts() {
             type="text"
             name="fullName"
             className="border px-2 py-1 rounded w-full"
-            value={updatedUser.fullName || user.fullName}
+            value={updatedAccount.fullName || account.fullName}
             onChange={handleChange}
           />
         </div>
@@ -165,7 +118,7 @@ export default function Accounts() {
             type="text"
             name="username"
             className="border px-2 py-1 rounded w-full"
-            value={updatedUser.username || user.username}
+            value={updatedAccount.username || account.username}
             onChange={handleChange}
           />
         </div>
@@ -176,7 +129,7 @@ export default function Accounts() {
             type="text"
             name="email"
             className="border px-2 py-1 rounded w-full"
-            value={updatedUser.email || user.email}
+            value={updatedAccount.email || account.email}
             onChange={handleChange}
           />
         </div>
@@ -187,7 +140,7 @@ export default function Accounts() {
             rows="3"
             name="bio"
             className="border px-2 py-1 rounded w-full"
-            defaultValue={user.bio}
+            value={updatedAccount.bio || account.bio}
             onChange={handleChange}
           />
         </div>
@@ -195,9 +148,9 @@ export default function Accounts() {
         <button
           type="submit"
           className="text-sm font-semibold bg-gray-200 rounded-lg px-4 py-2 disabled:opacity-[0.2]"
-          disabled={Object.keys(updatedUser).length < 1}
+          disabled={Object.keys(updatedAccount).length < 1}
         >
-          Submit
+          Save
         </button>
       </form>
     </div>

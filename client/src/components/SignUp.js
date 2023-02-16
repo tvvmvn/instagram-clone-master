@@ -17,21 +17,19 @@ export default function Register() {
 
       const _error = {};
 
-      if (username.length < 3) {
+      if (username.length < 5) {
         _error.username = 'Username is too short';
       }
 
-      const userByUsername = await fetchUserByUsername(username);
-
-      if (userByUsername.user) {
-        _error.username = 'Username already in use';
+      if (email.length < 5) {
+        _error.email = 'E-mail is not valid';
       }
 
-      // const userByEmail = await fetchUserByEmail(email);
+      const userByEmail = await fetchUserByEmail(email);
 
-      // if (userByEmail) {
-      //   _error.email = 'Email already in use';
-      // }
+      if (userByEmail.user) {
+        _error.email = 'Email already in use';
+      }
 
       if (password.length < 3) {
         _error.password = 'Password is too short';
@@ -135,7 +133,7 @@ export default function Register() {
 
       <p className="text-center mt-4">
         Don't have an account ?  {" "}
-        <Link to="/login" className="text-blue-500 font-semibold">
+        <Link to="/accounts/login" className="text-blue-500 font-semibold">
           Login
         </Link>
       </p>

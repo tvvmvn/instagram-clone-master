@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import User from './User';
+import { useParams, Link } from 'react-router-dom';
 import { fetchFollowings, followReq } from '../utils/requests';
 import Spinner from './Spinner';
 
@@ -32,30 +31,43 @@ export default function FollowingList() {
 
       const updatedFollowings = followings.map(following => {
         if (following.username === username) {
-          return {...following, isFollowing: !following.isFollowing}
+          return { ...following, isFollowing: !following.isFollowing }
         }
         return following;
       })
-  
+
       setFollowings(updatedFollowings);
-      
+
     } catch (error) {
       alert(error)
     }
   }
 
   const followingList = followings.map(following => (
-    <div 
+    <div
       key={following.username}
-      className="flex" 
+      className="flex items-center"
     >
-      <User user={following} />
-      <button 
-        className={`ml-2 font-semibold ${!following.isFollowing && 'text-blue-500'}`}
-        onClick={() => handleFollow(following.username, following.isFollowing)}
+      <Link
+        to={`/profiles/${following.username}`}
+        className="inline-flex items-center"
       >
-        {following.isFollowing ? 'Following' : 'Follow'}
-      </button>
+        <img
+          src={`${process.env.REACT_APP_SERVER}/files/profiles/${following.image}`}
+          className="w-12 h-12 object-cover rounded-full"
+        />
+        <span className="ml-2">
+          {following.username}
+        </span>
+      </Link>
+      <div className="ml-2">
+        <button
+          className={`px-4 py-2 text-sm rounded-lg font-semibold ${following.isFollowing ? 'bg-gray-200' : 'text-white bg-blue-500'}`}
+          onClick={() => handleFollow(following.username, following.isFollowing)}
+        >
+          {following.isFollowing ? 'Following' : 'Follow'}
+        </button>
+      </div>
     </div>
   ))
 
@@ -68,7 +80,7 @@ export default function FollowingList() {
         </ul>
       ) : (
         <p className="text-center my-4">User doesn't followReq any users</p>
-      )} 
+      )}
 
       {!isLoaded && <Spinner />}
       {error && <p className="text-red-500">{error.message}</p>}

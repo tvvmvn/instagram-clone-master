@@ -35,8 +35,6 @@ export default function ArticleCreate({ active, setActive }) {
     }
   }
 
-  // console.log(files)
-
   if (active) {
     return (
       <div className="fixed inset-0 bg-black/[0.2] z-10" onClick={close}>
@@ -48,13 +46,14 @@ export default function ArticleCreate({ active, setActive }) {
           &times;
         </button>
         <form
-          className="p-4 bg-white max-w-xs mt-20 mx-auto rounded-2xl"
+          className="bg-white max-w-xs mt-20 mx-auto rounded-2xl"
           onSubmit={handleSubmit}
         >
-          <h3 className="text-lg font-semibold text-center">Create new post</h3>
-          <hr className="my-4" />
-          <div className="mb-2">
-            <label className="inline-block font-semibold text-sm px-4 py-2 bg-gray-200 rounded-lg cursor-pointer">
+          <div className="p-4 border-b">
+            <h3 className="text-lg font-semibold text-center">Create new post</h3>
+          </div>
+          <div className="p-4">
+            <label className="inline-block mb-2 font-semibold text-sm px-4 py-2 bg-gray-200 rounded-lg cursor-pointer">
               <input
                 type="file"
                 className="hidden"
@@ -65,38 +64,44 @@ export default function ArticleCreate({ active, setActive }) {
               Select Photos +
             </label>
 
-            <ul className="flex flex-wrap">
-              {files.map(file => (
-                <li key={file.name}>
-                  <img className="w-16 h-16 object-cover" src={URL.createObjectURL(file)} alt={file.name} />
-                </li>
-              ))}
-            </ul>
-          </div>
+            {files.length > 0 && (
+              <ul className="grid grid-cols-3 mb-2">
+                {files.map(file => (
+                  <li key={file.name} className="pt-[100%] relative">
+                    <img 
+                      className="absolute inset-0 w-full h-full object-cover" 
+                      src={URL.createObjectURL(file)} 
+                      alt={file.name} 
+                    />
+                  </li>
+                ))}
+              </ul>
+            )}
 
-          <div className="mb-2">
-            <label
-              htmlFor="description"
-              className="block font-semibold"
+            <div className="mb-2">
+              <label
+                htmlFor="description"
+                className="block font-semibold"
+              >
+                Description
+              </label>
+              <textarea
+                rows="2"
+                id="description"
+                className="block w-full px-2 py-1 rounded border"
+                onChange={({ target }) => setDescription(target.value)}
+                value={description}
+              />
+            </div>
+
+            <button
+              type="submit"
+              className="px-4 py-2 text-sm font-semibold bg-blue-500 rounded-lg text-white disabled:opacity-[0.2]"
+              disabled={files.length < 1}
             >
-              Description
-            </label>
-            <textarea
-              rows="2"
-              id="description"
-              className="block w-full px-2 py-1 rounded border"
-              onChange={({ target }) => setDescription(target.value)}
-              value={description}
-            />
+              Post
+            </button>
           </div>
-
-          <button
-            type="submit"
-            className="px-4 py-2 text-sm font-semibold bg-blue-500 rounded-lg text-white disabled:opacity-[0.2]"
-            // disabled={images.length < 1}
-          >
-            Post
-          </button>
         </form>
       </div>
     )

@@ -19,12 +19,12 @@ export default function Login() {
       setError(null);
 
       const formData = JSON.stringify({ email, password });
-      const data = await loginReq(formData);
+      const { user } = await loginReq(formData);
 
-      signIn(data.user);
-
+      localStorage.setItem('user', JSON.stringify(user));
       localStorage.setItem('email', email);
-      localStorage.setItem("token", data.token);
+
+      signIn(user);
       
       setTimeout(() => {
         navigate('/');
@@ -86,9 +86,9 @@ export default function Login() {
 
       {error && <p className="my-4 text-center text-red-500">{error.message}</p>}
 
-      <p className="text-center">
+      <p className="text-center my-4">
         Don't have an account ?  {" "}
-        <Link to="/register" className="text-blue-500 font-semibold">Sign Up</Link>
+        <Link to="/accounts/signup" className="text-blue-500 font-semibold">Sign Up</Link>
       </p>
     </form>
   )

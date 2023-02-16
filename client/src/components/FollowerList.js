@@ -1,12 +1,13 @@
-import {useEffect, useState} from 'react';
-import { useParams } from 'react-router-dom';
-import User from './User';
+import { useContext, useEffect, useState } from 'react';
+import { useParams, Link } from 'react-router-dom';
 import { fetchFollowers, followReq } from '../utils/requests';
+import AuthContext from './AuthContext';
 import Spinner from './Spinner';
 
 export default function FollowerList() {
 
-  const {username} = useParams();
+  const { user } = useContext(AuthContext);
+  const { username } = useParams();
   const [error, setError] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [followers, setFollowers] = useState([]);
@@ -21,8 +22,7 @@ export default function FollowerList() {
       .catch(error => {
         setError(error);
       })
-      .finally(() => setIsLoaded(true))
-
+      .finally(() => setIsLoaded(true));
   }, [])
 
   async function handleFollow(username, isFollowing) {
@@ -31,30 +31,47 @@ export default function FollowerList() {
 
       const updatedFollowers = followers.map(follower => {
         if (follower.username === username) {
-          return {...follower, isFollowing: !follower.isFollowing}
+          return { ...follower, isFollowing: !follower.isFollowing }
         }
         return follower;
       })
-  
+
       setFollowers(updatedFollowers);
-      
+
     } catch (error) {
       alert(error)
     }
   }
 
   const followerList = followers.map(follower => (
-    <div 
+    <div
       key={follower.username}
-      className="flex" 
+      className="flex items-center"
     >
-      <User user={follower} />
-      <button 
-        className={`ml-2 text-blus-500 font-semibold ${!follower.isFollowing && 'text-blue-500'}`}
-        onClick={() => handleFollow(follower.username, follower.isFollowing)}
+      <Link
+        to={`/profiles/${follower.username}`}
+        className="inline-flex items-center"
       >
-        {follower.isFollowing ? 'Following' : 'Follow'}
-      </button>
+        <img
+          src={`${process.env.REACT_APP_SERVER}/files/profiles/${follower.image}`}
+          className="w-12 h-12 object-cover rounded-full"
+        />
+        <span className="ml-2">
+          {follower.username}
+        </span>
+      </Link>
+
+      {user.username !== follower.username && (
+        <div className="ml-2">
+          <button
+            className={`px-4 py-2 text-sm rounded-lg font-semibold ${follower.isFollowing ? 'bg-gray-200' : 'text-white bg-blue-500'}`}
+            onClick={() => handleFollow(follower.username, follower.isFollowing)}
+          >
+            {follower.isFollowing ? 'Following' : 'Follow'}
+          </button>
+        </div>
+      )}
+
     </div>
   ))
 
@@ -71,6 +88,6 @@ export default function FollowerList() {
 
       {!isLoaded && <Spinner />}
       {error && <p className="text-red-500">{error.message}</p>}
-    </div>  
+    </div>
   )
 }

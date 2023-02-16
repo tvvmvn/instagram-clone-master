@@ -170,9 +170,9 @@ function Comment({ comment, slug, deleteComment }) {
   return (
     <li className="py-4 flex border-b">
       <div className="shrink-0">
-        <Link to={`/profile/${comment.author.username}`}>
+        <Link to={`/profiles/${comment.author.username}`}>
           <img
-            src={comment.author.image ? `${process.env.REACT_APP_SERVER}/files/profiles/${comment.author.image}` : '/images/default.png'}
+            src={`${process.env.REACT_APP_SERVER}/files/profiles/${comment.author.image}`}
             className="w-8 h-8 object-cover rounded-full"
           />
         </Link>
@@ -180,9 +180,9 @@ function Comment({ comment, slug, deleteComment }) {
       </div>
 
       <div className="grow ml-4">
-        <span className="font-semibold">
+        <Link to={`/profiles/${comment.author.username}`} className="font-semibold">
           {comment.author.username} {" "}
-        </span>
+        </Link>
         {comment.content}
         <p>
           <small className="font-xs text-gray-400">{comment.created}</small>

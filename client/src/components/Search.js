@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
-import User from './User';
 import { searchUserByUsername } from "../utils/requests";
+import { Link } from "react-router-dom";
 import Spinner from './Spinner';
 
 export default function Search() {
@@ -34,10 +34,6 @@ export default function Search() {
     inputEl.current.focus();
   })
 
-  useEffect(() => {
-    document.title = `Instagram`
-  }, [])
-
   return (
     <div className="px-4">
       <label className="block mt-8 mb-4">
@@ -70,8 +66,23 @@ function Result({ error, isLoaded, users }) {
 
   return users.map(user => (
     <div key={user.username} className="flex items-center my-2">
-      <User user={user}/>
-      {user.isFollowing && <span className="ml-2 text-blue-500 text-sm">Following</span>}
+      <Link
+        to={`/profiles/${user.username}`}
+        className="inline-flex items-center"
+      >
+        <img
+          src={`${process.env.REACT_APP_SERVER}/files/profiles/${user.image}`}
+          className="w-12 h-12 object-cover rounded-full"
+        />
+        <span className="ml-2">
+          {user.username}
+        </span>
+      </Link>
+      {user.isFollowing && (
+        <div className="ml-2">
+          <span className="text-blue-500 text-sm font-semibold">Following</span>
+        </div>
+      )}
     </div>
   ))
 }

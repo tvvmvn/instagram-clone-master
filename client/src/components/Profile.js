@@ -4,14 +4,11 @@ import AuthContext from "./AuthContext";
 import ArticleCreate from "./ArticleCreate";
 import Timeline from "./Timeline";
 import { fetchTimeline, fetchProfile, followReq } from "../utils/requests";
-import NotFound from './NotFound';
 
 export default function Profile() {
   const { username } = useParams();
   const { user, signOut } = useContext(AuthContext);
   const isMaster = user.username === username;
-  const [error, setError] = useState(null);
-  const [isLoaded, setIsLoaded] = useState(false);
   const [profile, setProfile] = useState(null);
   const [articles, setArticles] = useState(null);
   const [articleCount, setArticleCount] = useState(0);
@@ -19,21 +16,20 @@ export default function Profile() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    setIsLoaded(false);
+    setProfile(null);
 
     Promise.all([
       fetchProfile(username),
       fetchTimeline(username)
     ])
       .then(([profile, timeline]) => {
-        setProfile(profile.profile)
+        setProfile(profile.profile);
         setArticles(timeline.articles);
         setArticleCount(timeline.articleCount)
       })
       .catch(error => {
-        setError(error)
+        navigate('/notfound', { replace: true })
       })
-      .finally(() => setIsLoaded(true));
 
   }, [username]);
 
@@ -43,6 +39,7 @@ export default function Profile() {
     if (confirmed) {
       signOut();
       localStorage.removeItem("token");
+      localStorage.removeItem('user');
     }
   }
 
@@ -58,19 +55,10 @@ export default function Profile() {
   }
 
   useEffect(() => {
-    if (active) {
-      document.title = `Create new post - Instagram`;
-    } else {
-      document.title = `${username} - Instagram`;
-    }
-  }, [active])
+    document.title = `${username} - Instagram`
+  }, [])
 
-  if (error) {
-    return <NotFound />
-    // return <p className="text-red-500">{error.message}</p>
-  }
-
-  if (!isLoaded) {
+  if (!profile) {
     return <p>fetching profile...</p>
   }
 
@@ -79,7 +67,7 @@ export default function Profile() {
       <div className="px-4 my-8">
         <div className="flex">
           <img
-            src={profile.image ? `${process.env.REACT_APP_SERVER}/files/profiles/${profile.image}` : '/images/default.png'}
+            src={`${process.env.REACT_APP_SERVER}/files/profiles/${profile.image}`}
             className="w-20 h-20 object-cover border rounded-full"
           />
 
@@ -116,7 +104,7 @@ export default function Profile() {
                 </div>
               </li>
               <li className="w-1/3">
-                <Link to={`/profile/${username}/followers`} className="block text-sm">
+                <Link to={`/profiles/${username}/followers`} className="block text-sm">
                   <span className="font-semibold">
                     {profile.followerCount}
                   </span>
@@ -125,7 +113,7 @@ export default function Profile() {
                 </Link>
               </li>
               <li className="w-1/3">
-                <Link to={`/profile/${username}/following`} className="block text-sm">
+                <Link to={`/profiles/${username}/following`} className="block text-sm">
                   <span className="font-semibold">
                     {profile.followingCount}
                   </span>

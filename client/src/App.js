@@ -7,7 +7,7 @@ import ArticleView from "./components/ArticleView";
 import Comments from "./components/Comments";
 import Search from "./components/Search";
 import Login from "./components/Login";
-import Register from "./components/Register";
+import SignUp from "./components/SignUp";
 import Profile from "./components/Profile";
 import FollowerList from "./components/FollowerList";
 import FollowingList from "./components/FollowingList";
@@ -15,6 +15,7 @@ import Accounts from "./components/Accounts";
 import NotFound from "./components/NotFound";
 
 function App() {
+
   return (
     <Router>
       <AuthProvider>
@@ -27,11 +28,11 @@ function App() {
           }>
             <Route index element={<Feed />} />
             <Route path="search" element={<Search />} />
-            <Route path="article/:slug">
+            <Route path="p/:slug">
               <Route index element={<ArticleView />} />
               <Route path="comments" element={<Comments />} />
             </Route>
-            <Route path="profile/:username">
+            <Route path="profiles/:username">
               <Route index element={<Profile />} />
               <Route path="followers" element={<FollowerList />} />
               <Route path="following" element={<FollowingList />} />
@@ -40,8 +41,8 @@ function App() {
           </Route>
 
           {/* routes that auth is not required */}
-          <Route path="login" element={<Login />} />
-          <Route path="register" element={<Register />} />
+          <Route path="accounts/login" element={<Login />} />
+          <Route path="accounts/signup" element={<SignUp />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </AuthProvider>

@@ -47,9 +47,9 @@ export default function Layout() {
               </Link>
             </li>
             <li className="ml-2">
-              <Link to={`/profile/${user.username}`}>
+              <Link to={`/profiles/${user.username}`}>
                 <img
-                  src={user.image ? `${process.env.REACT_APP_SERVER}/files/profiles/${user.image}` : "/images/default.png"}
+                  src={`${process.env.REACT_APP_SERVER}/files/profiles/${user.image}`}
                   className="w-8 h-8 object-cover rounded-full"
                 />
               </Link>

@@ -42,11 +42,11 @@ export default function ArticleTemplate({ article, toggleFavorite, deleteArticle
     <div className="mt-4 bg-white">
       <div className="px-2 mb-2 flex justify-between items-center">
         <Link
-          to={`/profile/${article.author.username}`}
+          to={`/profiles/${article.author.username}`}
           className="inline-flex items-center"
         >
           <img
-            src={article.author.image ? `${process.env.REACT_APP_SERVER}/files/profiles/${article.author.image}` : '/images/default.png'}
+            src={`${process.env.REACT_APP_SERVER}/files/profiles/${article.author.image}`}
             className="w-10 h-10 object-cover rounded-full"
           />
           <span className="ml-2">
@@ -92,7 +92,7 @@ export default function ArticleTemplate({ article, toggleFavorite, deleteArticle
               </svg>
             )}
           </button>
-          <Link to={`/article/${article.slug}/comments`}>
+          <Link to={`/p/${article.slug}/comments`}>
             <svg 
               className="w-6 ml-2"
               xmlns="http://www.w3.org/2000/svg" 
@@ -103,19 +103,21 @@ export default function ArticleTemplate({ article, toggleFavorite, deleteArticle
           </Link>
         </div>
 
-        <p className="text-sm my-2">{article.favoriteCount} likes</p>
+        <p className="text-sm my-4">{article.favoriteCount} likes</p>
 
         {article.description && (
           <p className="my-4">
-            <span className="font-semibold">{article.author.username}</span>
+            <Link to={`/profiles/${article.author.username}`} className="font-semibold">{article.author.username}</Link>
             {" "}
             {article.description}
           </p>
         )}
 
-        <p className="text-gray-400 text-sm my-2">
-          <Link to={`/article/${article.slug}/comments`}> {article.commentCount} Comments</Link>
-        </p>
+        {article.commentCount > 0 && (
+          <p className="text-gray-400 text-sm my-2">
+            <Link to={`/p/${article.slug}/comments`}> View all {article.commentCount} Comments</Link>
+          </p>
+        )}
 
         <p className="text-gray-400 text-xs">{article.created}</p>
       </div>

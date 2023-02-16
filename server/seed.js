@@ -33,35 +33,35 @@ async function seedDatabase() {
         image: 'bird.jpeg'
       }
     ]
-    
-    for (let i = 0; i<users.length; i++) {
+
+    for (let i = 0; i < users.length; i++) {
       const user = new User();
       user.username = users[i].username;
       user.email = users[i].email;
       user.bio = users[i].bio;
       user.image = users[i].image;
-  
+
       await user.save();
-  
+
       console.log(user);
     }
-  
-    for (let i = 1; i<=4; i++) {
-      const user = await User.findOne({username: 'cat'});
-  
+
+    for (let i = 1; i <= 4; i++) {
+      const user = await User.findOne({ username: 'cat' });
+
       const article = new Article();
       article.images = [`${i}.jpeg`];
       article.description = `cat photos ${i}`;
       article.author = user._id;
       article.slug = `cat-${i}`
-  
+
       await article.save();
-      
+
       console.log(article);
     }
-    
+
     mongoose.connection.close();
-  
+
   } catch (error) {
     console.error(error);
   }

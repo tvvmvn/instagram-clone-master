@@ -10,16 +10,15 @@ const profileController = require("../controllers/profileController");
 
 // INDEX
 router.get('/', (req, res) => {
-  res.json({ message: "hello express" });
+  res.json({ message: "API Server - INDEX PAGE" });
 })
 
 // USERS
 router.get('/users', auth, userController.users);
 router.post('/users', userController.register);
-// router.get('/users/:username', userController.username);
-// router.get('/users/:email', userController.email);
-router.get('/user', auth, userController.user); 
-router.put('/user', auth, userController.edit);
+router.get('/users/:email', userController.user);
+router.get('/user', auth, userController.account); 
+router.put('/user', auth, userController.accountEdit);
 router.post('/user/login', userController.login);
 
 // ARTICLES 

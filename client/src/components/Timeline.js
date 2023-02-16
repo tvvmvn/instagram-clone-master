@@ -12,7 +12,7 @@ export default function Timeline({ articles, articleCount }) {
     <ul className="grid grid-cols-3 gap-2 mb-2">
       {articles.map(article => (
         <li key={article.slug}>
-          <Link to={`/article/${article.slug}`} className="block h-40 relative">
+          <Link to={`/p/${article.slug}`} className="block h-40 relative">
             <img
               src={`${process.env.REACT_APP_SERVER}/files/articles/${article.images[0]}`}
               className="w-full h-full object-cover"

@@ -90,10 +90,6 @@ export default function Feed() {
     </div>
   )
 
-  useEffect(() => {
-    document.title = `Instagram`;
-  }, [])
-
   return (
     <>
       <ul className="">
