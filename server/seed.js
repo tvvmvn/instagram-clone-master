@@ -1,7 +1,6 @@
-const userArgs = process.argv.slice[2];
+const userArgs = process.argv.slice(2);
 const mongoose = require("mongoose");
 const User = require('./models/User');
-const Follow = require('./models/Follow');
 const Article = require('./models/Article');
 
 if (!userArgs[0].startsWith('mongodb')) {
@@ -11,6 +10,7 @@ if (!userArgs[0].startsWith('mongodb')) {
 
 async function seedDatabase() {
   try {
+    const MONGODB_URI = userArgs[0];
     await mongoose.connect(MONGODB_URI);
 
     const users = [
