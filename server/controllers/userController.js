@@ -56,12 +56,12 @@ exports.users = async (req, res, next) => {
       user.fullName = _user.fullName;
       user.image = _user.image;
 
-      if (req.user) {
-        const follow = await Follow.
-          findOne({ follower: req.user._id, following: _user._id });
+      // if (req.user) {
+      //   const follow = await Follow.
+      //     findOne({ follower: req.user._id, following: _user._id });
         
-        user.isFollowing = !!follow;
-      }
+      //   user.isFollowing = !!follow;
+      // }
 
       users.push(user);
     }
@@ -127,12 +127,6 @@ exports.register = [
 exports.account = async (req, res, next) => {
   try {
 
-    if (!req.user) {
-      const err = new Error('Unauthorized');
-      err.status = 401;
-      throw err;
-    }
-
     const account = {
       email: req.user.email,
       username: req.user.username,
@@ -152,12 +146,6 @@ exports.accountEdit = [
   fileHandler('profiles').single('image'),
   async (req, res, next) => {
     try {
-      
-      if (!req.user) {
-        const err = new Error('Unauthorized');
-        err.status = 401;
-        throw err;
-      }
 
       const _user = await User.findById(req.user._id);
 

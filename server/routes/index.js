@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router();
 const passport = require("passport");
+const auth = passport.authenticate("jwt", { session: false });
 const jwtStrategy = require("../auth/jwtStrategy");
 const articleController = require("../controllers/articleController");
 const commentController = require("../controllers/commentController");
@@ -8,29 +9,18 @@ const userController = require("../controllers/userController");
 const profileController = require("../controllers/profileController");
 
 passport.use(jwtStrategy);
-const auth = (req, res, next) => {
-  passport.authenticate("jwt", { session: false }, (err, user) => {
-    if (err) {
-      return next(err);
-    }
-
-    req.user = user;  
-    next();
-
-  })(req, res, next);
-} 
 
 /* INDEX */ 
 router.get('/', (req, res) => {
   res.json({ message: "API Server - INDEX PAGE" });
 })
 
-// router.get('/test', auth, (req, res, next) => {
-//   res.json({ user: req.user });
-// });
+router.get('/test', auth, (req, res, next) => {
+  res.json({ user: req.user });
+});
 
 /* USERS */
-router.get('/users', auth, userController.users);
+router.get('/users', userController.users);
 router.post('/users', userController.register);
 router.get('/user', auth, userController.account); 
 router.put('/user', auth, userController.accountEdit);
