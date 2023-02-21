@@ -8,6 +8,8 @@ exports.users = async (req, res, next) => {
   try {
 
     const where = {};
+    const limit = req.query.limit || 10;
+    const skip = req.query.skip || 0;
 
     if ('following' in req.query) {
       const user = await User.findOne({ username: req.query.following });
@@ -35,23 +37,30 @@ exports.users = async (req, res, next) => {
       where.username = new RegExp(req.query.username, 'i');
     }
 
-    const userCount = await User.count(where);
+    if ('email' in req.query) {
+      where.email = req.query.email;
+    }
 
+    const userCount = await User.count(where);
     const _users = await User.
       find(where)
-      .limit(10)
-      .skip(0)
+      .limit(limit)
+      .skip(skip)
 
     const users = [];
 
     for (const _user of _users) {
-      const follow = await Follow
-        .findOne({ follower: req.user._id, following: _user._id });
+      
+      const user = {}
+      user.username = _user.username;
+      user.fullName = _user.fullName;
+      user.image = _user.image;
 
-      const user = {
-        username: _user.username,
-        image: _user.image,
-        isFollowing: !!follow
+      if (req.user) {
+        const follow = await Follow.
+          findOne({ follower: req.user._id, following: _user._id });
+        
+        user.isFollowing = !!follow;
       }
 
       users.push(user);
@@ -70,10 +79,12 @@ exports.register = [
   check('password').isLength({ min: 5 }),
   async (req, res, next) => {
     try {
+      
       const errors = validationResult(req);
 
       if (!errors.isEmpty()) {
-        const err = new Error('Validataion failed');
+        const err = new Error();
+        err.errors = errors.array();
         err.status = 400;
         throw err;
       }
@@ -113,20 +124,14 @@ exports.register = [
   }
 ]
 
-exports.user = async (req, res, next) => {
-  try {
-
-    const user = await User.findOne({ email: req.params.email });
-
-    res.json({ user })
-
-  } catch (error) {
-    next(error)
-  }
-}
-
 exports.account = async (req, res, next) => {
   try {
+
+    if (!req.user) {
+      const err = new Error('Unauthorized');
+      err.status = 401;
+      throw err;
+    }
 
     const account = {
       email: req.user.email,
@@ -147,13 +152,19 @@ exports.accountEdit = [
   fileHandler('profiles').single('image'),
   async (req, res, next) => {
     try {
+      
+      if (!req.user) {
+        const err = new Error('Unauthorized');
+        err.status = 401;
+        throw err;
+      }
 
       const _user = await User.findById(req.user._id);
 
       if (req.file) {
         _user.image = req.file.filename;  
       }
-
+      
       Object.assign(_user, req.body);
   
       await _user.save();

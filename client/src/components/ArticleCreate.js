@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { createArticleReq } from '../utils/requests';
+import { createArticle } from '../utils/requests';
 
 export default function ArticleCreate({ active, setActive }) {
 
@@ -13,14 +13,14 @@ export default function ArticleCreate({ active, setActive }) {
       e.preventDefault();
 
       const formData = new FormData();
-
+      
       for (let file of files) {
         formData.append('images', file);
       }
 
       formData.append('description', description);
-
-      await createArticleReq(formData);
+      
+      await createArticle(formData);
 
       navigate('/');
       

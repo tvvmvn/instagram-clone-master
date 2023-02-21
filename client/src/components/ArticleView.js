@@ -1,16 +1,16 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import ArticleTemplate from "./ArticleTemplate";
-import { fetchArticle, favoriteReq, deleteArticleReq } from "../utils/requests";
+import { fetchArticle, createFavorite, deleteFavorite, deleteArticle } from "../utils/requests";
 
 export default function ArticleView() {
 
-  const { slug } = useParams();
+  const { id } = useParams();
   const [article, setArticle] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetchArticle(slug)
+    fetchArticle(id)
       .then(data => {
         setArticle(data.article);
       })
@@ -19,14 +19,14 @@ export default function ArticleView() {
       })
   }, [])
 
-  async function toggleFavorite(slug, isFavorite) {
+  async function addFavorite(id) {
     try {
-      await favoriteReq(slug, isFavorite);
+      await createFavorite(id);
 
       const updatedArticle = {
         ...article,
-        isFavorite: !isFavorite,
-        favoriteCount: article.favoriteCount + (isFavorite ? - 1 : + 1)
+        isFavorite: true,
+        favoriteCount: article.favoriteCount + 1
       }
   
       setArticle(updatedArticle);
@@ -36,9 +36,26 @@ export default function ArticleView() {
     }
   }
 
-  async function deleteArticle(slug) {
+  async function cancelFavorite(id) {
     try {
-      await deleteArticleReq(slug);
+      await deleteFavorite(id);
+
+      const updatedArticle = {
+        ...article,
+        isFavorite: false,
+        favoriteCount: article.favoriteCount -1
+      }
+  
+      setArticle(updatedArticle);
+    
+    } catch (error) {
+      alert(error)
+    }
+  }
+
+  async function removeArticle(id) {
+    try {
+      await deleteArticle(id);
       
       navigate('/', { replace: true });
     
@@ -54,8 +71,9 @@ export default function ArticleView() {
   return (
     <ArticleTemplate
       article={article}
-      toggleFavorite={toggleFavorite}
-      deleteArticle={deleteArticle}
+      addFavorite={addFavorite}
+      cancelFavorite={cancelFavorite}
+      removeArticle={removeArticle}
     />
   )
 }

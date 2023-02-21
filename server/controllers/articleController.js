@@ -7,24 +7,18 @@ const fileHandler = require('../utils/fileHandler');
 
 exports.feed = async (req, res, next) => {
   try {
-    const loginUser = req.user;
 
-    const follows = await Follow.find({ follower: loginUser._id });
-    const followings = follows.map(follow => follow.following); 
+    const follows = await Follow.find({ follower: req.user._id });
+    const followings = follows.map(follow => follow.following);
 
-    const where = { author: [...followings, loginUser._id] }
-    const limit = req.query.limit;
-    const skip = req.query.skip;
+    const where = { author: [...followings, req.user._id] }
+    const limit = req.query.limit || 5;
+    const skip = req.query.skip || 0;
 
     const articleCount = await Article.count(where);
-
     const _articles = await Article
       .find(where)
       .sort({ created: 'desc' })
-      .populate({
-        path: 'author',
-        select: 'username image -_id'
-      })
       .skip(skip)
       .limit(limit)
 
@@ -32,20 +26,23 @@ exports.feed = async (req, res, next) => {
 
     for (let _article of _articles) {
       const favorite = await Favorite
-        .findOne({ user: loginUser._id, article: _article._id });
-
+        .findOne({ user: req.user._id, article: _article._id });
       const commentCount = await Comment
         .count({ article: _article._id });
+      const user = await User.findById(_article.author);
 
       const article = {
         images: _article.images,
         description: _article.description,
-        created: _article.date, // virtual
-        author: _article.author,
+        displayDate: _article.displayDate, // virtual
+        author: {
+          username: user.username,
+          image: user.image
+        },
         favoriteCount: _article.favoriteCount,
         isFavorite: !!favorite,
         commentCount,
-        slug: _article.slug,
+        id: _article._id
       }
 
       articles.push(article);
@@ -61,16 +58,15 @@ exports.feed = async (req, res, next) => {
 exports.articles = async (req, res, next) => {
   try {
     const where = {}
-    const limit = req.query.limit
-    const skip = req.query.skip
+    const limit = req.query.limit || 9
+    const skip = req.query.skip || 0
 
-    if (req.query.username) {
+    if ('username' in req.query) {
       const user = await User.findOne({ username: req.query.username });
       where.author = user._id;
     }
 
     const articleCount = await Article.count(where);
-
     const _articles = await Article
       .find(where)
       .sort({ created: 'desc' })
@@ -81,14 +77,14 @@ exports.articles = async (req, res, next) => {
 
     for (let _article of _articles) {
 
-      const favoriteCount = await Favorite.count({article: _article._id});
-      const commentCount = await Comment.count({article: _article._id});
+      const favoriteCount = await Favorite.count({ article: _article._id });
+      const commentCount = await Comment.count({ article: _article._id });
 
       const article = {
         images: _article.images,
-        slug: _article.slug,
         favoriteCount,
-        commentCount
+        commentCount,
+        id: _article._id,
       }
 
       articles.push(article);
@@ -103,11 +99,8 @@ exports.articles = async (req, res, next) => {
 
 exports.article = async (req, res, next) => {
   try {
-    const loginUser = req.user;
-    const slug = req.params.slug;
-
     const _article = await Article
-      .findOne({ slug })
+      .findById(req.params.id)
       .populate('author')
 
     if (!_article) {
@@ -117,22 +110,25 @@ exports.article = async (req, res, next) => {
     }
 
     const favorite = await Favorite
-      .findOne({ user: loginUser._id, article: _article._id });
-
+      .findOne({ user: req.user._id, article: _article._id });
     const commentCount = await Comment.count({ article: _article._id });
+    const user = await User.findById(_article.author);
+    const follow = await Follow
+      .findOne({ follower: req.user._id, following: user._id });
 
     const article = {
       images: _article.images,
       description: _article.description,
-      created: _article.date,
+      displayDate: _article.displayDate,
       author: {
-        username: _article.author.username,
-        image: _article.author.image
+        username: user.username,
+        image: user.image,
+        isFollowing: !!follow,
       },
       favoriteCount: _article.favoriteCount,
       isFavorite: !!favorite,
       commentCount,
-      slug: _article.slug,
+      id: _article._id
     }
 
     res.json({ article });
@@ -160,8 +156,7 @@ exports.create = [
       article.description = req.body.description;
       article.images = images;
       article.author = req.user._id;
-      article.slugify(files[0].originalname);
-  
+
       await article.save();
 
       res.json({ article });
@@ -175,16 +170,8 @@ exports.create = [
 exports.delete = async (req, res, next) => {
   try {
 
-    const loginUser = req.user;
-    const slug = req.params.slug;
     const article = await Article
-      .findOne({ slug });
-
-    if (loginUser._id.toString() !== article.author.toString()) {
-      const err = new Error("User not match")
-      err.staus = 400;
-      throw err;
-    }
+      .findById(req.params.id);
 
     if (!article) {
       const err = new Error("Article not found")
@@ -192,9 +179,15 @@ exports.delete = async (req, res, next) => {
       throw err;
     }
 
+    if (req.user._id.toString() !== article.author.toString()) {
+      const err = new Error("Author is not correct")
+      err.staus = 400;
+      throw err;
+    }
+
     await article.delete();
 
-    res.json({ slug });
+    res.json({ article });
 
   } catch (error) {
     next(error)
@@ -203,13 +196,11 @@ exports.delete = async (req, res, next) => {
 
 exports.favorite = async (req, res, next) => {
   try {
-    const loginUser = req.user;
-    const slug = req.params.slug;
 
-    const article = await Article.findOne({ slug })
+    const article = await Article.findById(req.params.id);
 
     const favorite = await Favorite
-      .findOne({ user: loginUser._id, article: article._id })
+      .findOne({ user: req.user._id, article: article._id })
 
     if (favorite) {
       const err = new Error("Already favorite article");
@@ -218,7 +209,7 @@ exports.favorite = async (req, res, next) => {
     }
 
     const newFavorite = new Favorite({
-      user: loginUser._id,
+      user: req.user._id,
       article: article._id
     })
     await newFavorite.save();
@@ -235,16 +226,13 @@ exports.favorite = async (req, res, next) => {
 
 exports.unfavorite = async (req, res, next) => {
   try {
-    const loginUser = req.user;
-    const slug = req.params.slug
-
-    const article = await Article.findOne({ slug })
+    const article = await Article.findById(req.params.id);
 
     const favorite = await Favorite
-      .findOne({ user: loginUser._id, article: article._id });
+      .findOne({ user: req.user._id, article: article._id });
 
     if (!favorite) {
-      const err = new Error("No article to unfavorite");
+      const err = new Error("Not favorite article");
       err.status = 400;
       throw err;
     }

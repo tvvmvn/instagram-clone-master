@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { searchUserByUsername } from "../utils/requests";
+import { fetchUsersByUsername } from "../utils/requests";
 import { Link } from "react-router-dom";
 import Spinner from './Spinner';
 
@@ -20,7 +20,7 @@ export default function Search() {
     setError(null);
     setIsLoaded(false);
 
-    searchUserByUsername(username)
+    fetchUsersByUsername(username)
       .then(data => {
         setUsers(data.users);
       })
@@ -74,15 +74,15 @@ function Result({ error, isLoaded, users }) {
           src={`${process.env.REACT_APP_SERVER}/files/profiles/${user.image}`}
           className="w-12 h-12 object-cover rounded-full"
         />
-        <span className="ml-2">
-          {user.username}
-        </span>
-      </Link>
-      {user.isFollowing && (
         <div className="ml-2">
-          <span className="text-blue-500 text-sm font-semibold">Following</span>
+          <span className="block font-semibold">
+            {user.username}
+          </span>
+          <span className="block text-gray-400 text-sm">
+            {user.fullName}
+          </span>
         </div>
-      )}
+      </Link>
     </div>
   ))
 }

@@ -1,7 +1,7 @@
 import { useState, useContext, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import AuthContext from "./AuthContext";
-import { loginReq } from "../utils/requests";
+import { createToken } from "../utils/requests";
 
 export default function Login() {
 
@@ -19,7 +19,7 @@ export default function Login() {
       setError(null);
 
       const formData = JSON.stringify({ email, password });
-      const { user } = await loginReq(formData);
+      const { user } = await createToken(formData);
 
       localStorage.setItem('user', JSON.stringify(user));
       localStorage.setItem('email', email);

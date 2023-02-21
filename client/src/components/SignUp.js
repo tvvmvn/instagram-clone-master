@@ -1,15 +1,15 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { createUserReq, fetchUserByEmail, fetchUserByUsername } from "../utils/requests";
+import { createUser, fetchUsersByEmail } from "../utils/requests";
 
 export default function Register() {
 
   const navigate = useNavigate();
-  const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [fullName, setFullName] = useState("");
   const [error, setError] = useState(null);
+  const [email, setEmail] = useState("");
+  const [fullName, setFullName] = useState("");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
 
   async function handleSubmit(e) {
     try {
@@ -17,20 +17,23 @@ export default function Register() {
 
       const _error = {};
 
-      if (username.length < 5) {
-        _error.username = 'Username is too short';
-      }
-
+      // EMAIL
       if (email.length < 5) {
         _error.email = 'E-mail is not valid';
       }
 
-      const userByEmail = await fetchUserByEmail(email);
+      const { userCount } = await fetchUsersByEmail(email);
 
-      if (userByEmail.user) {
-        _error.email = 'Email already in use';
+      if (userCount > 0) {
+        _error.email = 'E-mail is already in use'
       }
 
+      // USERNAME
+      if (username.length < 5) {
+        _error.username = 'Username is too short';
+      }
+
+      // PASSWORD
       if (password.length < 3) {
         _error.password = 'Password is too short';
       }
@@ -48,7 +51,7 @@ export default function Register() {
         password 
       });
       
-      await createUserReq(formData);
+      await createUser(formData);
 
       alert(`Welcome, ${fullName}!`);
 
@@ -60,7 +63,7 @@ export default function Register() {
   }
 
   useEffect(() => {
-    document.title = `Sign Up - Instagram`
+    document.title = 'Sign Up - Instagram';
   }, [])
 
   return (

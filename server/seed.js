@@ -17,29 +17,33 @@ async function seedDatabase() {
       {
         username: 'cat',
         email: 'cat@example.com',
+        fullName: 'Kitty',
+        image: 'cat.jpeg',
         bio: 'Meow',
-        image: 'cat.jpeg'
       },
       {
         username: 'dog',
         email: 'dot@example.com',
+        fullName: 'Mr.Loyal',
+        image: 'dog.jpeg',
         bio: 'Bark',
-        image: 'dog.jpeg'
       },
       {
         username: 'bird',
         email: 'bird@example.com',
+        fullName: 'Blue and White',
+        image: 'bird.jpeg',
         bio: '',
-        image: 'bird.jpeg'
       }
     ]
 
     for (let i = 0; i < users.length; i++) {
       const user = new User();
-      user.username = users[i].username;
       user.email = users[i].email;
-      user.bio = users[i].bio;
+      user.username = users[i].username;
+      user.fullName = users[i].fullName;
       user.image = users[i].image;
+      user.bio = users[i].bio;
 
       await user.save();
 
@@ -53,7 +57,6 @@ async function seedDatabase() {
       article.images = [`${i}.jpeg`];
       article.description = `cat photos ${i}`;
       article.author = user._id;
-      article.slug = `cat-${i}`
 
       await article.save();
 

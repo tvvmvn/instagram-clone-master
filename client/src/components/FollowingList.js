@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { fetchFollowings, followReq } from '../utils/requests';
+import { fetchFollowings } from '../utils/requests';
 import Spinner from './Spinner';
 
 export default function FollowingList() {
@@ -14,7 +14,6 @@ export default function FollowingList() {
   useEffect(() => {
     fetchFollowings(username)
       .then(data => {
-        console.log(data)
         setFollowingCount(data.userCount);
         setFollowings([...followings, ...data.users]);
       })
@@ -25,50 +24,25 @@ export default function FollowingList() {
 
   }, [])
 
-  async function handleFollow(username, isFollowing) {
-    try {
-      await followReq(username, isFollowing);
-
-      const updatedFollowings = followings.map(following => {
-        if (following.username === username) {
-          return { ...following, isFollowing: !following.isFollowing }
-        }
-        return following;
-      })
-
-      setFollowings(updatedFollowings);
-
-    } catch (error) {
-      alert(error)
-    }
-  }
-
   const followingList = followings.map(following => (
-    <div
+    <Link
       key={following.username}
-      className="flex items-center"
+      to={`/profiles/${following.username}`}
+      className="flex items-center mb-2"
     >
-      <Link
-        to={`/profiles/${following.username}`}
-        className="inline-flex items-center"
-      >
-        <img
-          src={`${process.env.REACT_APP_SERVER}/files/profiles/${following.image}`}
-          className="w-12 h-12 object-cover rounded-full"
-        />
-        <span className="ml-2">
-          {following.username}
-        </span>
-      </Link>
-      <div className="ml-2">
-        <button
-          className={`px-4 py-2 text-sm rounded-lg font-semibold ${following.isFollowing ? 'bg-gray-200' : 'text-white bg-blue-500'}`}
-          onClick={() => handleFollow(following.username, following.isFollowing)}
-        >
-          {following.isFollowing ? 'Following' : 'Follow'}
-        </button>
-      </div>
-    </div>
+      <img
+        src={`${process.env.REACT_APP_SERVER}/files/profiles/${following.image}`}
+        className="w-12 h-12 object-cover rounded-full"
+      />
+        <div className="ml-2">
+          <span className="block font-semibold">
+            {following.username}
+          </span>
+          <span className="block text-gray-400 text-sm">
+            {following.fullName}
+          </span>
+        </div>
+    </Link>
   ))
 
   return (
@@ -79,7 +53,7 @@ export default function FollowingList() {
           {followingList}
         </ul>
       ) : (
-        <p className="text-center my-4">User doesn't followReq any users</p>
+        <p className="text-center my-4">User doesn't follow any users</p>
       )}
 
       {!isLoaded && <Spinner />}

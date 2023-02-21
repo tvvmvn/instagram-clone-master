@@ -2,31 +2,31 @@ const multer = require('multer');
 const path = require('path');
 
 module.exports = function fileHandler(dest) {
-  const upload = multer({
+  return multer({
     storage: multer.diskStorage({
       destination: (req, file, cb) => {
-        cb(null, `${__dirname}/../files/${dest}/`)
+        cb(null, `${__dirname}/../files/${dest}/`);
       },
-  
+
       filename: (req, file, cb) => {
         const ext = path.extname(file.originalname);
-        cb(null, Date.now() + ext)
+
+        cb(null, Date.now() + ext);
       }
     }),
     fileFilter: (req, file, cb) => {
       const ext = path.extname(file.originalname);
-  
+
       if (ext === '.jpg' || ext === '.jpeg' || ext === '.png') {
-        return cb(null, true)
+        return cb(null, true);
       }
-  
-      cb(new TypeError('Not acceptable type of files.'));
+
+      const err = new TypeError('This type of file is not acceptable.');
+      cb(err);
     },
     limits: {
       fileSize: 1e7,
       files: 10
     }
   })
-
-  return upload;
 }

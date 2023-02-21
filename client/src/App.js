@@ -20,7 +20,6 @@ function App() {
     <Router>
       <AuthProvider>
         <Routes>
-          {/* routes that auth is required */}
           <Route path="/" element={
             <AuthRequired>
               <Layout />
@@ -28,7 +27,7 @@ function App() {
           }>
             <Route index element={<Feed />} />
             <Route path="search" element={<Search />} />
-            <Route path="p/:slug">
+            <Route path="p/:id">
               <Route index element={<ArticleView />} />
               <Route path="comments" element={<Comments />} />
             </Route>
@@ -39,8 +38,6 @@ function App() {
             </Route>
             <Route path="accounts/edit" element={<Accounts />} />
           </Route>
-
-          {/* routes that auth is not required */}
           <Route path="accounts/login" element={<Login />} />
           <Route path="accounts/signup" element={<SignUp />} />
           <Route path="*" element={<NotFound />} />

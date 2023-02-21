@@ -1,6 +1,6 @@
 import {useState, useEffect, useContext} from "react"
 import ArticleTemplate from "./ArticleTemplate";
-import { fetchFeed, favoriteReq, deleteArticleReq } from "../utils/requests";
+import { fetchFeed, createFavorite, deleteFavorite, deleteArticle } from "../utils/requests";
 import Spinner from './Spinner';
 
 const limit = 5;
@@ -14,6 +14,7 @@ export default function Feed() {
   const [articleCount, setArticleCount] = useState(0);
 
   useEffect(() => {
+    setError(null);
     setIsLoaded(false);
     
     fetchFeed(limit, skip)
@@ -30,16 +31,16 @@ export default function Feed() {
       
   }, [skip])
 
-  async function toggleFavorite(slug, isFavorite) {
+  async function addFavorite(id) {
     try {
-      await favoriteReq(slug, isFavorite);
+      await createFavorite(id);
 
       const updatedArticles = articles.map(article => {
-        if (article.slug === slug) {
+        if (article.id === id) {
           return {
             ...article,
-            isFavorite: !isFavorite,
-            favoriteCount: article.favoriteCount + (isFavorite ? - 1 : + 1)
+            isFavorite: true,
+            favoriteCount: article.favoriteCount + 1
           }
         }
         return article;
@@ -52,12 +53,34 @@ export default function Feed() {
     }
   }
 
-  async function deleteArticle(slug) {
+  async function cancelFavorite(id) {
     try {
-      await deleteArticleReq(slug); 
+      await deleteFavorite(id);
+
+      const updatedArticles = articles.map(article => {
+        if (article.id === id) {
+          return {
+            ...article,
+            isFavorite: false,
+            favoriteCount: article.favoriteCount - 1
+          }
+        }
+        return article;
+      })
+  
+      setArticles(updatedArticles);
+
+    } catch (error) {
+      alert(error)
+    }
+  }
+
+  async function removeArticle(id) {
+    try {
+      await deleteArticle(id); 
 
       const remainingArticles = articles.filter(article => {
-        if (slug !== article.slug) {
+        if (id !== article.id) {
           return article;
         }
       });
@@ -70,11 +93,12 @@ export default function Feed() {
   }
 
   const articleList = articles.map(article => (
-    <li key={article.slug} className="border-b pb-4">
+    <li key={article.id} className="border-b pb-4">
       <ArticleTemplate
         article={article}
-        toggleFavorite={toggleFavorite}
-        deleteArticle={deleteArticle}
+        addFavorite={addFavorite}
+        cancelFavorite={cancelFavorite}
+        removeArticle={removeArticle}
       />
     </li>
   ))

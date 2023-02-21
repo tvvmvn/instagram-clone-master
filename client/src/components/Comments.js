@@ -1,18 +1,18 @@
 import { useContext, useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
-import { fetchComments, createCommentReq, deleteCommentReq } from "../utils/requests";
+import { fetchComments, createComment, deleteComment } from "../utils/requests";
 import Spinner from './Spinner';
 
 export default function Comments() {
 
-  const { slug } = useParams();
+  const { id } = useParams();
   const [error, setError] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [comments, setComments] = useState([]);
   const [commentCount, setCommentCount] = useState(0);
 
   useEffect(() => {
-    fetchComments(slug)
+    fetchComments(id)
       .then(data => {
         setComments([...comments, ...data.comments]);
         setCommentCount(data.commentCount);
@@ -21,12 +21,11 @@ export default function Comments() {
         setError(error);
       })
       .finally(() => setIsLoaded(true));
-
   }, [])
 
   async function addComment(formData) {
     try {
-      const data = await createCommentReq(slug, formData);
+      const data = await createComment(id, formData);
 
       setCommentCount(commentCount + 1);
     
@@ -38,13 +37,13 @@ export default function Comments() {
     }
   }
 
-  async function deleteComment(slug, commentId) {
+  async function removeComment(id) {
     try {
-      await deleteCommentReq(slug, commentId);
+      await deleteComment(id);
       
       setCommentCount(commentCount - 1);
 
-      const updatedComments = comments.filter(comment => comment.id !== commentId);
+      const updatedComments = comments.filter(comment => comment.id !== id);
       setComments(updatedComments);
     
     } catch (error) {
@@ -56,8 +55,7 @@ export default function Comments() {
     <Comment
       key={comment.id}
       comment={comment}
-      slug={slug}
-      deleteComment={deleteComment}
+      removeComment={removeComment}
     />
   ))
 
@@ -123,16 +121,14 @@ function Form({ addComment }) {
   )
 }
 
-function Comment({ comment, slug, deleteComment }) {
+function Comment({ comment, removeComment }) {
 
   const [active, setActive] = useState(false);
 
   async function handleDelete() {
     try {
-      await deleteComment(slug, comment.id);
-
+      await removeComment(comment.id);
       setActive(false);
-      
     } catch (error) {
       alert(error)
     }

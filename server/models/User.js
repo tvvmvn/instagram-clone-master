@@ -14,13 +14,12 @@ const UserSchema = new Schema({
 })
 
 UserSchema.methods.generateJWT = function () {
-  return jwt.sign({
-    username: this.username
-  }, process.env.SECRET);
+  return jwt.sign({ username: this.username }, process.env.SECRET);
 }
 
 UserSchema.methods.setPassword = function (password) {
-  this.salt = crypto.randomBytes(16).toString("hex");
+  this.salt = crypto
+    .randomBytes(16).toString("hex");
 
   this.password = crypto
     .pbkdf2Sync(password, this.salt, 310000, 32, "sha256")
@@ -35,4 +34,4 @@ UserSchema.methods.checkPassword = function (password) {
   return this.password === hashedPassword;
 }
 
-module.exports = mongoose.model('User', UserSchema)
+module.exports = mongoose.model('User', UserSchema);

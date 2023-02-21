@@ -11,8 +11,8 @@ export default function Timeline({ articles, articleCount }) {
   return (
     <ul className="grid grid-cols-3 gap-2 mb-2">
       {articles.map(article => (
-        <li key={article.slug}>
-          <Link to={`/p/${article.slug}`} className="block h-40 relative">
+        <li key={article.id}>
+          <Link to={`/p/${article.id}`} className="block h-40 relative">
             <img
               src={`${process.env.REACT_APP_SERVER}/files/articles/${article.images[0]}`}
               className="w-full h-full object-cover"
@@ -30,7 +30,11 @@ export default function Timeline({ articles, articleCount }) {
                   <span className="ml-2 text-white">{article.favoriteCount}</span>
                 </div>
                 <div className="flex justify-center">
-                  <svg className="w-5 fill-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                  <svg 
+                    className="w-5 fill-white" 
+                    xmlns="http://www.w3.org/2000/svg" 
+                    viewBox="0 0 512 512"
+                  >
                     <path d="M256 32C114.6 32 .0272 125.1 .0272 240c0 49.63 21.35 94.98 56.97 130.7c-12.5 50.37-54.27 95.27-54.77 95.77c-2.25 2.25-2.875 5.734-1.5 8.734C1.979 478.2 4.75 480 8 480c66.25 0 115.1-31.76 140.6-51.39C181.2 440.9 217.6 448 256 448c141.4 0 255.1-93.13 255.1-208S397.4 32 256 32z" />
                   </svg>
                   <span className="ml-2 text-white">{article.commentCount}</span>

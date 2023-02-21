@@ -3,7 +3,7 @@ import { useParams, Link, useNavigate } from "react-router-dom";
 import AuthContext from "./AuthContext";
 import ArticleCreate from "./ArticleCreate";
 import Timeline from "./Timeline";
-import { fetchTimeline, fetchProfile, followReq } from "../utils/requests";
+import { fetchTimeline, fetchProfile, createFollow, deleteFollow } from "../utils/requests";
 
 export default function Profile() {
   const { username } = useParams();
@@ -43,12 +43,19 @@ export default function Profile() {
     }
   }
 
-  async function handleFollow() {
+  async function addFollow() {
     try {
+      await createFollow(username); 
+      setProfile({ ...profile, isFollowing: true })
+    } catch (error) {
+      alert(error)
+    }
+  }
 
-      await followReq(username, profile.isFollowing); 
-      setProfile({ ...profile, isFollowing: !profile.isFollowing })
-
+  async function cancelFollow() {
+    try {
+      await deleteFollow(username); 
+      setProfile({ ...profile, isFollowing: false })
     } catch (error) {
       alert(error)
     }
@@ -64,7 +71,7 @@ export default function Profile() {
 
   return (
     <>
-      <div className="px-4 my-8">
+      <div className="px-4 mt-8">
         <div className="flex">
           <img
             src={`${process.env.REACT_APP_SERVER}/files/profiles/${profile.image}`}
@@ -73,27 +80,41 @@ export default function Profile() {
 
           <div className="grow ml-4">
             <div className="flex items-center mb-4">
-              <h3 className="font-semibold">
-                {profile.username}
-              </h3>
+              <h3>{profile.username}</h3>
 
-              <div className="ml-2">
-                {isMaster ? (
-                  <Link to="/accounts/edit" className="bg-gray-200 rounded-lg px-4 py-2 text-sm font-semibold">
+              {isMaster && (
+                <>
+                  <Link to="/accounts/edit" className="ml-2 bg-gray-200 rounded-lg px-4 py-2 text-sm font-semibold">
                     Edit profile
                   </Link>
-                ) : (
-                  <button 
-                    className={`text-sm px-4 py-2 font-semibold p-2 rounded-lg ${profile.isFollowing ? 'bg-gray-200' : 'bg-blue-500 text-white'}`}
-                    onClick={handleFollow}
+
+                  <button
+                    className="ml-2 bg-gray-200 px-4 py-2 text-sm font-semibold rounded-lg"
+                    onClick={handleSignOut}
                   >
-                    {profile.isFollowing ? 'Following' : 'Follow'}
+                    Out
                   </button>
-                )}
-              </div>
+                </>
+              )}
+              {(!isMaster && profile.isFollowing) && (
+                <button
+                  className="ml-2 bg-gray-200 text-sm px-4 py-2 font-semibold p-2 rounded-lg"
+                  onClick={cancelFollow}
+                >
+                  Following
+                </button>
+              )}
+              {(!isMaster && !profile.isFollowing) && (
+                <button
+                  className="ml-2 bg-blue-500 text-white text-sm px-4 py-2 font-semibold p-2 rounded-lg"
+                  onClick={addFollow}
+                >
+                  Follow
+                </button>
+              )}
             </div>
 
-            <ul className="flex items-center">
+            <ul className="flex items-center mb-4">
               <li className="w-1/3">
                 <div className="text-sm">
                   <span className="font-semibold">
@@ -109,7 +130,7 @@ export default function Profile() {
                     {profile.followerCount}
                   </span>
                   {" "}
-                  follower
+                  followers
                 </Link>
               </li>
               <li className="w-1/3">
@@ -122,21 +143,18 @@ export default function Profile() {
                 </Link>
               </li>
             </ul>
-            <p className="text-sm my-4">
-              {profile.bio}
-            </p>
 
-            {isMaster && (
-              <button
-                className="text-sm text-red-500 font-semibold"
-                onClick={handleSignOut}
-              >
-                Log Out
-              </button>
-            )}
+            <div>
+              {profile.fullName && (
+                <h3 className="text-sm font-semibold my-2">{profile.fullName}</h3>
+              )}
+              <p className="text-sm my-2">
+                {profile.bio}
+              </p>
+            </div>
             
             <button
-              className="fixed right-8 bottom-8 animate-bounce"
+              className="fixed right-8 bottom-8 hover:scale-110"
               onClick={() => setActive(true)}
             >
               <svg 
@@ -152,11 +170,17 @@ export default function Profile() {
         </div>
       </div>
 
-      <hr className="mb-8" />
+      <hr className="mt-4 mb-8" />
 
-      <Timeline articles={articles} articleCount={articleCount} />
+      <Timeline
+        articles={articles}
+        articleCount={articleCount}
+      />
 
-      <ArticleCreate active={active} setActive={setActive} />
+      <ArticleCreate
+        active={active}
+        setActive={setActive}
+      />
     </>
   )
 }

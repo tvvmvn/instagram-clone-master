@@ -1,19 +1,18 @@
 import { useState, useContext, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { fetchUser, updateAccountReq, updateProfileImageReq } from "../utils/requests";
+import { fetchUser, updateAccount } from "../utils/requests";
 import AuthContext from "./AuthContext";
 
 export default function Accounts() {
   const { user, setUser } = useContext(AuthContext);
-  const [active, setActive] = useState(false);
   const navigate = useNavigate();
   const [account, setAccount] = useState(null);
-  const [updatedAccount, setUpdatedAccount] = useState({})
+  const [updatedAccount, setUpdatedAccount] = useState({});
 
   useEffect(() => {
     fetchUser()
       .then(data => {
-        setAccount(data.account)
+        setAccount(data.account);
       })
       .catch(error => {
         navigate('/notfound', { replace: true });
@@ -30,10 +29,14 @@ export default function Accounts() {
         formData.append(prop, updatedAccount[prop])
       })
 
-      const data = await updateAccountReq(formData);
+      const data = await updateAccount(formData);
       setAccount(data.account);
 
-      const updatedUser = { ...user, image: data.account.image };
+      const updatedUser = { 
+        ...user, 
+        image: data.account.image,
+        username: data.account.username
+      };
       setUser(updatedUser);
       localStorage.setItem('user', JSON.stringify(updatedUser));
 
@@ -45,9 +48,7 @@ export default function Accounts() {
     }
   }
 
-  console.log(updatedAccount);
-
-  function handleUpload(e) {
+  function handleFile(e) {
     const file = e.target.files[0];
     
     if (file) {
@@ -63,7 +64,7 @@ export default function Accounts() {
   }
 
   useEffect(() => {
-    document.title = `Edit profile - Instagram`;
+    document.title = 'Edit profile - Instagram';
   }, [])
 
   if (!account) {
@@ -74,7 +75,7 @@ export default function Accounts() {
     <div className="mt-8 px-4">
       {Object.keys(updatedAccount).length > 0 && (
         <p className="mb-4 bg-blue-500 text-white p-2">
-          Click to save updated
+          Click button to save updated data.
         </p>
       )}
       <div className="flex mb-4">
@@ -92,7 +93,7 @@ export default function Accounts() {
             <input
               type="file"
               className="hidden"
-              onChange={handleUpload}
+              onChange={handleFile}
               accept="image/*"
             />
             Change Photo
