@@ -15,10 +15,6 @@ router.get('/', (req, res) => {
   res.json({ message: "API Server - INDEX PAGE" });
 })
 
-router.get('/test', auth, (req, res, next) => {
-  res.json({ user: req.user });
-});
-
 /* USERS */
 router.get('/users', userController.users);
 router.post('/users', userController.register);
