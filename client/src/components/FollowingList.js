@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
-import { fetchFollowings } from '../utils/requests';
+import { useParams, Link, useNavigate } from 'react-router-dom';
+import { getDocs } from '../utils/requests';
 import Spinner from './Spinner';
 
 export default function FollowingList() {
@@ -10,9 +10,10 @@ export default function FollowingList() {
   const [isLoaded, setIsLoaded] = useState(false);
   const [followings, setFollowings] = useState([]);
   const [followingCount, setFollowingCount] = useState(0);
+  const navigate = useNavigate()
 
   useEffect(() => {
-    fetchFollowings(username)
+    getDocs(`users/?following=${username}`)
       .then(data => {
         setFollowingCount(data.userCount);
         setFollowings([...followings, ...data.users]);
@@ -25,24 +26,25 @@ export default function FollowingList() {
   }, [])
 
   const followingList = followings.map(following => (
-    <Link
-      key={following.username}
-      to={`/profiles/${following.username}`}
-      className="flex items-center mb-2"
-    >
-      <img
-        src={`${process.env.REACT_APP_SERVER}/files/profiles/${following.image}`}
-        className="w-12 h-12 object-cover rounded-full"
-      />
-        <div className="ml-2">
-          <span className="block font-semibold">
-            {following.username}
-          </span>
-          <span className="block text-gray-400 text-sm">
-            {following.fullName}
-          </span>
-        </div>
-    </Link>
+    <div key={following.username} className="mb-2">
+      <Link
+        to={`/profiles/${following.username}`}
+        className="inline-flex items-center"
+      >
+        <img
+          src={`${process.env.REACT_APP_SERVER}/files/profiles/${following.image}`}
+          className="w-12 h-12 object-cover rounded-full"
+        />
+          <div className="ml-2">
+            <span className="block font-semibold">
+              {following.username}
+            </span>
+            <span className="block text-gray-400 text-sm">
+              {following.fullName}
+            </span>
+          </div>
+      </Link>
+    </div>
   ))
 
   return (

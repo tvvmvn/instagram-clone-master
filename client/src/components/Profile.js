@@ -3,11 +3,11 @@ import { useParams, Link, useNavigate } from "react-router-dom";
 import AuthContext from "./AuthContext";
 import ArticleCreate from "./ArticleCreate";
 import Timeline from "./Timeline";
-import { fetchTimeline, fetchProfile, createFollow, deleteFollow } from "../utils/requests";
+import { getDoc, getDocs, addDoc, deleteDoc } from "../utils/requests";
 
 export default function Profile() {
   const { username } = useParams();
-  const { user, signOut } = useContext(AuthContext);
+  const { user, setUser } = useContext(AuthContext);
   const isMaster = user.username === username;
   const [profile, setProfile] = useState(null);
   const [articles, setArticles] = useState(null);
@@ -19,13 +19,14 @@ export default function Profile() {
     setProfile(null);
 
     Promise.all([
-      fetchProfile(username),
-      fetchTimeline(username)
+      getDoc(`profiles/${username}`),
+      getDocs(`articles/?username=${username}`)
     ])
-      .then(([profile, timeline]) => {
-        setProfile(profile.profile);
-        setArticles(timeline.articles);
-        setArticleCount(timeline.articleCount)
+      .then(([profileData, timelineData]) => {
+        setProfile(profileData.profile);
+        
+        setArticles(timelineData.articles);
+        setArticleCount(timelineData.articleCount)
       })
       .catch(error => {
         navigate('/notfound', { replace: true })
@@ -37,15 +38,13 @@ export default function Profile() {
     const confirmed = window.confirm('Are you sure to log out?');
 
     if (confirmed) {
-      signOut();
-      localStorage.removeItem("token");
-      localStorage.removeItem('user');
+      setUser(null);
     }
   }
 
   async function addFollow() {
     try {
-      await createFollow(username); 
+      await addDoc(`profiles/${username}/follow`); 
       setProfile({ ...profile, isFollowing: true })
     } catch (error) {
       alert(error)
@@ -54,7 +53,7 @@ export default function Profile() {
 
   async function cancelFollow() {
     try {
-      await deleteFollow(username); 
+      await deleteDoc(`profiles/${username}/follow`); 
       setProfile({ ...profile, isFollowing: false })
     } catch (error) {
       alert(error)

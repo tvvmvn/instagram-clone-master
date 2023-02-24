@@ -1,6 +1,6 @@
 import { useContext, useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
-import { fetchComments, createComment, deleteComment } from "../utils/requests";
+import { getDocs, addDoc, deleteDoc } from "../utils/requests";
 import Spinner from './Spinner';
 
 export default function Comments() {
@@ -12,7 +12,7 @@ export default function Comments() {
   const [commentCount, setCommentCount] = useState(0);
 
   useEffect(() => {
-    fetchComments(id)
+    getDocs(`articles/${id}/comments`)
       .then(data => {
         setComments([...comments, ...data.comments]);
         setCommentCount(data.commentCount);
@@ -23,9 +23,12 @@ export default function Comments() {
       .finally(() => setIsLoaded(true));
   }, [])
 
-  async function addComment(formData) {
+  async function addComment(content) {
     try {
-      const data = await createComment(id, formData);
+
+      const formData = JSON.stringify(content);
+
+      const data = await addDoc(`articles/${id}/comments`, formData);
 
       setCommentCount(commentCount + 1);
     
@@ -37,14 +40,14 @@ export default function Comments() {
     }
   }
 
-  async function removeComment(id) {
+  async function deleteComment(id) {
     try {
-      await deleteComment(id);
+      await deleteDoc(`comments/${id}`);
       
-      setCommentCount(commentCount - 1);
+      const remainingComments = comments.filter(comment => comment.id !== id);
 
-      const updatedComments = comments.filter(comment => comment.id !== id);
-      setComments(updatedComments);
+      setComments(remainingComments);
+      setCommentCount(commentCount - 1);
     
     } catch (error) {
       alert(error)
@@ -55,7 +58,7 @@ export default function Comments() {
     <Comment
       key={comment.id}
       comment={comment}
-      removeComment={removeComment}
+      deleteComment={deleteComment}
     />
   ))
 
@@ -88,8 +91,7 @@ function Form({ addComment }) {
     try {
       e.preventDefault();
 
-      const formData = JSON.stringify({ content });
-      await addComment(formData);
+      await addComment({ content });
 
       setContent("");
 
@@ -121,13 +123,13 @@ function Form({ addComment }) {
   )
 }
 
-function Comment({ comment, removeComment }) {
+function Comment({ comment, deleteComment }) {
 
   const [active, setActive] = useState(false);
 
   async function handleDelete() {
     try {
-      await removeComment(comment.id);
+      await deleteComment(comment.id);
       setActive(false);
     } catch (error) {
       alert(error)

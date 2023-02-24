@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { createUser, fetchUsersByEmail } from "../utils/requests";
+import { createUser, doesEmailExists } from "../utils/requests";
 
 export default function Register() {
 
@@ -22,9 +22,7 @@ export default function Register() {
         _error.email = 'E-mail is not valid';
       }
 
-      const { userCount } = await fetchUsersByEmail(email);
-
-      if (userCount > 0) {
+      if (await doesEmailExists(email)) {
         _error.email = 'E-mail is already in use'
       }
 

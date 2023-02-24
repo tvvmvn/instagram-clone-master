@@ -101,7 +101,6 @@ exports.article = async (req, res, next) => {
   try {
     const _article = await Article
       .findById(req.params.id)
-      .populate('author')
 
     if (!_article) {
       const err = new Error("Article not found");
@@ -113,8 +112,6 @@ exports.article = async (req, res, next) => {
       .findOne({ user: req.user._id, article: _article._id });
     const commentCount = await Comment.count({ article: _article._id });
     const user = await User.findById(_article.author);
-    const follow = await Follow
-      .findOne({ follower: req.user._id, following: user._id });
 
     const article = {
       images: _article.images,
@@ -123,7 +120,6 @@ exports.article = async (req, res, next) => {
       author: {
         username: user.username,
         image: user.image,
-        isFollowing: !!follow,
       },
       favoriteCount: _article.favoriteCount,
       isFavorite: !!favorite,
@@ -142,6 +138,7 @@ exports.create = [
   fileHandler('articles').array('images'),
   async (req, res, next) => {
     try {
+      
       const files = req.files;
 
       if (files.length < 1) {

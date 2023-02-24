@@ -5,15 +5,20 @@ import AuthContext from "./AuthContext";
 export default function AuthProvider({ children }) {
   const [user, setUser] = useState(JSON.parse(localStorage.getItem('user')));
 
-  function signIn(user) {
-    setUser(user);
-  }
+  // user state listener
+  useEffect(() => {
+    
+    console.log('user state listener is triggered.', user);
 
-  function signOut() {
-    setUser(null);
-  }
+    if (user) {
+      localStorage.setItem('user', JSON.stringify(user));
+    } else {
+      localStorage.removeItem('user');
+    }
 
-  const value = { user, setUser, signIn, signOut };
+  }, [user])
+
+  const value = { user, setUser };
 
   return (
     <AuthContext.Provider value={value}>

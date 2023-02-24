@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import ArticleTemplate from "./ArticleTemplate";
-import { fetchArticle, createFavorite, deleteFavorite, deleteArticle } from "../utils/requests";
+import { getDoc, addDoc, deleteDoc } from "../utils/requests";
 
 export default function ArticleView() {
 
@@ -10,7 +10,7 @@ export default function ArticleView() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetchArticle(id)
+    getDoc(`articles/${id}`)
       .then(data => {
         setArticle(data.article);
       })
@@ -21,7 +21,7 @@ export default function ArticleView() {
 
   async function addFavorite(id) {
     try {
-      await createFavorite(id);
+      await addDoc(`articles/${id}/favorite`);
 
       const updatedArticle = {
         ...article,
@@ -38,7 +38,7 @@ export default function ArticleView() {
 
   async function cancelFavorite(id) {
     try {
-      await deleteFavorite(id);
+      await deleteDoc(`articles/${id}/favorite`);
 
       const updatedArticle = {
         ...article,
@@ -53,9 +53,9 @@ export default function ArticleView() {
     }
   }
 
-  async function removeArticle(id) {
+  async function deleteArticle(id) {
     try {
-      await deleteArticle(id);
+      await deleteDoc(`articles/${id}`);
       
       navigate('/', { replace: true });
     
@@ -73,7 +73,7 @@ export default function ArticleView() {
       article={article}
       addFavorite={addFavorite}
       cancelFavorite={cancelFavorite}
-      removeArticle={removeArticle}
+      deleteArticle={deleteArticle}
     />
   )
 }

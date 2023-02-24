@@ -1,10 +1,17 @@
-const server = process.env.REACT_APP_SERVER;
+export async function addDoc(url, data) {
 
-/* USER  */
-export async function fetchUser() {
-  const res = await fetch(`${server}/user`, {
-    headers: { 'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem("user")).token }
-  });
+  const opts = {}
+  opts.method = 'POST';
+  opts.headers = { 'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem("user")).token }
+
+  if (data) {
+    if (typeof data === 'string') {
+      opts.headers['Content-Type'] = 'application/json';
+    }
+    opts.body = data;
+  }
+
+  const res = await fetch(`http://localhost:3000/api/${url}`, opts)
 
   if (!res.ok) {
     throw new Error(`${res.status} ${res.statusText}`);
@@ -13,10 +20,13 @@ export async function fetchUser() {
   return await res.json();
 }
 
-export async function fetchUsersByUsername(username) {
-  const res = await fetch(`${server}/users/?username=${username}`, {
-    headers: { 'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem("user")).token }
-  });
+export async function getDocs(url) {
+
+  const opts = {};
+  opts.method = 'GET'
+  opts.headers = { 'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem("user")).token }
+
+  const res = await fetch(`http://localhost:3000/api/${url}`, opts)
 
   if (!res.ok) {
     throw new Error(`${res.status} ${res.statusText}`);
@@ -24,9 +34,61 @@ export async function fetchUsersByUsername(username) {
 
   return await res.json();
 }
-  
-export async function fetchUsersByEmail(email) {
-  const res = await fetch(`${server}/users/?email=${email}`);
+
+export async function getDoc(url) {
+
+  const opts = {};
+  opts.method = 'GET'
+  opts.headers = { 'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem("user")).token }
+
+  const res = await fetch(`http://localhost:3000/api/${url}`, opts)
+
+  if (!res.ok) {
+    throw new Error(`${res.status} ${res.statusText}`);
+  }
+
+  return await res.json();
+}
+
+export async function deleteDoc(url) {
+
+  const opts = {};
+  opts.method = 'DELETE'
+  opts.headers = { 'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem("user")).token }
+
+  const res = await fetch(`http://localhost:3000/api/${url}`, opts)
+
+  if (!res.ok) {
+    throw new Error(`${res.status} ${res.statusText}`);
+  }
+
+  return await res.json();
+}
+
+export async function updateDoc(url, data) {
+
+  const opts = {};
+  opts.method = 'PUT';
+  opts.headers = { 'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem("user")).token };
+  opts.body = data;
+
+  const res = await fetch(`http://localhost:3000/api/${url}`, opts)
+
+  if (!res.ok) {
+    throw new Error(`${res.status} ${res.statusText}`);
+  }
+
+  return await res.json();
+}
+
+export async function signIn(formData) {
+
+  const opts = {};
+  opts.method = 'POST'
+  opts.headers = { 'Content-Type': 'application/json' }
+  opts.body = formData;
+
+  const res = await fetch(`http://localhost:3000/api/user/login`, opts)
 
   if (!res.ok) {
     throw new Error(`${res.status} ${res.statusText}`);
@@ -36,11 +98,13 @@ export async function fetchUsersByEmail(email) {
 }
 
 export async function createUser(formData) {
-  const res = await fetch(`${server}/users`, {
-    method: "POST",
-    headers: { 'Content-Type': 'application/json'},
-    body: formData
-  })
+
+  const opts = {};
+  opts.method = 'POST';
+  opts.headers = { 'Content-Type': 'application/json' }
+  opts.body = formData;
+
+  const res = await fetch(`http://localhost:3000/api/users`, opts);
 
   if (!res.ok) {
     throw new Error(`${res.status} ${res.statusText}`);
@@ -49,12 +113,14 @@ export async function createUser(formData) {
   return await res.json();
 }
 
-export async function createToken(formData) {
-  const res = await fetch(`${server}/user/login`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: formData
-  })
+export async function updateUser(data) {
+
+  const opts = {};
+  opts.method = 'PUT';
+  opts.headers = { 'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem("user")).token };
+  opts.body = data;
+
+  const res = await fetch(`http://localhost:3000/api/user`, opts);
 
   if (!res.ok) {
     throw new Error(`${res.status} ${res.statusText}`);
@@ -63,233 +129,21 @@ export async function createToken(formData) {
   return await res.json();
 }
 
-export async function updateAccount(formData) {
-  const res = await fetch(`${server}/user`, {
-    method: "PUT",
-    headers: {
-      "Authorization": 'Bearer ' + JSON.parse(localStorage.getItem("user")).token,
-    },
-    body: formData
-  })
+export async function doesEmailExists(email) {
+
+  const opts = {};
+  opts.method = 'GET';
+
+  const res = await fetch(`http://localhost:3000/api/users/?email=${email}`, opts);
 
   if (!res.ok) {
     throw new Error(`${res.status} ${res.statusText}`);
   }
 
-  return await res.json();
+  const { userCount } = await res.json();
+
+  return userCount > 0;
 }
-
-
-/* ARTICLES */
-export async function fetchFeed(limit, skip) {
-  const res = await fetch(`${server}/feed/?limit=${limit}&skip=${skip}`, {
-    headers: { 'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem("user")).token }
-  });
-
-  if (!res.ok) {
-    throw new Error(`${res.status} ${res.statusText}`);
-  }
-
-  return await res.json();
-}
-
-export async function fetchArticle(id) {
-  const res = await fetch(`${server}/articles/${id}`, {
-    headers: { 'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem("user")).token }
-  });
-
-  if (!res.ok) {
-    throw new Error(`${res.status} ${res.statusText}`);
-  }
-
-  return await res.json();
-}
-export async function createArticle(formData) {
-  const res = await fetch(`${server}/articles`, {
-    method: "POST",
-    headers: {
-      "Authorization": 'Bearer ' + JSON.parse(localStorage.getItem("user")).token,
-    },
-    body: formData
-  })
-
-  if (!res.ok) {
-    throw new Error(`${res.status} ${res.statusText}`);
-  }
-
-  return await res.json();
-}
-
-export async function deleteArticle(id) {
-  const res = await fetch(`${server}/articles/${id}`, {
-    method: 'DELETE',
-    headers: { 'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem("user")).token }
-  })
-
-  if (!res.ok) {
-    throw new Error(`${res.status} ${res.statusText}`);
-  }
-
-  return await res.json();
-}
-
-export async function createFavorite(id) {
-  const res = await fetch(`${server}/articles/${id}/favorite`, {
-    method: 'POST',
-    headers: { 'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem("user")).token }
-  })
-
-  if (!res.ok) {
-    throw new Error(`${res.status} ${res.statusText}`);
-  }
-
-  return await res.json();
-}
-
-export async function deleteFavorite(id) {
-  const res = await fetch(`${server}/articles/${id}/favorite`, {
-    method: 'DELETE',
-    headers: { 'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem("user")).token }
-  })
-
-  if (!res.ok) {
-    throw new Error(`${res.status} ${res.statusText}`);
-  }
-
-  return await res.json();
-}
-
-/* COMMENTS */
-export async function fetchComments(id) {
-  const res = await fetch(`${server}/articles/${id}/comments`, {
-    headers: { 'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem("user")).token }
-  });
-
-  if (!res.ok) {
-    throw new Error(`${res.status} ${res.statusText}`);
-  }
-
-  return await res.json();
-}
-
-export async function createComment(id, formData) {
-
-  const res = await fetch(`${server}/articles/${id}/comments`, {
-    method: "POST",
-    headers: {
-      "Authorization": 'Bearer ' + JSON.parse(localStorage.getItem("user")).token,
-      "Content-Type": "application/json",
-    },
-    body: formData
-  })
-
-  if (!res.ok) {
-    throw new Error(`${res.status} ${res.statusText}`);
-  }
-
-  return await res.json();
-}
-
-
-export async function deleteComment(id) {
-  const res = await fetch(`${server}/comments/${id}`, {
-    method: 'DELETE',
-    headers: { 'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem("user")).token }
-  })
-
-  if (!res.ok) {
-    throw new Error(`${res.status} ${res.statusText}`);
-  }
-
-  return await res.json();
-}
-
-
-/* PROFILES */
-export async function fetchProfile(username) {
-  const res = await fetch(`${server}/profiles/${username}`, {
-    headers: { 'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem("user")).token }
-  })
-
-  if (!res.ok) {
-    throw new Error(`${res.status} ${res.statusText}`);
-  }
-
-  return await res.json();
-}
-
-export async function fetchTimeline(username, skip = 0) {
-  const res = await fetch(`${server}/articles/?username=${username}&skip=${skip}`, {
-    headers: { 'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem("user")).token }
-  })
-
-  if (!res.ok) {
-    throw new Error(`${res.status} ${res.statusText}`);
-  }
-
-  return await res.json();
-}
-
-export async function fetchFollowers(username) {
-  const res = await fetch(`${server}/users/?followers=${username}`, {
-    headers: { 'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem("user")).token }
-  });
-
-  if (!res.ok) {
-    throw new Error(`${res.status} ${res.statusText}`);
-  }
-
-  return await res.json();
-}
-
-export async function fetchFollowings(username) {
-  const res = await fetch(`${server}/users/?following=${username}`, {
-    headers: { 'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem("user")).token }
-  });
-
-  if (!res.ok) {
-    throw new Error(`${res.status} ${res.statusText}`);
-  }
-
-  return await res.json();
-}
-
-export async function createFollow(username) {
-  const res = await fetch(`${server}/profiles/${username}/follow`, {
-    method: 'POST',
-    headers: { 'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem("user")).token }
-  })
-
-  if (!res.ok) {
-    throw new Error(`${res.status} ${res.statusText}`);
-  }
-
-  return await res.json();
-}
-
-export async function deleteFollow(username) {
-  const res = await fetch(`${server}/profiles/${username}/follow`, {
-    method: 'DELETE',
-    headers: { 'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem("user")).token }
-  })
-
-  if (!res.ok) {
-    throw new Error(`${res.status} ${res.statusText}`);
-  }
-
-  return await res.json();
-}
-
-
-
-
-
-
-
-
-
-
-
 
 
 

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Carousel from "./Carousel";
 
-export default function ArticleTemplate({ article, addFavorite, cancelFavorite, removeArticle }) {
+export default function ArticleTemplate({ article, addFavorite, cancelFavorite, deleteArticle }) {
 
   const [active, setActive] = useState(false);
 
@@ -18,7 +18,7 @@ export default function ArticleTemplate({ article, addFavorite, cancelFavorite, 
         <li className="border-b">
           <button
             className="w-full px-4 py-2 text-sm font-semibold text-red-500"
-            onClick={() => removeArticle(article.id)}
+            onClick={() => deleteArticle(article.id)}
           >
             Delete
           </button>

@@ -1,6 +1,6 @@
 import {useState, useEffect, useContext} from "react"
 import ArticleTemplate from "./ArticleTemplate";
-import { fetchFeed, createFavorite, deleteFavorite, deleteArticle } from "../utils/requests";
+import { getDocs, addDoc, deleteDoc } from "../utils/requests";
 import Spinner from './Spinner';
 
 const limit = 5;
@@ -17,7 +17,7 @@ export default function Feed() {
     setError(null);
     setIsLoaded(false);
     
-    fetchFeed(limit, skip)
+    getDocs(`feed/?limit=${limit}&skip=${skip}`)
       .then(data => {
         setArticleCount(data.articleCount);
           
@@ -33,7 +33,7 @@ export default function Feed() {
 
   async function addFavorite(id) {
     try {
-      await createFavorite(id);
+      await addDoc(`articles/${id}/favorite`);
 
       const updatedArticles = articles.map(article => {
         if (article.id === id) {
@@ -55,7 +55,7 @@ export default function Feed() {
 
   async function cancelFavorite(id) {
     try {
-      await deleteFavorite(id);
+      await deleteDoc(`articles/${id}/favorite`);
 
       const updatedArticles = articles.map(article => {
         if (article.id === id) {
@@ -75,9 +75,9 @@ export default function Feed() {
     }
   }
 
-  async function removeArticle(id) {
+  async function deleteArticle(id) {
     try {
-      await deleteArticle(id); 
+      await deleteDoc(`articles/${id}`); 
 
       const remainingArticles = articles.filter(article => {
         if (id !== article.id) {
@@ -98,7 +98,7 @@ export default function Feed() {
         article={article}
         addFavorite={addFavorite}
         cancelFavorite={cancelFavorite}
-        removeArticle={removeArticle}
+        deleteArticle={deleteArticle}
       />
     </li>
   ))

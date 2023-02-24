@@ -1,23 +1,11 @@
 import { useState, useContext, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { fetchUser, updateAccount } from "../utils/requests";
+import { updateUser } from "../utils/requests";
 import AuthContext from "./AuthContext";
 
 export default function Accounts() {
   const { user, setUser } = useContext(AuthContext);
-  const navigate = useNavigate();
-  const [account, setAccount] = useState(null);
-  const [updatedAccount, setUpdatedAccount] = useState({});
-
-  useEffect(() => {
-    fetchUser()
-      .then(data => {
-        setAccount(data.account);
-      })
-      .catch(error => {
-        navigate('/notfound', { replace: true });
-      })
-  }, [])
+  const [updatedUser, setUpdatedUser] = useState({});
 
   async function handleSubmit(e) {
     try {
@@ -25,22 +13,15 @@ export default function Accounts() {
 
       const formData = new FormData();
 
-      Object.keys(updatedAccount).map(prop => {
-        formData.append(prop, updatedAccount[prop])
+      Object.keys(updatedUser).map(prop => {
+        formData.append(prop, updatedUser[prop]);
       })
 
-      const data = await updateAccount(formData);
-      setAccount(data.account);
+      const data = await updateUser(formData);
 
-      const updatedUser = { 
-        ...user, 
-        image: data.account.image,
-        username: data.account.username
-      };
-      setUser(updatedUser);
-      localStorage.setItem('user', JSON.stringify(updatedUser));
+      setUser(data.user);
 
-      setUpdatedAccount({});
+      setUpdatedUser({});
       alert('Successfully updated');
 
     } catch (error) {
@@ -52,7 +33,7 @@ export default function Accounts() {
     const file = e.target.files[0];
     
     if (file) {
-      setUpdatedAccount({ ...updatedAccount, image: file })
+      setUpdatedUser({ ...updatedUser, image: file })
     }
   }
 
@@ -60,20 +41,18 @@ export default function Accounts() {
     const name = e.target.name;
     const value = e.target.value;
 
-    setUpdatedAccount({ ...updatedAccount, [name]: value });
+    setUpdatedUser({ ...updatedUser, [name]: value });
   }
 
   useEffect(() => {
     document.title = 'Edit profile - Instagram';
   }, [])
 
-  if (!account) {
-    return <p>fetching account...</p>
-  }
+  console.log(updatedUser);
 
   return (
     <div className="mt-8 px-4">
-      {Object.keys(updatedAccount).length > 0 && (
+      {Object.keys(updatedUser).length > 0 && (
         <p className="mb-4 bg-blue-500 text-white p-2">
           Click button to save updated data.
         </p>
@@ -81,13 +60,13 @@ export default function Accounts() {
       <div className="flex mb-4">
         <img
           src={
-            updatedAccount.image ? URL.createObjectURL(updatedAccount.image)
-            : `${process.env.REACT_APP_SERVER}/files/profiles/${account.image}`
+            updatedUser.image ? URL.createObjectURL(updatedUser.image)
+            : `${process.env.REACT_APP_SERVER}/files/profiles/${user.image}`
           }
           className="w-16 h-16 object-cover rounded-full border"
           />
         <div className="flex flex-col grow items-start ml-4">
-          <h3>{account.username}</h3>
+          <h3>{user.username}</h3>
 
           <label className="text-sm font-semibold text-blue-500 cursor-pointer">
             <input
@@ -108,7 +87,7 @@ export default function Accounts() {
             type="text"
             name="fullName"
             className="border px-2 py-1 rounded w-full"
-            value={updatedAccount.fullName || account.fullName}
+            defaultValue={user.fullName}
             onChange={handleChange}
           />
         </div>
@@ -118,8 +97,8 @@ export default function Accounts() {
           <input
             type="text"
             name="username"
-            className="border px-2 py-1 rounded w-full"
-            value={updatedAccount.username || account.username}
+            className="border px-2 py-1 rounded w-full read-only:bg-gray-100"
+            defaultValue={user.username}
             onChange={handleChange}
           />
         </div>
@@ -129,8 +108,8 @@ export default function Accounts() {
           <input
             type="text"
             name="email"
-            className="border px-2 py-1 rounded w-full"
-            value={updatedAccount.email || account.email}
+            className="border px-2 py-1 rounded w-full read-only:bg-gray-100"
+            defaultValue={user.email}
             onChange={handleChange}
           />
         </div>
@@ -141,7 +120,7 @@ export default function Accounts() {
             rows="3"
             name="bio"
             className="border px-2 py-1 rounded w-full"
-            value={updatedAccount.bio || account.bio}
+            defaultValue={user.bio}
             onChange={handleChange}
           />
         </div>
@@ -149,7 +128,7 @@ export default function Accounts() {
         <button
           type="submit"
           className="text-sm font-semibold bg-gray-200 rounded-lg px-4 py-2 disabled:opacity-[0.2]"
-          disabled={Object.keys(updatedAccount).length < 1}
+          disabled={Object.keys(updatedUser).length < 1}
         >
           Save
         </button>

@@ -1,11 +1,11 @@
 import { useState, useContext, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import AuthContext from "./AuthContext";
-import { createToken } from "../utils/requests";
+import { signIn } from "../utils/requests";
 
 export default function Login() {
 
-  const { signIn } = useContext(AuthContext);
+  const { setUser } = useContext(AuthContext);
   const navigate = useNavigate();
   const [error, setError] = useState(null);
   const [email, setEmail] = useState(localStorage.getItem("email") || "");
@@ -19,12 +19,11 @@ export default function Login() {
       setError(null);
 
       const formData = JSON.stringify({ email, password });
-      const { user } = await createToken(formData);
+      const { user } = await signIn(formData);
+      
+      setUser(user)
 
-      localStorage.setItem('user', JSON.stringify(user));
       localStorage.setItem('email', email);
-
-      signIn(user);
       
       setTimeout(() => {
         navigate('/');

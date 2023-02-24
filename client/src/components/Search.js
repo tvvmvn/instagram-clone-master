@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { fetchUsersByUsername } from "../utils/requests";
+import { getDoc } from "../utils/requests";
 import { Link } from "react-router-dom";
 import Spinner from './Spinner';
 
@@ -20,7 +20,7 @@ export default function Search() {
     setError(null);
     setIsLoaded(false);
 
-    fetchUsersByUsername(username)
+    getDoc(`users/?username=${username}`)
       .then(data => {
         setUsers(data.users);
       })

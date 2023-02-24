@@ -124,25 +124,7 @@ exports.register = [
   }
 ]
 
-exports.account = async (req, res, next) => {
-  try {
-
-    const account = {
-      email: req.user.email,
-      username: req.user.username,
-      fullName: req.user.fullName,
-      image: req.user.image,
-      bio: req.user.bio
-    }
-
-    res.json({ account });
-
-  } catch (error) {
-    next(error)
-  }
-}
-
-exports.accountEdit = [
+exports.edit = [
   fileHandler('profiles').single('image'),
   async (req, res, next) => {
     try {
@@ -156,16 +138,19 @@ exports.accountEdit = [
       Object.assign(_user, req.body);
   
       await _user.save();
+
+      const token = _user.generateJWT();
   
-      const account = {
+      const user = {
         email: _user.email,
         username: _user.username,
         fullName: _user.fullName,
         image: _user.image,
-        bio: _user.bio
+        bio: _user.bio,
+        token
       }
   
-      res.json({ account })
+      res.json({ user })
 
     } catch (error) {
       next(error)
@@ -194,8 +179,11 @@ exports.login = async (req, res, next) => {
     const token = _user.generateJWT();
 
     const user = {
+      email: _user.email,
       username: _user.username,
+      fullName: _user.fullName,
       image: _user.image,
+      bio: _user.bio,
       token
     }
 

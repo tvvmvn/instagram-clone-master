@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
-import { fetchFollowers } from '../utils/requests';
+import { useParams, Link, useNavigate } from 'react-router-dom';
+import { getDocs } from '../utils/requests';
 import Spinner from './Spinner';
 
 export default function FollowerList() {
@@ -9,39 +9,40 @@ export default function FollowerList() {
   const [error, setError] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [followers, setFollowers] = useState([]);
-  const [followerCount, setFollowerCount] = useState(0)
+  const [followerCount, setFollowerCount] = useState(0);
 
   useEffect(() => {
-    fetchFollowers(username)
+    getDocs(`users/?followers=${username}`)
       .then(data => {
         setFollowerCount(data.userCount);
         setFollowers([...followers, ...data.users]);
       })
       .catch(error => {
-        setError(error);
+        setError(error)
       })
       .finally(() => setIsLoaded(true));
   }, [])
 
   const followerList = followers.map(follower => (
-    <Link
-      key={follower.username}
-      to={`/profiles/${follower.username}`}
-      className="flex items-center mb-2"
-    >
-      <img
-        src={`${process.env.REACT_APP_SERVER}/files/profiles/${follower.image}`}
-        className="w-12 h-12 object-cover rounded-full"
-      />
-      <div className="ml-2">
-        <span className="block font-semibold">
-          {follower.username}
-        </span>
-        <span className="block text-gray-400 text-sm">
-          {follower.fullName}
-        </span>
-      </div>
-    </Link>
+    <div key={follower.username} className="mb-2">
+      <Link
+        to={`/profiles/${follower.username}`}
+        className="inline-flex items-center"
+      >
+        <img
+          src={`${process.env.REACT_APP_SERVER}/files/profiles/${follower.image}`}
+          className="w-12 h-12 object-cover rounded-full"
+        />
+        <div className="ml-2">
+          <span className="block font-semibold">
+            {follower.username}
+          </span>
+          <span className="block text-gray-400 text-sm">
+            {follower.fullName}
+          </span>
+        </div>
+      </Link>
+    </div>
   ))
 
   return (
