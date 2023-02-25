@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Carousel from "./Carousel";
 
-export default function ArticleTemplate({ article, addFavorite, cancelFavorite, deleteArticle }) {
+export default function ArticleTemplate({ article, handleDelete, handleFavorite, handleUnfavorite }) {
 
   const [active, setActive] = useState(false);
 
@@ -18,7 +18,7 @@ export default function ArticleTemplate({ article, addFavorite, cancelFavorite, 
         <li className="border-b">
           <button
             className="w-full px-4 py-2 text-sm font-semibold text-red-500"
-            onClick={() => deleteArticle(article.id)}
+            onClick={() => handleDelete(article.id)}
           >
             Delete
           </button>
@@ -72,7 +72,7 @@ export default function ArticleTemplate({ article, addFavorite, cancelFavorite, 
           {article.isFavorite ? (
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              onClick={() => cancelFavorite(article.id)}
+              onClick={() => handleUnfavorite(article.id)}
               viewBox="0 0 512 512"
               className="w-6 fill-red-500"
             >
@@ -81,7 +81,7 @@ export default function ArticleTemplate({ article, addFavorite, cancelFavorite, 
           ) : (
             <svg
               className="w-6"
-              onClick={() => addFavorite(article.id)}
+              onClick={() => handleFavorite(article.id)}
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 512 512"
             >

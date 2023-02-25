@@ -3,7 +3,7 @@ import { useParams, Link, useNavigate } from "react-router-dom";
 import AuthContext from "./AuthContext";
 import ArticleCreate from "./ArticleCreate";
 import Timeline from "./Timeline";
-import { getDoc, getDocs, addDoc, deleteDoc } from "../utils/requests";
+import { getProfile, getTimeline, follow, unfollow } from "../utils/requests";
 
 export default function Profile() {
   const { username } = useParams();
@@ -19,8 +19,8 @@ export default function Profile() {
     setProfile(null);
 
     Promise.all([
-      getDoc(`profiles/${username}`),
-      getDocs(`articles/?username=${username}`)
+      getProfile(username),
+      getTimeline(username)
     ])
       .then(([profileData, timelineData]) => {
         setProfile(profileData.profile);
@@ -42,19 +42,23 @@ export default function Profile() {
     }
   }
 
-  async function addFollow() {
+  async function handleFollow() {
     try {
-      await addDoc(`profiles/${username}/follow`); 
+      await follow(username)
+
       setProfile({ ...profile, isFollowing: true })
+
     } catch (error) {
       alert(error)
     }
   }
 
-  async function cancelFollow() {
+  async function handleUnfollow() {
     try {
-      await deleteDoc(`profiles/${username}/follow`); 
+      await unfollow(username)
+
       setProfile({ ...profile, isFollowing: false })
+
     } catch (error) {
       alert(error)
     }
@@ -98,7 +102,7 @@ export default function Profile() {
               {(!isMaster && profile.isFollowing) && (
                 <button
                   className="ml-2 bg-gray-200 text-sm px-4 py-2 font-semibold p-2 rounded-lg"
-                  onClick={cancelFollow}
+                  onClick={handleUnfollow}
                 >
                   Following
                 </button>
@@ -106,7 +110,7 @@ export default function Profile() {
               {(!isMaster && !profile.isFollowing) && (
                 <button
                   className="ml-2 bg-blue-500 text-white text-sm px-4 py-2 font-semibold p-2 rounded-lg"
-                  onClick={addFollow}
+                  onClick={handleFollow}
                 >
                   Follow
                 </button>

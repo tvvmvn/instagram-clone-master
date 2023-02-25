@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { addDoc } from '../utils/requests';
+import { createArticle } from '../utils/requests';
 
 export default function ArticleCreate({ active, setActive }) {
 
@@ -20,7 +20,7 @@ export default function ArticleCreate({ active, setActive }) {
 
       formData.append('description', description);
 
-      await addDoc('articles', formData);
+      await createArticle(formData);
 
       navigate('/');
       

@@ -1,6 +1,6 @@
 import { useContext, useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
-import { getDocs, addDoc, deleteDoc } from "../utils/requests";
+import { getComments, createComment, deleteComment } from "../utils/requests";
 import Spinner from './Spinner';
 
 export default function Comments() {
@@ -12,7 +12,7 @@ export default function Comments() {
   const [commentCount, setCommentCount] = useState(0);
 
   useEffect(() => {
-    getDocs(`articles/${id}/comments`)
+    getComments(id)
       .then(data => {
         setComments([...comments, ...data.comments]);
         setCommentCount(data.commentCount);
@@ -23,12 +23,10 @@ export default function Comments() {
       .finally(() => setIsLoaded(true));
   }, [])
 
-  async function addComment(content) {
+  async function handleAddComment(content) {
     try {
 
-      const formData = JSON.stringify(content);
-
-      const data = await addDoc(`articles/${id}/comments`, formData);
+      const data = await createComment(id, content);
 
       setCommentCount(commentCount + 1);
     
@@ -40,9 +38,9 @@ export default function Comments() {
     }
   }
 
-  async function deleteComment(id) {
+  async function handleDelete(id) {
     try {
-      await deleteDoc(`comments/${id}`);
+      await deleteComment(id);
       
       const remainingComments = comments.filter(comment => comment.id !== id);
 
@@ -58,7 +56,7 @@ export default function Comments() {
     <Comment
       key={comment.id}
       comment={comment}
-      deleteComment={deleteComment}
+      handleDelete={handleDelete}
     />
   ))
 
@@ -66,7 +64,7 @@ export default function Comments() {
     <div className="px-4">
       <h1 className="text-2xl font-semibold my-4">Comments</h1>
       <Form
-        addComment={addComment}
+        handleAddComment={handleAddComment}
       />
 
       {commentCount > 0 ? (
@@ -83,7 +81,7 @@ export default function Comments() {
   )
 }
 
-function Form({ addComment }) {
+function Form({ handleAddComment }) {
   
   const [content, setContent] = useState("");
 
@@ -91,7 +89,7 @@ function Form({ addComment }) {
     try {
       e.preventDefault();
 
-      await addComment({ content });
+      await handleAddComment(content);
 
       setContent("");
 
@@ -123,13 +121,13 @@ function Form({ addComment }) {
   )
 }
 
-function Comment({ comment, deleteComment }) {
+function Comment({ comment, handleDelete }) {
 
   const [active, setActive] = useState(false);
 
-  async function handleDelete() {
+  async function handleClick() {
     try {
-      await deleteComment(comment.id);
+      await handleDelete(comment.id);
       setActive(false);
     } catch (error) {
       alert(error)
@@ -148,7 +146,7 @@ function Comment({ comment, deleteComment }) {
         <li className="border-b">
           <button
             className="w-full px-4 py-2 text-sm font-semibold text-red-500"
-            onClick={handleDelete}
+            onClick={handleClick}
           >
             Delete
           </button>

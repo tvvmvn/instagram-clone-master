@@ -1,6 +1,5 @@
 import { useState, useContext, useEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom";
-import { updateUser } from "../utils/requests";
+import { updateProfile } from "../utils/requests";
 import AuthContext from "./AuthContext";
 
 export default function Accounts() {
@@ -17,7 +16,7 @@ export default function Accounts() {
         formData.append(prop, updatedUser[prop]);
       })
 
-      const data = await updateUser(formData);
+      const data = await updateProfile(formData);
 
       setUser(data.user);
 

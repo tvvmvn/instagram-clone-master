@@ -41,15 +41,8 @@ export default function Register() {
       if (isError) {
         throw _error;
       }
-
-      const formData = JSON.stringify({ 
-        email, 
-        fullName, 
-        username, 
-        password 
-      });
       
-      await createUser(formData);
+      await createUser(email, fullName, username, password);
 
       alert(`Welcome, ${fullName}!`);
 

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import ArticleTemplate from "./ArticleTemplate";
-import { getDoc, addDoc, deleteDoc } from "../utils/requests";
+import { getArticle, deleteArticle, favorite, unfavorite } from "../utils/requests";
 
 export default function ArticleView() {
 
@@ -10,7 +10,7 @@ export default function ArticleView() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    getDoc(`articles/${id}`)
+    getArticle(id)
       .then(data => {
         setArticle(data.article);
       })
@@ -19,33 +19,34 @@ export default function ArticleView() {
       })
   }, [])
 
-  async function addFavorite(id) {
+  async function handleFavorite(id) {
     try {
-      await addDoc(`articles/${id}/favorite`);
+      await favorite(id)
 
       const updatedArticle = {
         ...article,
         isFavorite: true,
         favoriteCount: article.favoriteCount + 1
       }
-  
+
       setArticle(updatedArticle);
-    
+
     } catch (error) {
       alert(error)
     }
   }
 
-  async function cancelFavorite(id) {
+  async function handleUnfavorite(id) {
     try {
-      await deleteDoc(`articles/${id}/favorite`);
+
+      await unfavorite(id);
 
       const updatedArticle = {
         ...article,
         isFavorite: false,
-        favoriteCount: article.favoriteCount -1
+        favoriteCount: article.favoriteCount - 1
       }
-  
+
       setArticle(updatedArticle);
     
     } catch (error) {
@@ -53,9 +54,9 @@ export default function ArticleView() {
     }
   }
 
-  async function deleteArticle(id) {
+  async function handleDelete(id) {
     try {
-      await deleteDoc(`articles/${id}`);
+      await deleteArticle(id);
       
       navigate('/', { replace: true });
     
@@ -71,9 +72,9 @@ export default function ArticleView() {
   return (
     <ArticleTemplate
       article={article}
-      addFavorite={addFavorite}
-      cancelFavorite={cancelFavorite}
-      deleteArticle={deleteArticle}
+      handleFavorite={handleFavorite}
+      handleUnfavorite={handleUnfavorite}
+      handleDelete={handleDelete}
     />
   )
 }

@@ -18,8 +18,7 @@ export default function Login() {
 
       setError(null);
 
-      const formData = JSON.stringify({ email, password });
-      const { user } = await signIn(formData);
+      const { user } = await signIn(email, password);
       
       setUser(user)
 

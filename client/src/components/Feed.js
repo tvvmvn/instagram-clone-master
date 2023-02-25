@@ -1,6 +1,6 @@
 import {useState, useEffect, useContext} from "react"
 import ArticleTemplate from "./ArticleTemplate";
-import { getDocs, addDoc, deleteDoc } from "../utils/requests";
+import { getFeed, deleteArticle, favorite, unfavorite } from "../utils/requests";
 import Spinner from './Spinner';
 
 const limit = 5;
@@ -17,7 +17,7 @@ export default function Feed() {
     setError(null);
     setIsLoaded(false);
     
-    getDocs(`feed/?limit=${limit}&skip=${skip}`)
+    getFeed()
       .then(data => {
         setArticleCount(data.articleCount);
           
@@ -31,9 +31,9 @@ export default function Feed() {
       
   }, [skip])
 
-  async function addFavorite(id) {
+  async function handleFavorite(id) {
     try {
-      await addDoc(`articles/${id}/favorite`);
+      await favorite(id);
 
       const updatedArticles = articles.map(article => {
         if (article.id === id) {
@@ -53,9 +53,9 @@ export default function Feed() {
     }
   }
 
-  async function cancelFavorite(id) {
+  async function handleUnfavorite(id) {
     try {
-      await deleteDoc(`articles/${id}/favorite`);
+      await unfavorite(id)
 
       const updatedArticles = articles.map(article => {
         if (article.id === id) {
@@ -75,9 +75,9 @@ export default function Feed() {
     }
   }
 
-  async function deleteArticle(id) {
+  async function handleDelete(id) {
     try {
-      await deleteDoc(`articles/${id}`); 
+      await deleteArticle(id); 
 
       const remainingArticles = articles.filter(article => {
         if (id !== article.id) {
@@ -96,9 +96,9 @@ export default function Feed() {
     <li key={article.id} className="border-b pb-4">
       <ArticleTemplate
         article={article}
-        addFavorite={addFavorite}
-        cancelFavorite={cancelFavorite}
-        deleteArticle={deleteArticle}
+        handleFavorite={handleFavorite}
+        handleUnfavorite={handleUnfavorite}
+        handleDelete={handleDelete}
       />
     </li>
   ))

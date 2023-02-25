@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { getDocs } from '../utils/requests';
+import { getFollowings } from '../utils/requests';
 import Spinner from './Spinner';
 
 export default function FollowingList() {
@@ -13,7 +13,7 @@ export default function FollowingList() {
   const navigate = useNavigate()
 
   useEffect(() => {
-    getDocs(`users/?following=${username}`)
+    getFollowings(username)
       .then(data => {
         setFollowingCount(data.userCount);
         setFollowings([...followings, ...data.users]);

@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { getDocs } from '../utils/requests';
+import { getFollowers } from '../utils/requests';
 import Spinner from './Spinner';
 
 export default function FollowerList() {
@@ -12,7 +12,7 @@ export default function FollowerList() {
   const [followerCount, setFollowerCount] = useState(0);
 
   useEffect(() => {
-    getDocs(`users/?followers=${username}`)
+    getFollowers(username)
       .then(data => {
         setFollowerCount(data.userCount);
         setFollowers([...followers, ...data.users]);
