@@ -47,24 +47,24 @@ exports.create = async (req, res, next) => {
 
     const article = await Article.findById(req.params.id);
 
-    const newComment = new Comment({
+    const _comment = new Comment({
       article: article._id,
       content: req.body.content,
       author: req.user._id
     })
 
-    await newComment.save();
+    await _comment.save();
 
-    const user = await User.findById(newComment.author);
+    const user = await User.findById(_comment.author);
 
     const comment = {
-      id: newComment._id,
-      content: newComment.content,
+      id: _comment._id,
+      content: _comment.content,
       author: {
         username: user.username,
         image: user.image
       },
-      created: newComment.created,
+      created: _comment.created,
     }
 
     res.json({ comment });

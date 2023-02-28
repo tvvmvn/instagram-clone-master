@@ -5,7 +5,8 @@ const Article = require('../models/Article');
 exports.details = async (req, res, next) => {
   try {
 
-    const user = await User.findOne({ username: req.params.username });
+    const user = await User
+      .findOne({ username: req.params.username });
 
     if (!user) {
       const err = new Error("User not found");
@@ -13,7 +14,8 @@ exports.details = async (req, res, next) => {
       throw err;
     }
 
-    const follow = await Follow.findOne({ follower: req.user._id, following: user._id })
+    const follow = await Follow
+      .findOne({ follower: req.user._id, following: user._id })
     const followingCount = await Follow.count({ follower: user._id })
     const followerCount = await Follow.count({ following: user._id })
     const articleCount = await Article.count({ author: user._id })
@@ -41,21 +43,21 @@ exports.follow = async (req, res, next) => {
 
     const user = await User.findOne({ username: req.params.username })
 
-    const follow = await Follow
+    const _follow = await Follow
       .findOne({ follower: req.user._id, following: user._id })
 
-    if (follow) {
+    if (_follow) {
       const err = new Error("You are following this user already.");
       err.status = 400;
       throw err;
     }
 
-    const newFollow = new Follow({
+    const follow = new Follow({
       follower: req.user._id,
       following: user._id
     })
 
-    await newFollow.save();
+    await follow.save();
 
     res.json({ follow });
 

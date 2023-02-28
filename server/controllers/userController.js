@@ -129,7 +129,7 @@ exports.edit = [
   async (req, res, next) => {
     try {
 
-      const _user = await User.findById(req.user._id);
+      const _user = req.user;
 
       if (req.file) {
         _user.image = req.file.filename;  

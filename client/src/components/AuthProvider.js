@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import AuthContext from "./AuthContext";
 
 export default function AuthProvider({ children }) {
-  const [user, setUser] = useState(JSON.parse(localStorage.getItem('user')));
+  const initialUser = JSON.parse(localStorage.getItem('user'));
+  const [user, setUser] = useState(initialUser);
 
   // user state listener
   useEffect(() => {

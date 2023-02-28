@@ -149,10 +149,11 @@ exports.create = [
 
       const images = files.map(file => file.filename);
 
-      const article = new Article();
-      article.description = req.body.description;
-      article.images = images;
-      article.author = req.user._id;
+      const article = new Article({
+        images,
+        description: req.body.description,
+        author: req.user._id
+      });
 
       await article.save();
 
