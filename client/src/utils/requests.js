@@ -1,5 +1,6 @@
 const server = process.env.REACT_APP_SERVER;
 
+
 /* USER  */
 export async function createUser(email, fullName, username, password) {
   const res = await fetch(`${server}/users`, {
@@ -71,6 +72,7 @@ export async function doesEmailExists(email) {
 
   return userCount > 0;
 }
+
 
 /* ARTICLES */
 export async function getFeed() {

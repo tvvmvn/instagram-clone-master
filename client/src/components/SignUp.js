@@ -23,7 +23,7 @@ export default function Register() {
       }
 
       if (await doesEmailExists(email)) {
-        _error.email = 'E-mail is already in use'
+        _error.email = 'E-mail is already in use';
       }
 
       // USERNAME
@@ -32,7 +32,7 @@ export default function Register() {
       }
 
       // PASSWORD
-      if (password.length < 3) {
+      if (password.length < 5) {
         _error.password = 'Password is too short';
       }
 
