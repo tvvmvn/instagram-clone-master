@@ -16,6 +16,36 @@ create a file named request.js
 make directory named components in src.
 create templates with export function that has equal name to file.
 
+- Authorization
+AuthContext
+AuthProvider
+AuthRequired
+
+- USER
+Accounts
+Login
+SignUp
+
+- ARTICLE
+Feed
+ArticleView
+ArticleCreate
+ArticleTemplate
+Carousel
+Comments
+
+- PROFILE
+Profile
+Timeline
+FollowerList
+FollowingList
+
+- OTHERS
+Layout
+NotFound
+Search
+Spinner
+
 ## Edit entry file of application and html document.
 index.js
 index.html > title
