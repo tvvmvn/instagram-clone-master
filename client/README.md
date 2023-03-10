@@ -55,7 +55,7 @@ App.js
 
 ## Start to make each component to build UI. 
 1 Components relavant to authorization
-Auth*.js > Layout > SignIn & SignUp.
+Auth*.js > Layout > Spinner, NotFound > SignIn & SignUp.
 
 
 

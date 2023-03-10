@@ -18,7 +18,7 @@ export default function Register() {
       const _error = {};
 
       // EMAIL
-      if (email.length < 5) {
+      if (!email.includes('@') || email.trim().length < 5) {
         _error.email = 'E-mail is not valid';
       }
 
@@ -27,12 +27,12 @@ export default function Register() {
       }
 
       // USERNAME
-      if (username.length < 5) {
+      if (username.trim().length < 5) {
         _error.username = 'Username is too short';
       }
 
       // PASSWORD
-      if (password.length < 5) {
+      if (password.trim().length < 5) {
         _error.password = 'Password is too short';
       }
 
@@ -118,7 +118,7 @@ export default function Register() {
         <button
           type="submit"
           className="bg-blue-500 rounded-lg text-sm font-semibold px-4 py-2 text-white w-full disabled:opacity-[0.5]"
-          disabled={!email.trim() || !password.trim()}
+          disabled={!email.trim() || !username.trim() || !password.trim()}
         >
           Sign Up
         </button>

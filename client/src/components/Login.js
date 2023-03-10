@@ -49,6 +49,7 @@ export default function Login() {
             type="text"
             className="border px-2 py-1 w-full rounded"
             value={email}
+            placeholder="E-mail"
             onChange={({ target }) => setEmail(target.value)}
           />
         </label>
@@ -60,6 +61,7 @@ export default function Login() {
             type={showPassword ? "text" : "password"}
             className="border px-2 py-1 w-full rounded"
             value={password}
+            placeholder="password"
             onChange={({ target }) => setPassword(target.value)}
           />
           {password.trim().length > 0 && (
