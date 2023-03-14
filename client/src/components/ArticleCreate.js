@@ -106,5 +106,4 @@ export default function ArticleCreate({ active, setActive }) {
       </div>
     )
   }
-
 }

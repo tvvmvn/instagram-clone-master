@@ -58,12 +58,9 @@ export default function Accounts() {
       )}
       <div className="flex mb-4">
         <img
-          src={
-            updatedUser.image ? URL.createObjectURL(updatedUser.image)
-            : `${process.env.REACT_APP_SERVER}/files/profiles/${user.image}`
-          }
+          src={updatedUser.image ? URL.createObjectURL(updatedUser.image) : `${process.env.REACT_APP_SERVER}/files/profiles/${user.image}`}
           className="w-16 h-16 object-cover rounded-full border"
-          />
+        />
         <div className="flex flex-col grow items-start ml-4">
           <h3>{user.username}</h3>
 

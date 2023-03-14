@@ -6,6 +6,7 @@ import Timeline from "./Timeline";
 import { getProfile, getTimeline, follow, unfollow } from "../utils/requests";
 
 export default function Profile() {
+
   const { username } = useParams();
   const { user, setUser } = useContext(AuthContext);
   const isMaster = user.username === username;
@@ -29,7 +30,7 @@ export default function Profile() {
         setArticleCount(timelineData.articleCount)
       })
       .catch(error => {
-        navigate('/notfound', { replace: true })
+        navigate('/notfound', { replace: true });
       })
 
   }, [username]);
@@ -57,7 +58,7 @@ export default function Profile() {
     try {
       await unfollow(username)
 
-      setProfile({ ...profile, isFollowing: false })
+      setProfile({ ...profile, isFollowing: false });
 
     } catch (error) {
       alert(error)
