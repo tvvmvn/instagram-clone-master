@@ -13,7 +13,10 @@ export default function ArticleTemplate({ article, handleDelete, handleFavorite,
   }
 
   const modal = (
-    <div className="fixed inset-0 flex justify-center items-center bg-black/[0.2] z-10" onClick={close}>
+    <div 
+      className="fixed inset-0 flex justify-center items-center bg-black/[0.2] z-10" 
+      onClick={close}
+    >
       <ul className="bg-white w-60 rounded-lg">
         <li className="border-b">
           <button

@@ -53,9 +53,18 @@ index.html > title
 ## Define Application Sturcture
 App.js
 
-## Start to make each component to build UI. 
-1 Components relavant to authorization
+## make each component to build UI. 
+1. Components relavant to authorization
 Auth*.js > Layout > Spinner, NotFound > SignIn & SignUp.
+2. User profile and account
+Profile > Account
+3. Article
+ArticleCreate > ArticleView > ArticleTemplate(Carousel) > Comments
+4. Search
+5. Feed
+Feed
+6. etc
+FollowerList, FollowingList
 
 
 
