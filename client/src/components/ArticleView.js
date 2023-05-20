@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import ArticleTemplate from "./ArticleTemplate";
 import { getArticle, deleteArticle, favorite, unfavorite } from "../utils/requests";
+import Spinner from "./Spinner";
 
 export default function ArticleView() {
 
@@ -25,7 +26,7 @@ export default function ArticleView() {
 
       const updatedArticle = {
         ...article,
-        isFavorite: true,
+        favorite: true,
         favoriteCount: article.favoriteCount + 1
       }
 
@@ -43,7 +44,7 @@ export default function ArticleView() {
 
       const updatedArticle = {
         ...article,
-        isFavorite: false,
+        favorite: false,
         favoriteCount: article.favoriteCount - 1
       }
 
@@ -66,7 +67,7 @@ export default function ArticleView() {
   }
 
   if (!article) {
-    return <p>fetching an article...</p>
+    return <Spinner />
   }
 
   return (

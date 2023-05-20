@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { searchUsers } from "../utils/requests";
+import { getProfiles } from "../utils/requests";
 import { Link } from "react-router-dom";
 import Spinner from './Spinner';
 
@@ -7,22 +7,24 @@ export default function Search() {
 
   const [error, setError] = useState(null);
   const [isLoaded, setIsLoaded] = useState(true);
-  const [users, setUsers] = useState([]);
+  const [profiles, setProfiles] = useState([]);
   const inputEl = useRef(null);
+
+  console.log(profiles)
 
   function handleChange(e) {
     const username = e.target.value;
 
     if (!username) {
-      return setUsers([]);
+      return setProfiles([]);
     }
 
     setError(null);
     setIsLoaded(false);
 
-    searchUsers(username)
+    getProfiles(username)
       .then(data => {
-        setUsers(data.users);
+        setProfiles(data.profiles);
       })
       .catch(error => {
         setError(error);
@@ -36,7 +38,8 @@ export default function Search() {
 
   return (
     <div className="px-4">
-      <label className="block mt-8 mb-4">
+      <h3 className="text-lg font-semibold my-4">Explore</h3>
+      <label className="block mb-4">
         <input
           type="text"
           className="border px-2 py-1 rounded w-full"
@@ -49,13 +52,13 @@ export default function Search() {
       <Result 
         error={error} 
         isLoaded={isLoaded} 
-        users={users} 
+        profiles={profiles}
       />
     </div>
   )
 }
 
-function Result({ error, isLoaded, users }) {
+function Result({ error, isLoaded, profiles }) {
   if (error) {
     return <p className="text-red-500">{error.message}</p>
   }
@@ -64,24 +67,27 @@ function Result({ error, isLoaded, users }) {
     return <Spinner />
   }
 
-  return users.map(user => (
-    <div key={user.username} className="flex items-center my-2">
+  return profiles.map(profile => (
+    <div key={profile.username} className="flex items-center my-2">
       <Link
-        to={`/profiles/${user.username}`}
+        to={`/profiles/${profile.username}`}
         className="inline-flex items-center"
       >
         <img
-          src={`${process.env.REACT_APP_SERVER}/files/profiles/${user.image}`}
-          className="w-12 h-12 object-cover rounded-full"
+          src={`${process.env.REACT_APP_SERVER}/files/profiles/${profile.avatar}`}
+          className="w-10 h-10 object-cover rounded-full"
         />
         <div className="ml-2">
           <span className="block font-semibold">
-            {user.username}
+            {profile.username}
           </span>
           <span className="block text-gray-400 text-sm">
-            {user.fullName}
+            {profile.fullName}
           </span>
         </div>
+        {!!profile.follow && (
+          <div className="ml-2 text-sm text-blue-500"> following </div>
+        )}
       </Link>
     </div>
   ))

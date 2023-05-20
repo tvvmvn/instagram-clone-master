@@ -15,8 +15,8 @@ export default function FollowingList() {
   useEffect(() => {
     getFollowings(username)
       .then(data => {
-        setFollowingCount(data.userCount);
-        setFollowings([...followings, ...data.users]);
+        setFollowingCount(data.profileCount);
+        setFollowings([...followings, ...data.profiles]);
       })
       .catch(error => {
         setError(error);
@@ -25,14 +25,17 @@ export default function FollowingList() {
 
   }, [])
 
+  function handleFollow() {}
+  function handleUnfollow() {}
+
   const followingList = followings.map(following => (
-    <div key={following.username} className="mb-2">
+    <div key={following.username} className="flex justify-between items-center mb-2">
       <Link
         to={`/profiles/${following.username}`}
         className="inline-flex items-center"
       >
         <img
-          src={`${process.env.REACT_APP_SERVER}/files/profiles/${following.image}`}
+          src={`${process.env.REACT_APP_SERVER}/files/profiles/${following.avatar}`}
           className="w-12 h-12 object-cover rounded-full"
         />
           <div className="ml-2">
@@ -44,19 +47,30 @@ export default function FollowingList() {
             </span>
           </div>
       </Link>
+      {following.follow ? (
+          <button
+            className="ml-2 bg-gray-200 text-sm px-4 py-2 font-semibold p-2 rounded-lg"
+            onClick={handleUnfollow}
+          >
+            Following
+          </button>
+        ) : (
+          <button
+            className="ml-2 bg-blue-500 text-white text-sm px-4 py-2 font-semibold p-2 rounded-lg"
+            onClick={handleFollow}
+          >
+            Follow
+          </button>
+        )}
     </div>
   ))
 
   return (
     <div className="px-2">
-      <h1 className="text-2xl my-4 font-semibold">Following</h1>
-      {followingCount > 0 ? (
-        <ul>
-          {followingList}
-        </ul>
-      ) : (
-        <p className="text-center my-4">User doesn't follow any users</p>
-      )}
+      <h3 className="text-lg my-4 font-semibold">{username}'s following</h3>
+      <ul>
+        {followingList}
+      </ul>
 
       {!isLoaded && <Spinner />}
       {error && <p className="text-red-500">{error.message}</p>}

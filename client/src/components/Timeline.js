@@ -6,7 +6,7 @@ export default function Timeline({ articles, articleCount }) {
     <li key={article.id}>
       <Link to={`/p/${article.id}`} className="block h-40 relative">
         <img
-          src={`${process.env.REACT_APP_SERVER}/files/articles/${article.images[0]}`}
+          src={`${process.env.REACT_APP_SERVER}/files/articles/${article.photos[0]}`}
           className="w-full h-full object-cover"
         />
         <div className="absolute inset-0 bg-black/[0.2] opacity-0 hover:opacity-100">

@@ -1,5 +1,5 @@
 import { useState, useContext, useEffect, useRef } from "react";
-import { updateProfile } from "../utils/requests";
+import { updateUser } from "../utils/requests";
 import AuthContext from "./AuthContext";
 
 export default function Accounts() {
@@ -16,7 +16,7 @@ export default function Accounts() {
         formData.append(prop, updatedUser[prop]);
       })
 
-      const data = await updateProfile(formData);
+      const data = await updateUser(formData);
 
       setUser(data.user);
 
@@ -32,7 +32,7 @@ export default function Accounts() {
     const file = e.target.files[0];
     
     if (file) {
-      setUpdatedUser({ ...updatedUser, image: file })
+      setUpdatedUser({ ...updatedUser, avatar: file })
     }
   }
 
@@ -58,7 +58,7 @@ export default function Accounts() {
       )}
       <div className="flex mb-4">
         <img
-          src={updatedUser.image ? URL.createObjectURL(updatedUser.image) : `${process.env.REACT_APP_SERVER}/files/profiles/${user.image}`}
+          src={updatedUser.avatar ? URL.createObjectURL(updatedUser.avatar) : `${process.env.REACT_APP_SERVER}/files/profiles/${user.avatar}`}
           className="w-16 h-16 object-cover rounded-full border"
         />
         <div className="flex flex-col grow items-start ml-4">
@@ -69,7 +69,7 @@ export default function Accounts() {
               type="file"
               className="hidden"
               onChange={handleFile}
-              accept="image/*"
+              accept="image/png, image/jpg, image/jpeg"
             />
             Change Photo
           </label>

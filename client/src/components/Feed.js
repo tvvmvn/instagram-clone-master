@@ -17,7 +17,7 @@ export default function Feed() {
     setError(null);
     setIsLoaded(false);
     
-    getFeed()
+    getFeed(skip)
       .then(data => {
         setArticleCount(data.articleCount);
           
@@ -39,7 +39,7 @@ export default function Feed() {
         if (article.id === id) {
           return {
             ...article,
-            isFavorite: true,
+            favorite: true,
             favoriteCount: article.favoriteCount + 1
           }
         }
@@ -61,7 +61,7 @@ export default function Feed() {
         if (article.id === id) {
           return {
             ...article,
-            isFavorite: false,
+            favorite: false,
             favoriteCount: article.favoriteCount - 1
           }
         }
@@ -106,7 +106,7 @@ export default function Feed() {
   const moreButton = (articleCount > limit && articleCount > articles.length) && (
     <div className="flex justify-center my-2">
       <button 
-        className="p-1 text-blue-500" 
+        className="p-1 text-blue-500 font-semibold" 
         onClick={() => setSkip(skip + limit)}
       >
         More

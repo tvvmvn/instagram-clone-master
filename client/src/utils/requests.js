@@ -1,17 +1,38 @@
 const server = process.env.REACT_APP_SERVER;
 
-
 /* USER  */
-export async function createUser(email, fullName, username, password) {
+export async function createUser(newUser) {
   const res = await fetch(`${server}/users`, {
     method: "POST",
     headers: { 'Content-Type': 'application/json'},
-    body: JSON.stringify({ 
-      email, 
-      fullName, 
-      username, 
-      password 
-    })
+    body: JSON.stringify(newUser)
+  })
+
+  if (res.status === 400) {
+    const { errors } = await res.json();
+
+    const _error = {};
+  
+    for (var i=0; i<errors.length; i++) {
+      console.log(errors[i].param, errors[i].msg);
+      _error[errors[i].param] = errors[i].msg
+    }
+    
+    throw _error;
+  }
+
+  if (!res.ok) {
+    throw new Error(`${res.status} ${res.statusText}`);
+  }
+
+  return await res.json();
+}
+
+export async function updateUser(formData) {
+  const res = await fetch(`${server}/user`, {
+    method: "PUT",
+    headers: { "Authorization": 'Bearer ' + JSON.parse(localStorage.getItem("user")).token },
+    body: formData
   })
 
   if (!res.ok) {
@@ -28,55 +49,20 @@ export async function signIn(email, password) {
     body: JSON.stringify({ email, password })
   })
 
+  if (res.status === 401) {
+    throw new Error('User not found')
+  }
+
   if (!res.ok) {
-    throw new Error(`${res.status} ${res.statusText}`);
+    throw new Error('Something is broken');
   }
 
   return await res.json();
 }
-
-export async function updateProfile(formData) {
-  const res = await fetch(`${server}/user`, {
-    method: "PUT",
-    headers: { "Authorization": 'Bearer ' + JSON.parse(localStorage.getItem("user")).token },
-    body: formData
-  })
-
-  if (!res.ok) {
-    throw new Error(`${res.status} ${res.statusText}`);
-  }
-
-  return await res.json();
-}
-
-export async function searchUsers(username) {
-  const res = await fetch(`${server}/users/?username=${username}`, {
-    headers: { 'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem("user")).token }
-  });
-
-  if (!res.ok) {
-    throw new Error(`${res.status} ${res.statusText}`);
-  }
-
-  return await res.json();
-}
-  
-export async function doesEmailExists(email) {
-  const res = await fetch(`${server}/users/?email=${email}`);
-
-  if (!res.ok) {
-    throw new Error(`${res.status} ${res.statusText}`);
-  }
-
-  const { userCount } = await res.json();
-
-  return userCount > 0;
-}
-
 
 /* ARTICLES */
-export async function getFeed() {
-  const res = await fetch(`${server}/feed`, {
+export async function getFeed(skip) {
+  const res = await fetch(`${server}/feed?skip=${skip}`, {
     headers: { 'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem("user")).token }
   });
 
@@ -199,6 +185,18 @@ export async function deleteComment(id) {
 
 
 /* PROFILES */
+export async function getProfiles(username) {
+  const res = await fetch(`${server}/profiles/?username=${username}`, {
+    headers: { 'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem("user")).token }
+  });
+
+  if (!res.ok) {
+    throw new Error(`${res.status} ${res.statusText}`);
+  }
+
+  return await res.json();
+}
+
 export async function getProfile(username) {
   const res = await fetch(`${server}/profiles/${username}`, {
     headers: { 'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem("user")).token }
@@ -224,7 +222,7 @@ export async function getTimeline(username) {
 }
 
 export async function getFollowers(username) {
-  const res = await fetch(`${server}/users/?followers=${username}`, {
+  const res = await fetch(`${server}/profiles/?followers=${username}`, {
     headers: { 'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem("user")).token }
   });
 
@@ -236,7 +234,7 @@ export async function getFollowers(username) {
 }
 
 export async function getFollowings(username) {
-  const res = await fetch(`${server}/users/?following=${username}`, {
+  const res = await fetch(`${server}/profiles/?following=${username}`, {
     headers: { 'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem("user")).token }
   });
 

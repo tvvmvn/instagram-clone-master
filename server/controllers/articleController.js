@@ -2,7 +2,6 @@ const User = require('../models/User');
 const Follow = require('../models/Follow');
 const Article = require('../models/Article');
 const Favorite = require('../models/Favorite');
-const Comment = require('../models/Comment');
 const fileHandler = require('../utils/fileHandler');
 
 exports.feed = async (req, res, next) => {
@@ -16,37 +15,21 @@ exports.feed = async (req, res, next) => {
     const skip = req.query.skip || 0;
 
     const articleCount = await Article.count(where);
-    const _articles = await Article
+    const articles = await Article
       .find(where)
+      .populate({
+        path: 'author',
+        select: 'username avatar'
+      })
+      .populate({
+        path: 'favorite'
+      })
+      .populate({
+        path: 'commentCount'
+      })
       .sort({ created: 'desc' })
       .skip(skip)
       .limit(limit)
-
-    const articles = [];
-
-    for (let _article of _articles) {
-      const favorite = await Favorite
-        .findOne({ user: req.user._id, article: _article._id });
-      const commentCount = await Comment
-        .count({ article: _article._id });
-      const user = await User.findById(_article.author);
-
-      const article = {
-        images: _article.images,
-        description: _article.description,
-        displayDate: _article.displayDate, // virtual
-        author: {
-          username: user.username,
-          image: user.image
-        },
-        favoriteCount: _article.favoriteCount,
-        isFavorite: !!favorite,
-        commentCount,
-        id: _article._id
-      }
-
-      articles.push(article);
-    }
 
     res.json({ articles, articleCount });
 
@@ -55,7 +38,7 @@ exports.feed = async (req, res, next) => {
   }
 }
 
-exports.articles = async (req, res, next) => {
+exports.find = async (req, res, next) => {
   try {
     const where = {}
     const limit = req.query.limit || 9
@@ -67,28 +50,14 @@ exports.articles = async (req, res, next) => {
     }
 
     const articleCount = await Article.count(where);
-    const _articles = await Article
-      .find(where)
+    const articles = await Article
+      .find(where, 'photos favoriteCount commentCount displayDate')
+      .populate({
+        path: 'commentCount'
+      })
       .sort({ created: 'desc' })
       .limit(limit)
       .skip(skip)
-
-    const articles = [];
-
-    for (let _article of _articles) {
-
-      const favoriteCount = await Favorite.count({ article: _article._id });
-      const commentCount = await Comment.count({ article: _article._id });
-
-      const article = {
-        images: _article.images,
-        favoriteCount,
-        commentCount,
-        id: _article._id,
-      }
-
-      articles.push(article);
-    }
 
     res.json({ articles, articleCount });
 
@@ -97,34 +66,25 @@ exports.articles = async (req, res, next) => {
   }
 }
 
-exports.article = async (req, res, next) => {
+exports.findOne = async (req, res, next) => {
   try {
-    const _article = await Article
+    const article = await Article
       .findById(req.params.id)
+      .populate({
+        path: 'author',
+        select: 'username avatar'
+      })
+      .populate({
+        path: 'favorite'
+      })
+      .populate({
+        path: 'commentCount'
+      })
 
-    if (!_article) {
+    if (!article) {
       const err = new Error("Article not found");
       err.status = 404;
       throw err;
-    }
-
-    const favorite = await Favorite
-      .findOne({ user: req.user._id, article: _article._id });
-    const commentCount = await Comment.count({ article: _article._id });
-    const user = await User.findById(_article.author);
-
-    const article = {
-      images: _article.images,
-      description: _article.description,
-      displayDate: _article.displayDate,
-      author: {
-        username: user.username,
-        image: user.image,
-      },
-      favoriteCount: _article.favoriteCount,
-      isFavorite: !!favorite,
-      commentCount,
-      id: _article._id
     }
 
     res.json({ article });
@@ -135,7 +95,7 @@ exports.article = async (req, res, next) => {
 }
 
 exports.create = [
-  fileHandler('articles').array('images'),
+  fileHandler('articles').array('photos'),
   async (req, res, next) => {
     try {
       
@@ -147,10 +107,10 @@ exports.create = [
         throw err;
       }
 
-      const images = files.map(file => file.filename);
+      const photos = files.map(file => file.filename);
 
       const article = new Article({
-        images,
+        photos,
         description: req.body.description,
         author: req.user._id
       });
@@ -197,23 +157,19 @@ exports.favorite = async (req, res, next) => {
 
     const article = await Article.findById(req.params.id);
 
-    const favorite = await Favorite
+    const _favorite = await Favorite
       .findOne({ user: req.user._id, article: article._id })
 
-    if (favorite) {
-      const err = new Error("Already favorite article");
-      err.status = 400;
-      throw err;
+    if (!_favorite) {
+      const favorite = new Favorite({
+        user: req.user._id,
+        article: article._id
+      })
+      await favorite.save();
+  
+      article.favoriteCount++;
+      await article.save();
     }
-
-    const newFavorite = new Favorite({
-      user: req.user._id,
-      article: article._id
-    })
-    await newFavorite.save();
-
-    article.favoriteCount++;
-    await article.save();
 
     res.json({ article })
 
@@ -229,16 +185,12 @@ exports.unfavorite = async (req, res, next) => {
     const favorite = await Favorite
       .findOne({ user: req.user._id, article: article._id });
 
-    if (!favorite) {
-      const err = new Error("Not favorite article");
-      err.status = 400;
-      throw err;
+    if (favorite) {
+      await favorite.delete();
+
+      article.favoriteCount--;
+      await article.save();
     }
-
-    await favorite.delete();
-
-    article.favoriteCount--;
-    await article.save();
 
     res.json({ article });
 

@@ -62,7 +62,7 @@ export default function Comments() {
 
   return (
     <div className="px-4">
-      <h1 className="text-2xl font-semibold my-4">Comments</h1>
+      <h3 className="text-lg font-semibold my-4">This article's comments</h3>
       <Form
         handleAddComment={handleAddComment}
       />
@@ -168,8 +168,8 @@ function Comment({ comment, handleDelete }) {
       <div className="shrink-0">
         <Link to={`/profiles/${comment.author.username}`}>
           <img
-            src={`${process.env.REACT_APP_SERVER}/files/profiles/${comment.author.image}`}
-            className="w-8 h-8 object-cover rounded-full"
+            src={`${process.env.REACT_APP_SERVER}/files/profiles/${comment.author.avatar}`}
+            className="w-8 h-8 object-cover border rounded-full"
           />
         </Link>
 

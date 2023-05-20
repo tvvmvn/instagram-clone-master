@@ -16,28 +16,28 @@ router.get('/', (req, res) => {
 })
 
 /* USERS */
-router.get('/users', userController.users);
-router.post('/users', userController.register);
-router.put('/user', auth, userController.edit);
-router.post('/user/login', userController.login);
+router.post('/users', userController.create); 
+router.put('/user', auth, userController.update); 
+router.post('/user/login', userController.login); 
 
 /* ARTICLES */
-router.get('/feed', auth, articleController.feed)
-router.get('/articles', auth, articleController.articles)
-router.post('/articles', auth, articleController.create)
-router.get('/articles/:id', auth, articleController.article)
-router.delete('/articles/:id', auth, articleController.delete)
-router.post('/articles/:id/favorite', auth, articleController.favorite)
+router.get('/feed', auth, articleController.feed) 
+router.get('/articles', auth, articleController.find)
+router.post('/articles', auth, articleController.create)  
+router.get('/articles/:id', auth, articleController.findOne)
+router.delete('/articles/:id', auth, articleController.delete) 
+router.post('/articles/:id/favorite', auth, articleController.favorite) 
 router.delete('/articles/:id/favorite', auth, articleController.unfavorite)
 
 /* COMMENTS */
-router.get('/articles/:id/comments', auth, commentController.comments)
-router.post('/articles/:id/comments', auth, commentController.create)
-router.delete('/comments/:id', auth, commentController.delete)
+router.get('/articles/:id/comments', auth, commentController.find) 
+router.post('/articles/:id/comments', auth, commentController.create) 
+router.delete('/comments/:id', auth, commentController.delete) 
 
 /* PROFILES */
-router.get('/profiles/:username', auth, profileController.details)
-router.post('/profiles/:username/follow', auth, profileController.follow)
+router.get('/profiles', auth, profileController.find); 
+router.get('/profiles/:username', auth, profileController.findOne)
+router.post('/profiles/:username/follow', auth, profileController.follow) 
 router.delete('/profiles/:username/follow', auth, profileController.unfollow)
 
 module.exports = router;

@@ -46,8 +46,8 @@ export default function ArticleTemplate({ article, handleDelete, handleFavorite,
           className="inline-flex items-center"
         >
           <img
-            src={`${process.env.REACT_APP_SERVER}/files/profiles/${article.author.image}`}
-            className="w-10 h-10 object-cover rounded-full"
+            src={`${process.env.REACT_APP_SERVER}/files/profiles/${article.author.avatar}`}
+            className="w-10 h-10 object-cover border rounded-full"
           />
           <span className="ml-2">
             {article.author.username}
@@ -67,12 +67,12 @@ export default function ArticleTemplate({ article, handleDelete, handleFavorite,
       </div>
 
       <Carousel 
-        images={article.images} 
+        photos={article.photos} 
       />
 
       <div className="mt-2 px-2">
         <div className="flex">
-          {article.isFavorite ? (
+          {article.favorite ? (
             <svg
               xmlns="http://www.w3.org/2000/svg"
               onClick={() => handleUnfavorite(article.id)}

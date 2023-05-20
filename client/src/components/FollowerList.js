@@ -15,24 +15,29 @@ export default function FollowerList() {
 
     getFollowers(username)
       .then(data => {
-        setFollowerCount(data.userCount);
-        setFollowers([...followers, ...data.users]);
+        setFollowerCount(data.profileCount);
+        setFollowers([...followers, ...data.profiles]);
       })
       .catch(error => {
         setError(error)
       })
       .finally(() => setIsLoaded(true));
-      
+
   }, [])
 
+  console.log(followers)
+
+  function handleFollow() { }
+  function handleUnfollow() { }
+
   const followerList = followers.map(follower => (
-    <div key={follower.username} className="mb-2">
+    <div key={follower.username} className="flex justify-between items-center mb-2">
       <Link
         to={`/profiles/${follower.username}`}
         className="inline-flex items-center"
       >
         <img
-          src={`${process.env.REACT_APP_SERVER}/files/profiles/${follower.image}`}
+          src={`${process.env.REACT_APP_SERVER}/files/profiles/${follower.avatar}`}
           className="w-12 h-12 object-cover rounded-full"
         />
         <div className="ml-2">
@@ -44,19 +49,30 @@ export default function FollowerList() {
           </span>
         </div>
       </Link>
+        {follower.follow ? (
+          <button
+            className="ml-2 bg-gray-200 text-sm px-4 py-2 font-semibold p-2 rounded-lg"
+            onClick={handleUnfollow}
+          >
+            Following
+          </button>
+        ) : (
+          <button
+            className="ml-2 bg-blue-500 text-white text-sm px-4 py-2 font-semibold p-2 rounded-lg"
+            onClick={handleFollow}
+          >
+            Follow
+          </button>
+        )}
     </div>
   ))
 
   return (
     <div className="px-2">
-      <h1 className="text-2xl my-4 font-semibold">Followers</h1>
-      {followerCount > 0 ? (
-        <ul>
-          {followerList}
-        </ul>
-      ) : (
-        <p className="text-center my-4">User has no followers</p>
-      )}
+      <h3 className="text-lg my-4 font-semibold">{username}'s followers</h3>
+      <ul>
+        {followerList}
+      </ul>
 
       {!isLoaded && <Spinner />}
       {error && <p className="text-red-500">{error.message}</p>}

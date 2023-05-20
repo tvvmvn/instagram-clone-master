@@ -8,8 +8,6 @@ export default function AuthProvider({ children }) {
   // user state listener
   useEffect(() => {
     
-    console.log('user state listener is triggered.', user);
-
     if (user) {
       localStorage.setItem('user', JSON.stringify(user));
     } else {

@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export default function Carousel({ images }) {
+export default function Carousel({ photos }) {
 
   const [index, setIndex] = useState(0);
 
@@ -10,12 +10,12 @@ export default function Carousel({ images }) {
         className="flex transition"
         style={{ transform: `translateX(-${index * 100}%)` }}
       >
-        {images.map(image => (
-          <li key={image} className="w-full h-96 shrink-0">
+        {photos.map(photo => (
+          <li key={photo} className="w-full h-96 shrink-0">
             <img
-              src={`${process.env.REACT_APP_SERVER}/files/articles/${image}`}
+              src={`${process.env.REACT_APP_SERVER}/files/articles/${photo}`}
               className="w-full h-full object-cover"
-              alt={image}
+              alt={photo}
             />
           </li>
         ))}
@@ -23,7 +23,7 @@ export default function Carousel({ images }) {
 
       <div className="absolute top-0 left-0 h-full flex items-center">
         <svg
-          className={`w-4 fill-white/[0.4] mx-2 ${index === 0 && 'hidden'}`}
+          className={`w-4 fill-white/[0.8] mx-2 ${index === 0 && 'hidden'}`}
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 512 512"
           onClick={() => setIndex(index - 1)}
@@ -34,7 +34,7 @@ export default function Carousel({ images }) {
 
       <div className="absolute top-0 right-0 h-full flex items-center">
         <svg
-          className={`w-4 fill-white/[0.4] mx-2 ${index === images.length - 1 && 'hidden'}`}
+          className={`w-4 fill-white/[0.8] mx-2 ${index === photos.length - 1 && 'hidden'}`}
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 512 512"
           onClick={() => setIndex(index + 1)}
@@ -43,11 +43,11 @@ export default function Carousel({ images }) {
         </svg>
       </div>
 
-      <ul className="absolute bottom-0 w-full pb-2 flex justify-center gap-1 ">
-        {images.map((image, dotIndex) => (
+      <ul className="absolute bottom-0 w-full pb-4 flex justify-center gap-1 ">
+        {photos.map((photo, dotIndex) => (
           <li
-            key={image}
-            className={`w-1.5 h-1.5 rounded-full ${dotIndex === index ? 'bg-white' : 'bg-white/[0.5]'}`}
+            key={photo}
+            className={`w-2 h-2 rounded-full ${dotIndex === index ? 'bg-white' : 'bg-white/[0.5]'}`}
           >
           </li>
         ))}

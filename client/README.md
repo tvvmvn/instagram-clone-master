@@ -61,10 +61,8 @@ Profile > Account
 3. Article
 ArticleCreate > ArticleView > ArticleTemplate(Carousel) > Comments
 4. Search
+6. FollowerList, FollowingList
 5. Feed
-Feed
-6. etc
-FollowerList, FollowingList
 
 
 

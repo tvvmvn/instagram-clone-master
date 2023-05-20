@@ -2,7 +2,7 @@ const User = require('../models/User');
 const Article = require('../models/Article');
 const Comment = require('../models/Comment');
 
-exports.comments = async (req, res, next) => {
+exports.find = async (req, res, next) => {
   try {
     const article = await Article.findById(req.params.id);
 
@@ -11,29 +11,15 @@ exports.comments = async (req, res, next) => {
     const skip = req.query.skip || 0;
 
     const commentCount = await Comment.count(where);
-    const _comments = await Comment
+    const comments = await Comment
       .find(where)
+      .populate({
+        path: 'author',
+        select: 'username avatar'
+      })
       .sort({ created: 'desc' })
       .limit(limit)
       .skip(skip)
-
-    const comments = [];
-
-    for (let _comment of _comments) {
-      const user = await User.findById(_comment.author);
-
-      const comment = {
-        id: _comment._id,
-        content: _comment.content,
-        author: {
-          username: user.username,
-          image: user.image
-        },
-        created: _comment.created,
-      }
-
-      comments.push(comment);
-    }
 
     res.json({ comments, commentCount });
 
@@ -45,27 +31,19 @@ exports.comments = async (req, res, next) => {
 exports.create = async (req, res, next) => {
   try {
 
-    const article = await Article.findById(req.params.id);
-
     const _comment = new Comment({
-      article: article._id,
+      article: req.params.id,
       content: req.body.content,
       author: req.user._id
     })
 
     await _comment.save();
 
-    const user = await User.findById(_comment.author);
-
-    const comment = {
-      id: _comment._id,
-      content: _comment.content,
-      author: {
-        username: user.username,
-        image: user.image
-      },
-      created: _comment.created,
-    }
+    const comment = await _comment
+      .populate({
+        path: 'author',
+        select: 'username avatar'
+      })
 
     res.json({ comment });
 
@@ -81,7 +59,7 @@ exports.delete = async (req, res, next) => {
       .findById(req.params.id);
 
     if (req.user._id.toString() !== comment.author.toString()) {
-      const err = new Error("User is not correct");
+      const err = new Error("incorrect user");
       err.status = 400;
       throw err;
     }

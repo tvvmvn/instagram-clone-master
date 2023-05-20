@@ -15,41 +15,16 @@ export default function Register() {
     try {
       e.preventDefault();
 
-      const _error = {};
+      const newUser = { email, fullName, username, password }
 
-      // EMAIL
-      if (!email.includes('@') || email.trim().length < 5) {
-        _error.email = 'E-mail is not valid';
-      }
+      await createUser(newUser);
 
-      if (await doesEmailExists(email)) {
-        _error.email = 'E-mail is already in use';
-      }
-
-      // USERNAME
-      if (username.trim().length < 5) {
-        _error.username = 'Username is too short';
-      }
-
-      // PASSWORD
-      if (password.trim().length < 5) {
-        _error.password = 'Password is too short';
-      }
-
-      const isError = Object.keys(_error).length > 0;
-
-      if (isError) {
-        throw _error;
-      }
-      
-      await createUser(email, fullName, username, password);
-
-      alert(`Welcome, ${fullName}!`);
+      alert(`Welcome ${fullName}!`);
 
       navigate('/');
 
     } catch (error) {
-      setError(error);
+      setError(error)
     }
   }
 

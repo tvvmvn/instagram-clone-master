@@ -15,7 +15,7 @@ export default function ArticleCreate({ active, setActive }) {
       const formData = new FormData();
       
       for (let file of files) {
-        formData.append('images', file);
+        formData.append('photos', file);
       }
 
       formData.append('description', description);
@@ -59,7 +59,7 @@ export default function ArticleCreate({ active, setActive }) {
                 className="hidden"
                 onChange={({ target }) => setFiles(Array.from(target.files))}
                 multiple={true}
-                accept="image/*"
+                accept="image/png, image/jpg, image/jpeg"
               />
               Select Photos +
             </label>
