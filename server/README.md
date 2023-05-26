@@ -4,7 +4,7 @@ Tutorial "Instagram Clone" website written in in Node/Express.
 
 ---
 
-![A UML diagram showing the relation of database entities in this example repository](https://github.com/tvvmvn/instagram-clone-master/tree/main/server/public/images/diagram.png)
+![A UML diagram showing the relation of database entities in this example repository](https://github.com/tvvmvn/instagram-clone-master/blob/main/server/public/images/diagram.png?raw=true)
 
 
 
