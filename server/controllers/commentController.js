@@ -58,6 +58,12 @@ exports.delete = async (req, res, next) => {
     const comment = await Comment
       .findById(req.params.id);
 
+    if (!comment) {
+      const err = new Error("Comment not found")
+      err.status = 404;
+      throw err;
+    }
+
     if (req.user._id.toString() !== comment.author.toString()) {
       const err = new Error("incorrect user");
       err.status = 400;

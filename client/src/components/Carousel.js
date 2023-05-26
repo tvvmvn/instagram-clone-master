@@ -6,6 +6,7 @@ export default function Carousel({ photos }) {
 
   return (
     <div className="overflow-x-hidden relative">
+      {/* Photos */}
       <ul
         className="flex transition"
         style={{ transform: `translateX(-${index * 100}%)` }}
@@ -21,6 +22,7 @@ export default function Carousel({ photos }) {
         ))}
       </ul>
 
+      {/* Carousel buttons */}
       <div className="absolute top-0 left-0 h-full flex items-center">
         <svg
           className={`w-4 fill-white/[0.8] mx-2 ${index === 0 && 'hidden'}`}
@@ -43,6 +45,7 @@ export default function Carousel({ photos }) {
         </svg>
       </div>
 
+      {/* Carousel Indicator */}
       <ul className="absolute bottom-0 w-full pb-4 flex justify-center gap-1 ">
         {photos.map((photo, dotIndex) => (
           <li

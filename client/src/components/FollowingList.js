@@ -25,11 +25,12 @@ export default function FollowingList() {
 
   }, [])
 
-  function handleFollow() {}
-  function handleUnfollow() {}
+  function handleFollow() { }
+  function handleUnfollow() { }
 
   const followingList = followings.map(following => (
     <div key={following.username} className="flex justify-between items-center mb-2">
+      {/* Profile Avatar */}
       <Link
         to={`/profiles/${following.username}`}
         className="inline-flex items-center"
@@ -38,30 +39,32 @@ export default function FollowingList() {
           src={`${process.env.REACT_APP_SERVER}/files/profiles/${following.avatar}`}
           className="w-12 h-12 object-cover rounded-full"
         />
-          <div className="ml-2">
-            <span className="block font-semibold">
-              {following.username}
-            </span>
-            <span className="block text-gray-400 text-sm">
-              {following.fullName}
-            </span>
-          </div>
+        <div className="ml-2">
+          <span className="block font-semibold">
+            {following.username}
+          </span>
+          <span className="block text-gray-400 text-sm">
+            {following.fullName}
+          </span>
+        </div>
       </Link>
-      {following.follow ? (
-          <button
-            className="ml-2 bg-gray-200 text-sm px-4 py-2 font-semibold p-2 rounded-lg"
-            onClick={handleUnfollow}
-          >
-            Following
-          </button>
-        ) : (
-          <button
-            className="ml-2 bg-blue-500 text-white text-sm px-4 py-2 font-semibold p-2 rounded-lg"
-            onClick={handleFollow}
-          >
-            Follow
-          </button>
-        )}
+
+      {/* Follow Button */}
+      {following.isFollowing ? (
+        <button
+          className="ml-2 bg-gray-200 text-sm px-4 py-2 font-semibold p-2 rounded-lg"
+          onClick={handleUnfollow}
+        >
+          Following
+        </button>
+      ) : (
+        <button
+          className="ml-2 bg-blue-500 text-white text-sm px-4 py-2 font-semibold p-2 rounded-lg"
+          onClick={handleFollow}
+        >
+          Follow
+        </button>
+      )}
     </div>
   ))
 

@@ -26,7 +26,7 @@ export default function ArticleView() {
 
       const updatedArticle = {
         ...article,
-        favorite: true,
+        isFavorite: true,
         favoriteCount: article.favoriteCount + 1
       }
 
@@ -44,7 +44,7 @@ export default function ArticleView() {
 
       const updatedArticle = {
         ...article,
-        favorite: false,
+        isFavorite: false,
         favoriteCount: article.favoriteCount - 1
       }
 

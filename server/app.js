@@ -14,7 +14,8 @@ require('dotenv').config();
 
 // DATABASE Connection
 mongoose.set('strictQuery', false);
-mongoose.connect(process.env.MONGODB_URI)
+mongoose
+  .connect(process.env.MONGODB_URI)
   .catch(err => console.log(err));
 
 // MIDDLEWARE

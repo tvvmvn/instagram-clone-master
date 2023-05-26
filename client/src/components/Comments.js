@@ -165,6 +165,7 @@ function Comment({ comment, handleDelete }) {
   
   return (
     <li className="py-4 flex border-b">
+      {/* Author Avatar */}
       <div className="shrink-0">
         <Link to={`/profiles/${comment.author.username}`}>
           <img
@@ -172,9 +173,9 @@ function Comment({ comment, handleDelete }) {
             className="w-8 h-8 object-cover border rounded-full"
           />
         </Link>
-
       </div>
 
+      {/* Comment Content */}
       <div className="grow ml-4">
         <Link to={`/profiles/${comment.author.username}`} className="font-semibold">
           {comment.author.username} {" "}
@@ -185,6 +186,7 @@ function Comment({ comment, handleDelete }) {
         </p>
       </div>
 
+      {/* More button */}
       <div className="shrink-0 ml-4">
         {active && modal}
         <svg

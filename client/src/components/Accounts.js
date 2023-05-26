@@ -51,11 +51,14 @@ export default function Accounts() {
 
   return (
     <div className="mt-8 px-4">
+      {/* Update Message */}
       {Object.keys(updatedUser).length > 0 && (
         <p className="mb-4 bg-blue-500 text-white p-2">
-          Click button to save updated data.
+          Submit form to save updated data.
         </p>
       )}
+
+      {/* Avatar Image */}
       <div className="flex mb-4">
         <img
           src={updatedUser.avatar ? URL.createObjectURL(updatedUser.avatar) : `${process.env.REACT_APP_SERVER}/files/profiles/${user.avatar}`}
@@ -76,6 +79,7 @@ export default function Accounts() {
         </div>
       </div>
 
+      {/* Profile Form */}
       <form onSubmit={handleSubmit}>
         <div className="mb-2">
           <label htmlFor="" className="block font-semibold">Name</label>

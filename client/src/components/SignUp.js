@@ -100,8 +100,9 @@ export default function Register() {
         {error && <p className="text-red-500 text-center my-4">{error.message}</p>}
       </div>
 
+      {/* Login Link */}
       <p className="text-center mt-4">
-        Don't have an account ?  {" "}
+         Do you already have an account ?  {" "}
         <Link to="/accounts/login" className="text-blue-500 font-semibold">
           Login
         </Link>

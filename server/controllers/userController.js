@@ -65,17 +65,14 @@ exports.update = [
       }
 
       Object.assign(_user, req.body);
-      // for (key in req.body) {
-      //   _user[key] = req.body[key]
-      // }
 
       await _user.save();
 
       const token = _user.generateJWT();
 
       const user = {
-        email: _user.email,
         username: _user.username,
+        email: _user.email,
         fullName: _user.fullName,
         avatar: _user.avatar,
         bio: _user.bio,
@@ -90,38 +87,45 @@ exports.update = [
   }
 ]
 
-exports.login = async (req, res, next) => {
-  try {
-    const { email, password } = req.body;
 
-    const _user = await User.findOne({ email });
-
-    if (!_user) {
-      const err = new Error('User not found');
-      err.status = 401;
-      throw err;
+exports.login = [
+  check('username')
+    .isLength({ min: 5 }).withMessage('Incorrect username'),
+  check('password')
+    .isLength({ min: 5 }).withMessage('Incorrect password'),
+  async (req, res, next) => {
+    try {
+      const { email, password } = req.body;
+  
+      const _user = await User.findOne({ email });
+  
+      if (!_user) {
+        const err = new Error('User not found');
+        err.status = 401;
+        throw err;
+      }
+  
+      if (!_user.checkPassword(password)) {
+        const err = new Error('Password not match');
+        err.status = 401;
+        throw err;
+      }
+  
+      const token = _user.generateJWT();
+  
+      const user = {
+        username: _user.username,
+        email: _user.email,
+        fullName: _user.fullName,
+        avatar: _user.avatar,
+        bio: _user.bio,
+        token
+      }
+  
+      res.json({ user })
+  
+    } catch (error) {
+      next(error)
     }
-
-    if (!_user.checkPassword(password)) {
-      const err = new Error('Password not match');
-      err.status = 401;
-      throw err;
-    }
-
-    const token = _user.generateJWT();
-
-    const user = {
-      email: _user.email,
-      username: _user.username,
-      fullName: _user.fullName,
-      avatar: _user.avatar,
-      bio: _user.bio,
-      token
-    }
-
-    res.json({ user })
-
-  } catch (error) {
-    next(error)
   }
-}
+]

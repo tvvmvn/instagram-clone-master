@@ -40,7 +40,7 @@ exports.find = async (req, res, next) => {
     const profiles = await User
       .find(where, 'username fullName avatar bio')
       .populate({ 
-        path: 'follow',
+        path: 'isFollowing',
         match: { follower: req.user._id }
       })
       .limit(limit)
@@ -59,28 +59,34 @@ exports.findOne = async (req, res, next) => {
     const _profile = await User
       .findOne({ username: req.params.username }, 'username fullName avatar bio')
       .populate({
-        path: 'follow',
+        path: 'isFollowing',
         match: { follower: req.user._id }
       })
 
     if (!_profile) {
-      const err = new Error("User not found");
+      const err = new Error("Profile not found");
       err.status = 404;
       throw err;
     }
+    
+    const { 
+      username, 
+      fullName, 
+      avatar, 
+      bio, 
+      isFollowing 
+    } = _profile;
 
     const followingCount = await Follow.count({ follower: _profile._id })
     const followerCount = await Follow.count({ following: _profile._id })
     const articleCount = await Article.count({ author: _profile._id })
-
-    const { username, fullName, avatar, bio, follow } = _profile;
 
     const profile = {
       username, 
       fullName, 
       avatar, 
       bio, 
-      follow,
+      isFollowing,
       followingCount,
       followerCount,
       articleCount
@@ -104,6 +110,12 @@ exports.follow = async (req, res, next) => {
 
     const profile = await User
       .findOne({ username: req.params.username }, 'username fullName avatar bio');
+
+    if (!profile) {
+      const err = new Error('Profile not found')
+      err.status = 404;
+      throw err;
+    }
 
     const _follow = await Follow
       .findOne({ follower: req.user._id, following: profile._id })
@@ -129,6 +141,12 @@ exports.unfollow = async (req, res, next) => {
 
     const username = req.params.username;
     const profile = await User.findOne({ username }, 'username fullName avatar bio');
+
+    if (!profile) {
+      const err = new Error('Profile not found')
+      err.status = 404;
+      throw err;
+    }
 
     const follow = await Follow
       .findOne({ follower: req.user._id, following: profile._id });

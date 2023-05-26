@@ -8,6 +8,8 @@ if (!userArgs[0].startsWith('mongodb')) {
   return;
 }
 
+seedDatabase();
+
 async function seedDatabase() {
   try {
     const MONGODB_URI = userArgs[0];
@@ -18,31 +20,31 @@ async function seedDatabase() {
         username: 'cat',
         email: 'cat@example.com',
         fullName: 'Kitty',
-        image: 'cat.jpeg',
+        avatar: 'cat.jpeg',
         bio: 'Meow',
       },
       {
         username: 'dog',
         email: 'dot@example.com',
         fullName: 'Mr.Loyal',
-        image: 'dog.jpeg',
+        avatar: 'dog.jpeg',
         bio: 'Bark',
       },
       {
         username: 'bird',
         email: 'bird@example.com',
         fullName: 'Blue and White',
-        image: 'bird.jpeg',
+        avatar: 'bird.jpeg',
         bio: '',
       }
     ]
 
     for (let i = 0; i < users.length; i++) {
       const user = new User();
-      user.email = users[i].email;
       user.username = users[i].username;
+      user.email = users[i].email;
       user.fullName = users[i].fullName;
-      user.image = users[i].image;
+      user.avatar = users[i].avatar;
       user.bio = users[i].bio;
 
       await user.save();
@@ -54,7 +56,7 @@ async function seedDatabase() {
       const user = await User.findOne({ username: 'cat' });
 
       const article = new Article();
-      article.images = [`${i}.jpeg`];
+      article.photos = [`${i}.jpeg`];
       article.description = `cat photos ${i}`;
       article.author = user._id;
 
@@ -70,4 +72,3 @@ async function seedDatabase() {
   }
 }
 
-seedDatabase();

@@ -27,11 +27,12 @@ export default function FollowerList() {
 
   console.log(followers)
 
-  function handleFollow() { }
-  function handleUnfollow() { }
+  function handleFollow() {}
+  function handleUnfollow() {}
 
   const followerList = followers.map(follower => (
     <div key={follower.username} className="flex justify-between items-center mb-2">
+      {/* Profile Avatar */}
       <Link
         to={`/profiles/${follower.username}`}
         className="inline-flex items-center"
@@ -49,21 +50,23 @@ export default function FollowerList() {
           </span>
         </div>
       </Link>
-        {follower.follow ? (
-          <button
-            className="ml-2 bg-gray-200 text-sm px-4 py-2 font-semibold p-2 rounded-lg"
-            onClick={handleUnfollow}
-          >
-            Following
-          </button>
-        ) : (
-          <button
-            className="ml-2 bg-blue-500 text-white text-sm px-4 py-2 font-semibold p-2 rounded-lg"
-            onClick={handleFollow}
-          >
-            Follow
-          </button>
-        )}
+
+      {/* Follow Button */}
+      {follower.isFollowing ? (
+        <button
+          className="ml-2 bg-gray-200 text-sm px-4 py-2 font-semibold p-2 rounded-lg"
+          onClick={handleUnfollow}
+        >
+          Following
+        </button>
+      ) : (
+        <button
+          className="ml-2 bg-blue-500 text-white text-sm px-4 py-2 font-semibold p-2 rounded-lg"
+          onClick={handleFollow}
+        >
+          Follow
+        </button>
+      )}
     </div>
   ))
 

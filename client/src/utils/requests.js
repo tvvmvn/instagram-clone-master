@@ -10,15 +10,13 @@ export async function createUser(newUser) {
 
   if (res.status === 400) {
     const { errors } = await res.json();
-
-    const _error = {};
+    const error = {};
   
-    for (var i=0; i<errors.length; i++) {
-      console.log(errors[i].param, errors[i].msg);
-      _error[errors[i].param] = errors[i].msg
+    for (let i=0; i<errors.length; i++) {
+      error[errors[i].param] = errors[i].msg;
     }
     
-    throw _error;
+    throw error;
   }
 
   if (!res.ok) {
@@ -54,7 +52,7 @@ export async function signIn(email, password) {
   }
 
   if (!res.ok) {
-    throw new Error('Something is broken');
+    throw new Error(`${res.status} ${res.statusText}`);
   }
 
   return await res.json();

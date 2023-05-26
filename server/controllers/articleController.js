@@ -22,7 +22,7 @@ exports.feed = async (req, res, next) => {
         select: 'username avatar'
       })
       .populate({
-        path: 'favorite'
+        path: 'isFavorite'
       })
       .populate({
         path: 'commentCount'
@@ -51,7 +51,7 @@ exports.find = async (req, res, next) => {
 
     const articleCount = await Article.count(where);
     const articles = await Article
-      .find(where, 'photos favoriteCount commentCount displayDate')
+      .find(where, 'photos favoriteCount created')
       .populate({
         path: 'commentCount'
       })
@@ -75,7 +75,7 @@ exports.findOne = async (req, res, next) => {
         select: 'username avatar'
       })
       .populate({
-        path: 'favorite'
+        path: 'isFavorite'
       })
       .populate({
         path: 'commentCount'
@@ -157,6 +157,12 @@ exports.favorite = async (req, res, next) => {
 
     const article = await Article.findById(req.params.id);
 
+    if (!article) {
+      const err = new Error("Article not found");
+      err.status = 404;
+      throw err;
+    }
+
     const _favorite = await Favorite
       .findOne({ user: req.user._id, article: article._id })
 
@@ -181,6 +187,12 @@ exports.favorite = async (req, res, next) => {
 exports.unfavorite = async (req, res, next) => {
   try {
     const article = await Article.findById(req.params.id);
+
+    if (!article) {
+      const err = new Error("Article not found");
+      err.status = 404;
+      throw err;
+    }
 
     const favorite = await Favorite
       .findOne({ user: req.user._id, article: article._id });

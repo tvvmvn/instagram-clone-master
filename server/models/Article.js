@@ -5,9 +5,9 @@ const { DateTime } = require('luxon');
 const articleSchema = new Schema({
   photos: [{ type: String, required: true }],
   description: { type: String },
-  created: { type: Date, default: Date.now },
   author: { type: Schema.ObjectId, required: true, ref: 'User' },
   favoriteCount: { type: Number, default: 0 },
+  created: { type: Date, default: Date.now },
 }, {
   toJSON: { virtuals: true },
   toObject: { virtuals: true }
@@ -26,7 +26,7 @@ articleSchema.virtual('commentCount', {
   count: true
 })
 
-articleSchema.virtual('favorite', {
+articleSchema.virtual('isFavorite', {
   ref: 'Favorite',
   localField: '_id',
   foreignField: 'article',

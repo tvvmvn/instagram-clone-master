@@ -84,8 +84,10 @@ export default function Login() {
         Login
       </button>
 
+      {/* Error Messages */}
       {error && <p className="my-4 text-center text-red-500">{error.message}</p>}
 
+      {/* Sign Up Link */}
       <p className="text-center my-4">
         Don't have an account ?  {" "}
         <Link to="/accounts/signup" className="text-blue-500 font-semibold">Sign Up</Link>

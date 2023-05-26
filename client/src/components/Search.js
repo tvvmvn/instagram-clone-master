@@ -85,7 +85,9 @@ function Result({ error, isLoaded, profiles }) {
             {profile.fullName}
           </span>
         </div>
-        {!!profile.follow && (
+
+        {/* Follwing Status */}
+        {profile.isFollowing && (
           <div className="ml-2 text-sm text-blue-500"> following </div>
         )}
       </Link>

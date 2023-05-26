@@ -39,7 +39,7 @@ export default function Feed() {
         if (article.id === id) {
           return {
             ...article,
-            favorite: true,
+            isFavorite: true,
             favoriteCount: article.favoriteCount + 1
           }
         }
@@ -61,7 +61,7 @@ export default function Feed() {
         if (article.id === id) {
           return {
             ...article,
-            favorite: false,
+            isFavorite: false,
             favoriteCount: article.favoriteCount - 1
           }
         }

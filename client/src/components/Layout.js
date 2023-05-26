@@ -58,6 +58,7 @@ export default function Layout() {
         </div>
       </nav>
 
+      {/* Main */}
       <Outlet />
     </div>
   )

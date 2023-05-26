@@ -50,7 +50,7 @@ export default function Profile() {
     try {
       await follow(username)
 
-      setProfile({ ...profile, follow: 1 })
+      setProfile({ ...profile, isFollowing: true })
 
     } catch (error) {
       alert(error)
@@ -61,7 +61,7 @@ export default function Profile() {
     try {
       await unfollow(username)
 
-      setProfile({ ...profile, follow: 0 });
+      setProfile({ ...profile, isFollowing: false });
 
     } catch (error) {
       alert(error)
@@ -79,6 +79,7 @@ export default function Profile() {
   return (
     <>
       <div className="px-4 mt-8">
+        {/* Profile Image and Info */}
         <div className="flex">
           <img
             src={`${process.env.REACT_APP_SERVER}/files/profiles/${profile.avatar}`}
@@ -110,7 +111,7 @@ export default function Profile() {
                 </div>
               )}
 
-              {(!isMaster && profile.follow) && (
+              {(!isMaster && profile.isFollowing) && (
                 <button
                   className="ml-2 bg-gray-200 text-sm px-4 py-2 font-semibold p-2 rounded-lg"
                   onClick={handleUnfollow}
@@ -119,7 +120,7 @@ export default function Profile() {
                 </button>
               )}
 
-              {(!isMaster && !profile.follow) && (
+              {(!isMaster && !profile.isFollowing) && (
                 <button
                   className="ml-2 bg-blue-500 text-white text-sm px-4 py-2 font-semibold p-2 rounded-lg"
                   onClick={handleFollow}
@@ -173,6 +174,8 @@ export default function Profile() {
             </button>
           </div>
         </div>
+
+        {/* FullName and Bio */}
         <div className="">
           {profile.fullName && (
             <h3 className="text-sm font-semibold my-2">{profile.fullName}</h3>
@@ -182,7 +185,6 @@ export default function Profile() {
           </p>
         </div>
       </div>
-
 
       <hr className="mt-4 mb-4" />
 
