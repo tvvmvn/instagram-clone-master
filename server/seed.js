@@ -4,9 +4,9 @@ const User = require('./models/User');
 const Article = require('./models/Article');
 
 if (!userArgs[0].startsWith('mongodb')) {
-  console.log('ERROR: You need to specify a valid mongodb URL as the first argument');
+  console.log('ERROR: You need to specify a valid mongodb URL as the first argument.');
   return;
-};
+}
 
 seedDatabase();
 
