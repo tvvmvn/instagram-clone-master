@@ -1,16 +1,12 @@
 # express-locallibrary-tutorial
 
-Tutorial "Local Library" website written in in Node/Express.
+Tutorial "Instagram Clone" website written in in Node/Express.
 
 ---
 
-This web application creates an online catalog for a small local library, where users can browse available books and manage their accounts.
+![A UML diagram showing the relation of database entities in this example repository](https://github.com/tvvmvn/instagram-clone-master/tree/main/server/public/images/diagram.png)
 
-![A UML diagram showing the relation of database entities in this example repository](https://raw.githubusercontent.com/mdn/express-locallibrary-tutorial/main/public/images/Library%20Website%20-%20Mongoose_Express.png)
 
-For more information see the associated [MDN tutorial home page](https://developer.mozilla.org/en-US/docs/Learn/Server-side/Express_Nodejs/Tutorial_local_library_website).
-
-> **Note** The [auth branch](/../../tree/auth) in this repository implements an _unsupported_ and _undocumented_ version of the library with User Authentication and Authorization. This may be a useful starting point for some users.
 
 ## Quick Start
 
@@ -21,7 +17,7 @@ To get this project up and running locally on your computer:
 
    ```bash
    npm install
-   DEBUG=express-locallibrary-tutorial:* npm run devstart   #For linux
+   DEBUG=instagram-clone-master:* npm run devstart   #For linux
    ```
 
 3. Open a browser to <http://localhost:3000/> to open the library site.
