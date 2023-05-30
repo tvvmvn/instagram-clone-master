@@ -6,9 +6,6 @@
 
 ![A UML diagram showing the relation of components](https://github.com/tvvmvn/instagram-clone-master/blob/main/client/public/images/diagram.png)
 
-https://github.com/tvvmvn/instagram-clone-master/blob/main/client/public/images/diagram.png
-
-
 
 ## Quick Start
 
