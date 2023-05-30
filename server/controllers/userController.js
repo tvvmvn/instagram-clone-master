@@ -5,8 +5,8 @@ const { check, validationResult } = require('express-validator');
 exports.create = [
   check('username')
     .isLength({ min: 5 }).withMessage('username must be at least 5 chars long')
-    .custom(async (value) => {
-      const user = await User.findOne({ username: value });
+    .custom(async (username) => {
+      const user = await User.findOne({ username });
 
       if (user) {
         return Promise.reject('Username already in use');
@@ -14,8 +14,8 @@ exports.create = [
     }),
   check('email')
     .isEmail().withMessage('E-mail is not valid')
-    .custom(async (value) => {
-      const user = await User.findOne({ email: value });
+    .custom(async (email) => {
+      const user = await User.findOne({ email });
 
       if (user) {
         return Promise.reject('E-mail already in use');
@@ -87,30 +87,42 @@ exports.update = [
   }
 ]
 
-
 exports.login = [
-  check('username')
-    .isLength({ min: 5 }).withMessage('Incorrect username'),
+  check('email')
+    .isEmail().withMessage('E-mail is not valid')
+    .custom(async (email) => {
+      const user = await User.findOne({ email });
+
+      if (!user) {
+        return Promise.reject('User not found');
+      }
+    }),
   check('password')
-    .isLength({ min: 5 }).withMessage('Incorrect password'),
+    .isLength({ min: 5 }).withMessage('Password is not valid')
+    .custom(async (password, { req }) => {
+      const email = req.body.email;
+      const user = await User.findOne({ email });
+      
+      if (!user.checkPassword(password)) {
+        return Promise.reject('Password not match');
+      }
+    }),
   async (req, res, next) => {
     try {
-      const { email, password } = req.body;
-  
+
+      const errors = validationResult(req);
+
+      if (!errors.isEmpty()) {
+        const err = new Error();
+        err.errors = errors.array();
+        err.status = 401;
+        throw err;
+      }
+
+      const { email } = req.body;
+
       const _user = await User.findOne({ email });
-  
-      if (!_user) {
-        const err = new Error('User not found');
-        err.status = 401;
-        throw err;
-      }
-  
-      if (!_user.checkPassword(password)) {
-        const err = new Error('Password not match');
-        err.status = 401;
-        throw err;
-      }
-  
+
       const token = _user.generateJWT();
   
       const user = {

@@ -17,6 +17,13 @@ const userSchema = new Schema({
   toObject: { virtuals: true }
 })
 
+userSchema.virtual('isFollowing', {
+  ref: 'Follow',
+  localField: '_id',
+  foreignField: 'following',
+  justOne: true
+})
+
 userSchema.methods.generateJWT = function () {
   return jwt.sign({ username: this.username }, process.env.SECRET);
 }
@@ -37,12 +44,5 @@ userSchema.methods.checkPassword = function (password) {
 
   return this.password === hashedPassword;
 }
-
-userSchema.virtual('isFollowing', {
-  ref: 'Follow',
-  localField: '_id',
-  foreignField: 'following',
-  justOne: true
-})
 
 module.exports = mongoose.model('User', userSchema);

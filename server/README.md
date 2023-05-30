@@ -1,6 +1,6 @@
-# express-locallibrary-tutorial
+# Instagram-clone-app SERVER
 
-Tutorial "Instagram Clone" website written in in Node/Express.
+"Instagram Clone" API Server written in in Node/Express.
 
 ---
 
@@ -17,9 +17,9 @@ To get this project up and running locally on your computer:
 
    ```bash
    npm install
-   DEBUG=instagram-clone-master:* npm run devstart   #For linux
+   npm run devstart  
    ```
 
 3. Open a browser to <http://localhost:3000/> to open the library site.
 
-> **Note:** The library uses a default MongoDB database hosted on [MongoDB Atlas](https://www.mongodb.com/cloud/atlas). You should use a different database for your own code experiments.
+> **Note:** The app needs MongoDB URI and SECRET for JWT.

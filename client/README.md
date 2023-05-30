@@ -1,71 +1,25 @@
-# An initial setup *GUIDES* for building Instagram clone app
+# Instagram-clone-app CLIENT
+ 
+"Instagram Clone" Client is written in REACT
 
+---
 
-## Setting enviroment variables
-Set enviroment variables to .env such as server url.
-
-## Install packages
-cd client
-npm install
-
-## Create Server request library
-make directory named utils and move to utils directory.
-create a file named request.js
-
-## Create components
-make directory named components in src.
-create templates with export function that has equal name to file.
-
-- Authorization
-AuthContext
-AuthProvider
-AuthRequired
-
-- USER
-Accounts
-Login
-SignUp
-
-- ARTICLE
-Feed
-ArticleView
-ArticleCreate
-ArticleTemplate
-Carousel
-Comments
-
-- PROFILE
-Profile
-Timeline
-FollowerList
-FollowingList
-
-- OTHERS
-Layout
-NotFound
-Search
-Spinner
-
-## Edit entry file of application and html document.
-index.js
-index.html > title
-
-## Define Application Sturcture
-App.js
-
-## make each component to build UI. 
-1. Components relavant to authorization
-Auth*.js > Layout > Spinner, NotFound > SignIn & SignUp.
-2. User profile and account
-Profile > Account
-3. Article
-ArticleCreate > ArticleView > ArticleTemplate(Carousel) > Comments
-4. Search
-6. FollowerList, FollowingList
-5. Feed
+![A UML diagram showing the relation of database entities in this example repository](https://github.com/tvvmvn/instagram-clone-master/blob/main/server/public/images/diagram.png?raw=true)
 
 
 
+## Quick Start
 
+To get this project up and running locally on your computer:
 
+1. Set up a [Node.js](https://wiki.developer.mozilla.org/en-US/docs/Learn/Server-side/Express_Nodejs/development_environment) development environment.
+2. Once you have node setup, enter the following commands in the root of your clone of this repo:
 
+   ```bash
+   npm install
+   npm start
+   ```
+
+3. Open a browser to <http://localhost:3001/> to open the library site.
+
+> **Note:** The app needs API Server URI.
