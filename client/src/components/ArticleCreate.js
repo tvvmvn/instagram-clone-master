@@ -13,10 +13,10 @@ export default function ArticleCreate({ active, setActive }) {
       e.preventDefault();
 
       const formData = new FormData();
-      
-      for (let file of files) {
+
+      files.forEach(file => {
         formData.append('photos', file);
-      }
+      })
 
       formData.append('description', description);
 

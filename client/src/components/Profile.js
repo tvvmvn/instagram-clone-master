@@ -80,7 +80,7 @@ export default function Profile() {
     <>
       <div className="px-4 mt-8">
         {/* Profile Image and Info */}
-        <div className="flex">
+        <div className="flex mb-4">
           <img
             src={`${process.env.REACT_APP_SERVER}/files/profiles/${profile.avatar}`}
             className="w-20 h-20 object-cover border rounded-full"
@@ -130,7 +130,7 @@ export default function Profile() {
               )}
             </div>
 
-            <ul className="flex items-center mb-4">
+            <ul className="flex items-center">
               <li className="w-1/3">
                 <div className="text-sm">
                   <span className="font-semibold">
@@ -175,15 +175,15 @@ export default function Profile() {
           </div>
         </div>
 
-        {/* FullName and Bio */}
-        <div className="">
-          {profile.fullName && (
-            <h3 className="text-sm font-semibold my-2">{profile.fullName}</h3>
-          )}
+        {/* Name and Bio */}
+        {profile.fullName && (
+          <h3 className="text-sm font-semibold my-2">{profile.fullName}</h3>
+        )}
+        {profile.bio && (
           <p className="text-sm my-2">
             {profile.bio}
           </p>
-        </div>
+        )}
       </div>
 
       <hr className="mt-4 mb-4" />

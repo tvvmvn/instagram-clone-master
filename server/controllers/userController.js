@@ -4,7 +4,7 @@ const { check, validationResult } = require('express-validator');
 
 exports.create = [
   check('username')
-    .isLength({ min: 5 }).withMessage('username must be at least 5 chars long')
+    .isLength({ min: 5 }).withMessage('Username must be at least 5 chars long')
     .custom(async (username) => {
       const user = await User.findOne({ username });
 
@@ -56,9 +56,38 @@ exports.create = [
 
 exports.update = [
   fileHandler('profiles').single('avatar'),
+  check('username')
+    .optional()
+    .isLength({ min: 5 }).withMessage('Username must be at least 5 chars long')
+    .custom(async (username) => {
+      const user = await User.findOne({ username });
+
+      if (user) {
+        return Promise.reject('Username already in use');
+      }
+    }),
+  check('email')
+    .optional()
+    .isEmail().withMessage('E-mail is not valid')
+    .custom(async (email) => {
+      const user = await User.findOne({ email });
+      
+      if (user) {
+        return Promise.reject('E-mail already in use');
+      }
+    }),
   async (req, res, next) => {
     try {
       const _user = req.user;
+
+      const errors = validationResult(req);
+
+      if (!errors.isEmpty()) {
+        const err = new Error();
+        err.errors = errors.array();
+        err.status = 400;
+        throw err;
+      }
 
       if (req.file) {
         _user.avatar = req.file.filename;

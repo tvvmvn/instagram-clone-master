@@ -128,8 +128,7 @@ exports.create = [
 exports.delete = async (req, res, next) => {
   try {
 
-    const article = await Article
-      .findById(req.params.id);
+    const article = await Article.findById(req.params.id);
 
     if (!article) {
       const err = new Error("Article not found")

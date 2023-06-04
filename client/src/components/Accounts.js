@@ -12,7 +12,7 @@ export default function Accounts() {
 
       const formData = new FormData();
 
-      Object.keys(updatedUser).map(prop => {
+      Object.keys(updatedUser).forEach(prop => {
         formData.append(prop, updatedUser[prop]);
       })
 
@@ -99,7 +99,7 @@ export default function Accounts() {
             name="username"
             className="border px-2 py-1 rounded w-full read-only:bg-gray-100"
             defaultValue={user.username}
-            onChange={handleChange}
+            readOnly={true}
           />
         </div>
 
@@ -110,7 +110,7 @@ export default function Accounts() {
             name="email"
             className="border px-2 py-1 rounded w-full read-only:bg-gray-100"
             defaultValue={user.email}
-            onChange={handleChange}
+            readOnly={true}
           />
         </div>
 

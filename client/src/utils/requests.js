@@ -11,10 +11,10 @@ export async function createUser(newUser) {
   if (res.status === 400) {
     const { errors } = await res.json();
     const error = {};
-  
-    for (let i=0; i<errors.length; i++) {
-      error[errors[i].param] = errors[i].msg;
-    }
+
+    errors.forEach(_error => {
+      error[_error.param] = _error.msg;
+    })
     
     throw error;
   }
