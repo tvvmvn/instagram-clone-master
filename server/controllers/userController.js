@@ -1,28 +1,57 @@
 const User = require('../models/User');
 const fileHandler = require('../utils/fileHandler');
-const { check, validationResult } = require('express-validator');
+const { body, validationResult } = require('express-validator');
+
+const isValidUsername = () => body('username')
+  .trim()
+  .isLength({ min: 5 }).withMessage('Username must be at least 5 characters')
+  .isAlphanumeric().withMessage("Username is only allowed in alphabet and number.")
+
+const isValidEmail = () => body('email')
+  .trim()
+  .isEmail().withMessage('E-mail is not valid')
+
+const isValidPassword = () => body('password')
+  .trim()
+  .isLength({ min: 5 }).withMessage('Password must be at least 5 characters')
+
+const emailInUse = async (email) => {
+  const user = await User.findOne({ email });
+  
+  if (user) {
+    return Promise.reject('E-mail is already in use');
+  }
+}
+
+const usernameInUse = async (username) => {
+  const user = await User.findOne({ username });
+
+  if (user) {
+    return Promise.reject('Username is already in use');
+  }
+}
+
+const doesEmailExists = async (email) => {
+  const user = await User.findOne({ email });
+
+  if (!user) {
+    return Promise.reject('User is not found');
+  }
+}
+
+const doesPasswordMatch = async (password, { req }) => {
+  const email = req.body.email;
+  const user = await User.findOne({ email });
+  
+  if (!user.checkPassword(password)) {
+    return Promise.reject('Password does not match');
+  }
+}
 
 exports.create = [
-  check('username')
-    .isLength({ min: 5 }).withMessage('Username must be at least 5 chars long')
-    .custom(async (username) => {
-      const user = await User.findOne({ username });
-
-      if (user) {
-        return Promise.reject('Username already in use');
-      }
-    }),
-  check('email')
-    .isEmail().withMessage('E-mail is not valid')
-    .custom(async (email) => {
-      const user = await User.findOne({ email });
-
-      if (user) {
-        return Promise.reject('E-mail already in use');
-      }
-    }),
-  check('password')
-    .isLength({ min: 5 }).withMessage('Password is not safe'),
+  isValidUsername().custom(usernameInUse),
+  isValidEmail().custom(emailInUse),
+  isValidPassword(),
   async (req, res, next) => {
     try {
 
@@ -56,26 +85,8 @@ exports.create = [
 
 exports.update = [
   fileHandler('profiles').single('avatar'),
-  check('username')
-    .optional()
-    .isLength({ min: 5 }).withMessage('Username must be at least 5 chars long')
-    .custom(async (username) => {
-      const user = await User.findOne({ username });
-
-      if (user) {
-        return Promise.reject('Username already in use');
-      }
-    }),
-  check('email')
-    .optional()
-    .isEmail().withMessage('E-mail is not valid')
-    .custom(async (email) => {
-      const user = await User.findOne({ email });
-      
-      if (user) {
-        return Promise.reject('E-mail already in use');
-      }
-    }),
+  isValidUsername().custom(usernameInUse).optional(),
+  isValidEmail().custom(emailInUse).optional(),
   async (req, res, next) => {
     try {
       const _user = req.user;
@@ -117,25 +128,8 @@ exports.update = [
 ]
 
 exports.login = [
-  check('email')
-    .isEmail().withMessage('E-mail is not valid')
-    .custom(async (email) => {
-      const user = await User.findOne({ email });
-
-      if (!user) {
-        return Promise.reject('User not found');
-      }
-    }),
-  check('password')
-    .isLength({ min: 5 }).withMessage('Password is not valid')
-    .custom(async (password, { req }) => {
-      const email = req.body.email;
-      const user = await User.findOne({ email });
-      
-      if (!user.checkPassword(password)) {
-        return Promise.reject('Password not match');
-      }
-    }),
+  isValidEmail().custom(doesEmailExists),
+  isValidPassword().custom(doesPasswordMatch),
   async (req, res, next) => {
     try {
 
