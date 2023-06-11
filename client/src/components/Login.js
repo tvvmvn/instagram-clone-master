@@ -26,7 +26,7 @@ export default function Login() {
       
       setTimeout(() => {
         navigate('/');
-      }, 1000);
+      }, 200);
       
     } catch (error) {
       setError(error);
@@ -62,6 +62,7 @@ export default function Login() {
             className="border px-2 py-1 w-full rounded"
             value={password}
             placeholder="password"
+            autoComplete="new-password"
             onChange={({ target }) => setPassword(target.value)}
           />
           {password.trim().length > 0 && (

@@ -11,9 +11,7 @@ export default function Layout() {
       {/* NavBar */}
       <nav className="fixed top-0 left-0 w-full border-b z-10 bg-white">
         <div className="max-w-sm mx-auto px-2 h-10 flex justify-between items-center">
-          <Link to="/">
-            <img className="w-24" src="/images/logo.png" />
-          </Link>
+          <img className="w-24" src="/images/logo.png" />
           <ul className="flex items-center">
             <li>
               <Link to="/" className="block">

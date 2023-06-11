@@ -1,6 +1,6 @@
-import { useContext, useEffect, useState } from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom';
-import { getFollowers } from '../utils/requests';
+import { useEffect, useState } from 'react';
+import { useParams, Link } from 'react-router-dom';
+import { getFollowers, follow, unfollow } from '../utils/requests';
 import Spinner from './Spinner';
 
 export default function FollowerList() {
@@ -27,8 +27,43 @@ export default function FollowerList() {
 
   console.log(followers)
 
-  function handleFollow() {}
-  function handleUnfollow() {}
+  async function handleFollow(username) {
+    try {
+      await follow(username)
+
+      const updatedFollowers = followers.map(follower => {
+        if (follower.username === username) {
+          return { ...follower, isFollowing: true }
+        }
+
+        return follower;
+      })
+
+      setFollowers(updatedFollowers);
+
+    } catch (error) {
+      alert(error)
+    }
+  }
+
+  async function handleUnfollow(username) {
+    try {
+      await unfollow(username)
+
+      const updatedFollowers = followers.map(follower => {
+        if (follower.username === username) {
+          return { ...follower, isFollowing: false }
+        }
+
+        return follower;
+      })
+
+      setFollowers(updatedFollowers);
+
+    } catch (error) {
+      alert(error)
+    }
+  }
 
   const followerList = followers.map(follower => (
     <div key={follower.username} className="flex justify-between items-center mb-2">
@@ -39,7 +74,7 @@ export default function FollowerList() {
       >
         <img
           src={`${process.env.REACT_APP_SERVER}/files/profiles/${follower.avatar}`}
-          className="w-12 h-12 object-cover rounded-full"
+          className="w-12 h-12 object-cover rounded-full border"
         />
         <div className="ml-2">
           <span className="block font-semibold">
@@ -55,14 +90,14 @@ export default function FollowerList() {
       {follower.isFollowing ? (
         <button
           className="ml-2 bg-gray-200 text-sm px-4 py-2 font-semibold p-2 rounded-lg"
-          onClick={handleUnfollow}
+          onClick={() => handleUnfollow(follower.username)}
         >
           Following
         </button>
       ) : (
         <button
           className="ml-2 bg-blue-500 text-white text-sm px-4 py-2 font-semibold p-2 rounded-lg"
-          onClick={handleFollow}
+          onClick={() => handleFollow(follower.username)}
         >
           Follow
         </button>

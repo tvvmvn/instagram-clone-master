@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom';
-import { getFollowings } from '../utils/requests';
+import { useParams, Link } from 'react-router-dom';
+import { getFollowings, follow, unfollow } from '../utils/requests';
 import Spinner from './Spinner';
 
 export default function FollowingList() {
@@ -10,7 +10,6 @@ export default function FollowingList() {
   const [isLoaded, setIsLoaded] = useState(false);
   const [followings, setFollowings] = useState([]);
   const [followingCount, setFollowingCount] = useState(0);
-  const navigate = useNavigate()
 
   useEffect(() => {
     getFollowings(username)
@@ -22,11 +21,47 @@ export default function FollowingList() {
         setError(error);
       })
       .finally(() => setIsLoaded(true))
-
   }, [])
 
-  function handleFollow() { }
-  function handleUnfollow() { }
+  console.log(followings)
+
+  async function handleFollow(username) {
+    try {
+      await follow(username)
+
+      const updatedFollowings = followings.map(following => {
+        if (following.username === username) {
+          return { ...following, isFollowing: true }
+        }
+
+        return following;
+      })
+
+      setFollowings(updatedFollowings);
+
+    } catch (error) {
+      alert(error)
+    }
+  }
+
+  async function handleUnfollow(username) {
+    try {
+      await unfollow(username)
+
+      const updatedFollowings = followings.map(following => {
+        if (following.username === username) {
+          return { ...following, isFollowing: false }
+        }
+
+        return following;
+      })
+
+      setFollowings(updatedFollowings);
+
+    } catch (error) {
+      alert(error)
+    }
+  }
 
   const followingList = followings.map(following => (
     <div key={following.username} className="flex justify-between items-center mb-2">
@@ -37,7 +72,7 @@ export default function FollowingList() {
       >
         <img
           src={`${process.env.REACT_APP_SERVER}/files/profiles/${following.avatar}`}
-          className="w-12 h-12 object-cover rounded-full"
+          className="w-12 h-12 object-cover rounded-full border"
         />
         <div className="ml-2">
           <span className="block font-semibold">
@@ -53,14 +88,14 @@ export default function FollowingList() {
       {following.isFollowing ? (
         <button
           className="ml-2 bg-gray-200 text-sm px-4 py-2 font-semibold p-2 rounded-lg"
-          onClick={handleUnfollow}
+          onClick={() => handleUnfollow(following.username)}
         >
           Following
         </button>
       ) : (
         <button
           className="ml-2 bg-blue-500 text-white text-sm px-4 py-2 font-semibold p-2 rounded-lg"
-          onClick={handleFollow}
+          onClick={() => handleFollow(following.username)}
         >
           Follow
         </button>
