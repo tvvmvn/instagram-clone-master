@@ -14,7 +14,7 @@ import FollowingList from "./components/FollowingList";
 import Accounts from "./components/Accounts";
 import NotFound from "./components/NotFound";
 
-function App() {
+export default function App() {
 
   return (
     <Router>
@@ -46,5 +46,3 @@ function App() {
     </Router>
   )
 }
-
-export default App;

@@ -8,17 +8,6 @@ export async function createUser(newUser) {
     body: JSON.stringify(newUser)
   })
 
-  if (res.status === 400) {
-    const { errors } = await res.json();
-    const error = {};
-
-    errors.forEach(_error => {
-      error[_error.param] = _error.msg;
-    })
-    
-    throw error;
-  }
-
   if (!res.ok) {
     throw new Error(`${res.status} ${res.statusText}`);
   }
@@ -46,10 +35,6 @@ export async function signIn(email, password) {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ email, password })
   })
-
-  if (res.status === 401) {
-    throw new Error('User not found')
-  }
 
   if (!res.ok) {
     throw new Error(`${res.status} ${res.statusText}`);
@@ -180,7 +165,6 @@ export async function deleteComment(id) {
 
   return await res.json();
 }
-
 
 /* PROFILES */
 export async function getProfiles(username) {

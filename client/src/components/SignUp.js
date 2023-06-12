@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { createUser, doesEmailExists } from "../utils/requests";
+import { createUser } from "../utils/requests";
 
 export default function Register() {
 
@@ -16,6 +16,22 @@ export default function Register() {
       e.preventDefault();
 
       const newUser = { email, fullName, username, password }
+
+      const _error = {};
+
+      if (email.indexOf("@") === -1) {
+        _error.email = "E-mail is not valid";
+      }
+
+      if (username.match(/[^a-z0-9_]/)) {
+        _error.username = "Username is only allowed in lowercase alphabet and number"
+      }
+
+      // Requests for uniqueness check of email and username.
+
+      if (Object.keys(_error).length > 0) {
+        throw _error;
+      }
 
       await createUser(newUser);
 
@@ -84,16 +100,16 @@ export default function Register() {
             className="border rounded px-2 py-1 w-full"
             onChange={({ target }) => setPassword(target.value)}
             placeholder="Password"
+            autoComplete="new-password"
           />
         </label>
-        {error && <p className="text-red-500">{error.password}</p>}
       </div>
 
       <div className="mb-2">
         <button
           type="submit"
           className="bg-blue-500 rounded-lg text-sm font-semibold px-4 py-2 text-white w-full disabled:opacity-[0.5]"
-          disabled={!email.trim() || !username.trim() || !password.trim()}
+          disabled={email.trim().length < 5 || username.trim().length < 5 || password.trim().length < 5}
         >
           Sign Up
         </button>
