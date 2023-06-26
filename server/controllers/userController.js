@@ -89,8 +89,6 @@ exports.update = [
   isValidEmail().custom(emailInUse).optional(),
   async (req, res, next) => {
     try {
-      const _user = req.user;
-
       const errors = validationResult(req);
 
       if (!errors.isEmpty()) {
@@ -99,6 +97,8 @@ exports.update = [
         err.status = 400;
         throw err;
       }
+
+      const _user = req.user;
 
       if (req.file) {
         _user.avatar = req.file.filename;

@@ -12,24 +12,26 @@ export default function Search() {
 
   console.log(profiles)
 
-  function handleChange(e) {
-    const username = e.target.value;
+  async function handleChange(e) {
+    try {    
+      const username = e.target.value;
+  
+      if (!username) {
+        return setProfiles([]);
+      }
+  
+      setError(null);
+      setIsLoaded(false);
+  
+      const { profiles } = await getProfiles(username);
+      
+      setProfiles(profiles);
 
-    if (!username) {
-      return setProfiles([]);
+      setIsLoaded(true);
+
+    } catch (error) {
+      setError(error)
     }
-
-    setError(null);
-    setIsLoaded(false);
-
-    getProfiles(username)
-      .then(data => {
-        setProfiles(data.profiles);
-      })
-      .catch(error => {
-        setError(error);
-      })
-      .finally(() => setIsLoaded(true));
   }
 
   useEffect(() => {
@@ -67,11 +69,11 @@ function Result({ error, isLoaded, profiles }) {
     return <Spinner />
   }
 
-  return profiles.map(profile => (
-    <div key={profile.username} className="flex items-center my-2">
+  const profileList = profiles.map(profile => (
+    <li key={profile.username} className="flex items-center justify-between my-2">
       <Link
         to={`/profiles/${profile.username}`}
-        className="inline-flex items-center"
+        className="flex items-center"
       >
         <img
           src={`${process.env.REACT_APP_SERVER}/files/profiles/${profile.avatar}`}
@@ -85,13 +87,18 @@ function Result({ error, isLoaded, profiles }) {
             {profile.fullName}
           </span>
         </div>
-
-        {/* Follwing Status */}
-        {profile.isFollowing && (
-          <div className="ml-2 text-sm text-blue-500"> following </div>
-        )}
       </Link>
-    </div>
+      {/* Follwing Status */}
+      {profile.isFollowing && (
+        <div className="ml-2 text-sm text-blue-500 font-semibold">following</div>
+      )}
+    </li>
   ))
+
+  return (
+    <ul>
+      {profileList}
+    </ul>  
+  )
 }
 

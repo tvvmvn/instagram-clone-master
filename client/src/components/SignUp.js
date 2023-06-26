@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { createUser } from "../utils/requests";
 
-export default function Register() {
+export default function SignUp() {
 
   const navigate = useNavigate();
   const [error, setError] = useState(null);
