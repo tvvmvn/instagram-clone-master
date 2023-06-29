@@ -10,6 +10,7 @@ export default function Search() {
   const [profiles, setProfiles] = useState([]);
   const inputEl = useRef(null);
 
+  // tracking
   console.log(profiles)
 
   async function handleChange(e) {

@@ -98,17 +98,13 @@ function Form({ handleAddComment }) {
     }
   }
 
-  function handleChange(e) {
-    setContent(e.target.value);
-  }
-
   return (
     <form onSubmit={handleSubmit} className="mb-4">
       <textarea
         rows="2"
         className="border w-full px-2 py-1 rounded"
         value={content}
-        onChange={handleChange}
+        onChange={({ target }) => setContent(target.value)}
       />
       <button
         type="submit"
