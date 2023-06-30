@@ -4,7 +4,7 @@
 
 ---
 
-![A UML diagram showing the relation of components](/public/images/diagram.png?raw=true)
+![A UML diagram showing the relation of components](/server/public/images/diagram.png?raw=true)
 
 
 ## Quick Start
