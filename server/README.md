@@ -4,7 +4,7 @@
 
 ---
 
-![A UML diagram showing the relation of database entities in this example repository](https://github.com/tvvmvn/instagram-clone-master/blob/main/server/public/images/diagram.png?raw=true)
+![A UML diagram showing the relation of database entities in this example repository](/public/images/diagram.png?raw=true)
 
 
 

@@ -4,7 +4,7 @@
 
 ---
 
-![A UML diagram showing the relation of components](https://github.com/tvvmvn/instagram-clone-master/blob/main/client/public/images/diagram.png)
+![A UML diagram showing the relation of components](/public/images/diagram.png?raw=true)
 
 
 ## Quick Start
