@@ -24,6 +24,7 @@ userSchema.virtual('isFollowing', {
   justOne: true
 })
 
+// Operations
 userSchema.methods.generateJWT = function () {
   return jwt.sign({ username: this.username }, process.env.SECRET);
 }

@@ -2,6 +2,7 @@ const User = require('../models/User');
 const fileHandler = require('../utils/fileHandler');
 const { body, validationResult } = require('express-validator');
 
+// Middleware
 const isValidUsername = () => body('username')
   .trim()
   .isLength({ min: 5 }).withMessage('Username must be at least 5 characters')
@@ -83,6 +84,42 @@ exports.create = [
   }
 ]
 
+exports.login = [
+  isValidEmail().custom(doesEmailExists),
+  isValidPassword().custom(doesPasswordMatch),
+  async (req, res, next) => {
+    try {
+      const errors = validationResult(req);
+
+      if (!errors.isEmpty()) {
+        const err = new Error();
+        err.errors = errors.array();
+        err.status = 401;
+        throw err;
+      }
+
+      const { email } = req.body;
+
+      const _user = await User.findOne({ email });
+
+      const access_token = _user.generateJWT();
+  
+      const user = {
+        username: _user.username,
+        fullName: _user.fullName,
+        avatar: _user.avatar,
+        bio: _user.bio,
+        access_token
+      }
+  
+      res.json({ user })
+  
+    } catch (error) {
+      next(error)
+    }
+  }
+]
+
 exports.update = [
   fileHandler('profiles').single('avatar'),
   isValidUsername().custom(usernameInUse).optional(),
@@ -108,15 +145,14 @@ exports.update = [
 
       await _user.save();
 
-      const token = _user.generateJWT();
+      const access_token = _user.generateJWT();
 
       const user = {
         username: _user.username,
-        email: _user.email,
         fullName: _user.fullName,
         avatar: _user.avatar,
         bio: _user.bio,
-        token
+        access_token
       }
 
       res.json({ user })
@@ -127,40 +163,4 @@ exports.update = [
   }
 ]
 
-exports.login = [
-  isValidEmail().custom(doesEmailExists),
-  isValidPassword().custom(doesPasswordMatch),
-  async (req, res, next) => {
-    try {
-
-      const errors = validationResult(req);
-
-      if (!errors.isEmpty()) {
-        const err = new Error();
-        err.errors = errors.array();
-        err.status = 401;
-        throw err;
-      }
-
-      const { email } = req.body;
-
-      const _user = await User.findOne({ email });
-
-      const token = _user.generateJWT();
-  
-      const user = {
-        username: _user.username,
-        email: _user.email,
-        fullName: _user.fullName,
-        avatar: _user.avatar,
-        bio: _user.bio,
-        token
-      }
-  
-      res.json({ user })
-  
-    } catch (error) {
-      next(error)
-    }
-  }
-]
+exports.findOne = async (req, res, next) => {};

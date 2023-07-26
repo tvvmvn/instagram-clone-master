@@ -12,7 +12,6 @@ export default function FollowerList() {
   const [followerCount, setFollowerCount] = useState(0);
 
   useEffect(() => {
-
     getFollowers(username)
       .then(data => {
         setFollowerCount(data.profileCount);
@@ -22,7 +21,6 @@ export default function FollowerList() {
         setError(error)
       })
       .finally(() => setIsLoaded(true));
-
   }, [])
 
   console.log(followers)

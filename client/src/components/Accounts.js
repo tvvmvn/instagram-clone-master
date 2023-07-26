@@ -7,11 +7,10 @@ export default function Accounts() {
   const { user, setUser } = useContext(AuthContext);
   const [fullName, setFullName] = useState(user.fullName);
   const [username, setUsername] = useState(user.username);
-  const [email, setEmail] = useState(user.email);
   const [bio, setBio] = useState(user.bio);
 
   // handle rendering at load and cancel editing
-  const editedUser = { fullName, username, email, bio };
+  const editedUser = { fullName, username,  bio };
 
   Object.keys(user).map(key => {
     if (user[key] === editedUser[key]) {
@@ -100,18 +99,6 @@ export default function Accounts() {
             className="border px-2 py-1 rounded w-full"
             value={username}
             onChange={({ target }) => setUsername(target.value)}
-          />
-        </div>
-
-        <div className="mb-2">
-          <label htmlFor="email" className="block font-semibold">Email</label>
-          <input
-            type="text"
-            id="email"
-            name="email"
-            className="border px-2 py-1 rounded w-full"
-            value={email}
-            onChange={({ target }) => setEmail(target.value)}
           />
         </div>
 
