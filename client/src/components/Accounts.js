@@ -1,73 +1,65 @@
-import { useState, useContext, useEffect, useRef } from "react";
+import { useState, useContext, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { updateUser } from "../utils/requests";
+import { updateUser, updateAvatar } from "../utils/requests";
 import AuthContext from "./AuthContext";
 
 export default function Accounts() {
   const { user, setUser } = useContext(AuthContext);
-  const [updatedUser, setUpdatedUser] = useState({});
+  const [fullName, setFullName] = useState(user.fullName);
+  const [username, setUsername] = useState(user.username);
+  const [email, setEmail] = useState(user.email);
+  const [bio, setBio] = useState(user.bio);
 
-  async function handleSubmit(e) {
-    try {
-      e.preventDefault();
+  // handle rendering at load and cancel editing
+  const editedUser = { fullName, username, email, bio };
 
-      const formData = new FormData();
-
-      Object.keys(updatedUser).forEach(prop => {
-        formData.append(prop, updatedUser[prop]);
-      })
-
-      const data = await updateUser(formData);
-
-      setUser(data.user);
-
-      setUpdatedUser({});
-      alert('Successfully updated');
-
-    } catch (error) {
-      alert(error)
+  Object.keys(user).map(key => {
+    if (user[key] === editedUser[key]) {
+      delete editedUser[key];
     }
-  }
+  })
 
-  function handleFile(e) {
-    const file = e.target.files[0];
-    
-    if (file) {
-      setUpdatedUser({ ...updatedUser, avatar: file })
-    }
-  }
-
-  function handleChange(e) {   
-    const name = e.target.name;
-    const value = e.target.value;
-    
-    if (user[name] === value) {
-      const { [name]: value, ...rest } = updatedUser;
-      return setUpdatedUser(rest);
-    } 
-    
-    setUpdatedUser({ ...updatedUser, [name]: value });
-  }
+  console.log(editedUser);
 
   useEffect(() => {
     document.title = 'Edit profile - Instagram';
   }, [])
 
-  console.log(updatedUser);
+  async function handleSubmit(e) {
+    try {
+      e.preventDefault();
+
+      const { user } = await updateUser(editedUser);
+      setUser(user);
+
+      alert('Done');
+    } catch (error) {
+      alert(error);
+    }
+  }
+
+  async function handleFile(e) {
+    try {
+      const file = e.target.files[0];
+
+      const formData = new FormData();
+      formData.append("avatar", file);
+
+      const { user } = await updateAvatar(formData);
+      setUser(user);
+
+      alert("Done");
+    } catch (error) {
+      alert(error)
+    }
+  }
 
   return (
     <div className="mt-8 px-4">
-      {/* Update Message */}
-      {Object.keys(updatedUser).length > 0 && (
-        <p className="mb-4 bg-blue-500 text-white px-2 py-1">
-          Submit form to save updated data.
-        </p>
-      )}
-
       {/* Avatar Image */}
       <div className="flex mb-4">
         <img
-          src={updatedUser.avatar ? URL.createObjectURL(updatedUser.avatar) : `${process.env.REACT_APP_SERVER}/files/profiles/${user.avatar}`}
+          src={`${process.env.REACT_APP_SERVER}/files/profiles/${user.avatar}`}
           className="w-16 h-16 object-cover rounded-full border"
         />
         <div className="flex flex-col grow items-start ml-4">
@@ -94,8 +86,8 @@ export default function Accounts() {
             id="fullName"
             name="fullName"
             className="border px-2 py-1 rounded w-full"
-            defaultValue={user.fullName}
-            onChange={handleChange}
+            value={fullName}
+            onChange={({ target }) => setFullName(target.value)}
           />
         </div>
 
@@ -105,9 +97,9 @@ export default function Accounts() {
             type="text"
             id="username"
             name="username"
-            className="border px-2 py-1 rounded w-full read-only:bg-gray-100"
-            defaultValue={user.username}
-            onChange={handleChange}
+            className="border px-2 py-1 rounded w-full"
+            value={username}
+            onChange={({ target }) => setUsername(target.value)}
           />
         </div>
 
@@ -117,9 +109,9 @@ export default function Accounts() {
             type="text"
             id="email"
             name="email"
-            className="border px-2 py-1 rounded w-full read-only:bg-gray-100"
-            defaultValue={user.email}
-            onChange={handleChange}
+            className="border px-2 py-1 rounded w-full"
+            value={email}
+            onChange={({ target }) => setEmail(target.value)}
           />
         </div>
 
@@ -130,8 +122,8 @@ export default function Accounts() {
             rows="3"
             name="bio"
             className="border px-2 py-1 rounded w-full"
-            defaultValue={user.bio}
-            onChange={handleChange}
+            value={bio}
+            onChange={({ target }) => setBio(target.value)}
           />
         </div>
 
@@ -139,7 +131,7 @@ export default function Accounts() {
           <button
             type="submit"
             className="text-sm font-semibold bg-gray-200 rounded-lg px-4 py-2 disabled:opacity-[0.2]"
-            disabled={Object.keys(updatedUser).length < 1}
+            disabled={Object.keys(editedUser).length < 1}
           >
             Save
           </button>
