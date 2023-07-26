@@ -38,7 +38,7 @@ exports.find = async (req, res, next) => {
     const profileCount = await User.count(where);
 
     const profiles = await User
-      .find(where, 'username fullName avatar bio')
+      .find(where, 'username fullName avatar')
       .populate({ 
         path: 'isFollowing',
         match: { follower: req.user._id }
