@@ -5,7 +5,7 @@ import { createUser } from "../utils/requests";
 export default function SignUp() {
 
   const navigate = useNavigate();
-  const [error, setError] = useState({});
+  const [error, setError] = useState(null);
   const [email, setEmail] = useState("");
   const [fullName, setFullName] = useState("");
   const [username, setUsername] = useState("");
@@ -16,49 +16,33 @@ export default function SignUp() {
       e.preventDefault();
 
       const newUser = { email, fullName, username, password }
-      await createUser(newUser);
 
-      alert(`Welcome ${fullName}!`);
-      navigate('/');
-    } catch (error) {
-      setError(error)
-    }
-  }
-
-  useEffect(() => {
-    try {
       const _error = {};
-
-      if (!email) {
-        _error.email = "E-mail is required";
-      }
 
       if (email.indexOf("@") < 0) {
         _error.email = "E-mail is not valid";
-      }
-
-      if (username.length < 5) {
-        _error.username = "Username is too short";
       }
 
       if (username.match(/[^a-z0-9_]/)) {
         _error.username = "Username is only allowed in lowercase alphabet and number"
       }
 
-      if (password.length < 5) {
-        _error.password = "Unsafe password";
-      }
+      // Requests for uniqueness check of email and username.
 
       if (Object.keys(_error).length > 0) {
         throw _error;
       }
 
-      setError({});
-      
+      await createUser(newUser);
+
+      alert(`Welcome ${fullName}!`);
+
+      navigate('/');
+
     } catch (error) {
       setError(error)
     }
-  }, [username, email, password])
+  }
 
   useEffect(() => {
     document.title = 'Sign Up - Instagram';
@@ -80,7 +64,7 @@ export default function SignUp() {
             placeholder="Email address"
           />
         </label>
-        {error.email && <p className="text-red-500">{error.email}</p>}
+        {error && <p className="text-red-500">{error.email}</p>}
       </div>
 
       <div className="mb-2">
@@ -105,7 +89,7 @@ export default function SignUp() {
             placeholder="Username"
           />
         </label>
-        {error.username && <p className="text-red-500">{error.username}</p>}
+        {error && <p className="text-red-500">{error.username}</p>}
       </div>
 
       <div className="mb-2">
@@ -119,18 +103,17 @@ export default function SignUp() {
             autoComplete="new-password"
           />
         </label>
-        {error.password && <p className="text-red-500">{error.password}</p>}
       </div>
 
       <div className="mb-2">
         <button
           type="submit"
           className="bg-blue-500 rounded-lg text-sm font-semibold px-4 py-2 text-white w-full disabled:opacity-[0.5]"
-          disabled={error}
+          disabled={email.trim().length < 5 || username.trim().length < 5 || password.trim().length < 5}
         >
           Sign Up
         </button>
-        {error.message && <p className="text-red-500 text-center my-4">{error.message}</p>}
+        {error && <p className="text-red-500 text-center my-4">{error.message}</p>}
       </div>
 
       {/* Login Link */}

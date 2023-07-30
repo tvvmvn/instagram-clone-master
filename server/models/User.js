@@ -17,6 +17,28 @@ const userSchema = new Schema({
   toObject: { virtuals: true }
 })
 
+// Virtual field
+userSchema.virtual('articleCount', {
+  ref: 'Article',
+  localField: '_id',
+  foreignField: 'author',
+  count: true
+})
+
+userSchema.virtual('followerCount', {
+  ref: 'Follow',
+  localField: '_id',
+  foreignField: 'following',
+  count: true
+})
+
+userSchema.virtual('followingCount', {
+  ref: 'Follow',
+  localField: '_id',
+  foreignField: 'follower',
+  count: true
+})
+
 userSchema.virtual('isFollowing', {
   ref: 'Follow',
   localField: '_id',
@@ -25,25 +47,25 @@ userSchema.virtual('isFollowing', {
 })
 
 // Operations
-userSchema.methods.generateJWT = function () {
-  return jwt.sign({ username: this.username }, process.env.SECRET);
-}
-
 userSchema.methods.setPassword = function (password) {
   this.salt = crypto
-    .randomBytes(16).toString("hex");
-
+  .randomBytes(16).toString("hex");
+  
   this.password = crypto
-    .pbkdf2Sync(password, this.salt, 310000, 32, "sha256")
-    .toString("hex")
+  .pbkdf2Sync(password, this.salt, 310000, 32, "sha256")
+  .toString("hex")
 }
 
 userSchema.methods.checkPassword = function (password) {
   const hashedPassword = crypto
-    .pbkdf2Sync(password, this.salt, 310000, 32, "sha256")
-    .toString("hex")
-
+  .pbkdf2Sync(password, this.salt, 310000, 32, "sha256")
+  .toString("hex")
+  
   return this.password === hashedPassword;
+}
+
+userSchema.methods.generateJWT = function () {
+  return jwt.sign({ username: this.username }, process.env.SECRET);
 }
 
 module.exports = mongoose.model('User', userSchema);

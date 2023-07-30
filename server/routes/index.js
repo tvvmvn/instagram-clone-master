@@ -18,8 +18,7 @@ router.get('/', (req, res) => {
 /* USERS */
 router.post('/users', userController.create); 
 router.post('/user/login', userController.login); 
-router.put('/user', auth, userController.update); 
-router.get('/user', userController.findOne);
+router.get('/user', auth, userController.findOne);
 
 /* ARTICLES */
 router.get('/feed', auth, articleController.feed) 
@@ -36,6 +35,7 @@ router.post('/articles/:id/comments', auth, commentController.create)
 router.delete('/comments/:id', auth, commentController.delete) 
 
 /* PROFILES */
+router.put('/profiles', auth, profileController.update); 
 router.get('/profiles', auth, profileController.find); 
 router.get('/profiles/:username', auth, profileController.findOne)
 router.post('/profiles/:username/follow', auth, profileController.follow) 

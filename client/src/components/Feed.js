@@ -13,6 +13,8 @@ export default function Feed() {
   const [skip, setSkip] = useState(0);
   const [articleCount, setArticleCount] = useState(0);
 
+  console.log(articles)
+
   useEffect(() => {
     setError(null);
     setIsLoaded(false);

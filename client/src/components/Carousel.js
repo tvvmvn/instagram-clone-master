@@ -14,7 +14,7 @@ export default function Carousel({ photos }) {
         {photos.map(photo => (
           <li key={photo} className="w-full h-96 shrink-0">
             <img
-              src={`${process.env.REACT_APP_SERVER}/files/articles/${photo}`}
+              src={`${process.env.REACT_APP_SERVER}/files/photos/${photo}`}
               className="w-full h-full object-cover"
               alt={photo}
             />

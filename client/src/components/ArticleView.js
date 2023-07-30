@@ -10,6 +10,8 @@ export default function ArticleView() {
   const [article, setArticle] = useState(null);
   const navigate = useNavigate();
 
+  console.log(article);
+
   useEffect(() => {
     getArticle(id)
       .then(data => {

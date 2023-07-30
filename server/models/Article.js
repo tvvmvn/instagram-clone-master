@@ -13,6 +13,7 @@ const articleSchema = new Schema({
   toObject: { virtuals: true }
 })
 
+// Virtual field
 articleSchema.virtual('displayDate').get(function () {
    return DateTime
     .fromJSDate(this.created)
@@ -28,9 +29,9 @@ articleSchema.virtual('commentCount', {
 
 articleSchema.virtual('isFavorite', {
   ref: 'Favorite',
-  localField: '_id',
-  foreignField: 'article',
+  localField: '_id', // Article
+  foreignField: 'article', // Favorite
   justOne: true
 })
 
-module.exports = mongoose.model('Article', articleSchema)
+module.exports = mongoose.model('Article', articleSchema);

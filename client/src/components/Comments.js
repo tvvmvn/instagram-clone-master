@@ -11,6 +11,8 @@ export default function Comments() {
   const [comments, setComments] = useState([]);
   const [commentCount, setCommentCount] = useState(0);
 
+  console.log(comments)
+
   useEffect(() => {
     getComments(id)
       .then(data => {
@@ -165,7 +167,7 @@ function Comment({ comment, handleDelete }) {
       <div className="shrink-0">
         <Link to={`/profiles/${comment.author.username}`}>
           <img
-            src={`${process.env.REACT_APP_SERVER}/files/profiles/${comment.author.avatar}`}
+            src={`${process.env.REACT_APP_SERVER}/files/avatar/${comment.author.avatar}`}
             className="w-8 h-8 object-cover border rounded-full"
           />
         </Link>

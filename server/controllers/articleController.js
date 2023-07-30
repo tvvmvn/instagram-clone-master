@@ -6,11 +6,11 @@ const fileHandler = require('../utils/fileHandler');
 
 exports.feed = async (req, res, next) => {
   try {
-
     const follows = await Follow.find({ follower: req.user._id });
     const followings = follows.map(follow => follow.following);
+    const userId = req.user._id;
 
-    const where = { author: [...followings, req.user._id] }
+    const where = { author: [...followings, userId] }
     const limit = req.query.limit || 5;
     const skip = req.query.skip || 0;
 
@@ -21,11 +21,10 @@ exports.feed = async (req, res, next) => {
         path: 'author',
         select: 'username avatar'
       })
+      .populate('commentCount')
       .populate({
-        path: 'isFavorite'
-      })
-      .populate({
-        path: 'commentCount'
+        path: 'isFavorite',
+        match: { user: req.user._id }
       })
       .sort({ created: 'desc' })
       .skip(skip)
@@ -52,9 +51,7 @@ exports.find = async (req, res, next) => {
     const articleCount = await Article.count(where);
     const articles = await Article
       .find(where, 'photos favoriteCount created')
-      .populate({
-        path: 'commentCount'
-      })
+      .populate('commentCount')
       .sort({ created: 'desc' })
       .limit(limit)
       .skip(skip)
@@ -74,11 +71,10 @@ exports.findOne = async (req, res, next) => {
         path: 'author',
         select: 'username avatar'
       })
+      .populate('commentCount')
       .populate({
-        path: 'isFavorite'
-      })
-      .populate({
-        path: 'commentCount'
+        path: 'isFavorite',
+        match: { user: req.user._id }
       })
 
     if (!article) {
@@ -95,7 +91,7 @@ exports.findOne = async (req, res, next) => {
 }
 
 exports.create = [
-  fileHandler('articles').array('photos'),
+  fileHandler().array('photos'),
   async (req, res, next) => {
     try {
       
@@ -136,7 +132,10 @@ exports.delete = async (req, res, next) => {
       throw err;
     }
 
-    if (req.user._id.toString() !== article.author.toString()) {
+    const userId = req.user._id;
+    const isAuthor = userId.toString() === article.author.toString();
+
+    if (!isAuthor) {
       const err = new Error("Author is not correct")
       err.staus = 400;
       throw err;
@@ -153,7 +152,6 @@ exports.delete = async (req, res, next) => {
 
 exports.favorite = async (req, res, next) => {
   try {
-
     const article = await Article.findById(req.params.id);
 
     if (!article) {

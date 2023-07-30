@@ -11,7 +11,7 @@ import SignUp from "./components/SignUp";
 import Profile from "./components/Profile";
 import FollowerList from "./components/FollowerList";
 import FollowingList from "./components/FollowingList";
-import Accounts from "./components/Accounts";
+import ProfileEdit from "./components/ProfileEdit";
 import NotFound from "./components/NotFound";
 
 export default function App() {
@@ -36,7 +36,7 @@ export default function App() {
               <Route path="followers" element={<FollowerList />} />
               <Route path="following" element={<FollowingList />} />
             </Route>
-            <Route path="accounts/edit" element={<Accounts />} />
+            <Route path="accounts/edit" element={<ProfileEdit />} />
           </Route>
           <Route path="accounts/login" element={<Login />} />
           <Route path="accounts/signup" element={<SignUp />} />

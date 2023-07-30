@@ -15,25 +15,6 @@ export async function createUser(newUser) {
   return await res.json();
 }
 
-export async function updateUser(editedUser) {
-  const res = await fetch(`${server}/user`, {
-    method: "PUT",
-    headers: { 
-      'Content-Type': 'application/json',
-      "Authorization": 'Bearer ' + JSON.parse(localStorage.getItem("user")).access_token 
-    },
-    body: JSON.stringify(editedUser)
-  })
-
-  if (!res.ok) {
-    throw new Error(`${res.status} ${res.statusText}`);
-  }
-
-  return await res.json();
-}
-
-export async function updateAvatar() {}
-
 export async function signIn(email, password) {
   const res = await fetch(`${server}/user/login`, {
     method: "POST",
@@ -172,6 +153,39 @@ export async function deleteComment(id) {
 }
 
 /* PROFILES */
+export async function updateProfile(editedProfile) {
+  const res = await fetch(`${server}/profiles`, {
+    method: "PUT",
+    headers: { 
+      'Content-Type': 'application/json',
+      "Authorization": 'Bearer ' + JSON.parse(localStorage.getItem("user")).access_token 
+    },
+    body: JSON.stringify(editedProfile)
+  })
+
+  if (!res.ok) {
+    throw new Error(`${res.status} ${res.statusText}`);
+  }
+
+  return await res.json();
+}
+
+export async function updateAvatar(formData) {
+  const res = await fetch(`${server}/profiles`, {
+    method: "PUT",
+    headers: { 
+      "Authorization": 'Bearer ' + JSON.parse(localStorage.getItem("user")).access_token 
+    },
+    body: formData
+  })
+
+  if (!res.ok) {
+    throw new Error(`${res.status} ${res.statusText}`);
+  }
+
+  return await res.json();
+}
+
 export async function getProfiles(username) {
   const res = await fetch(`${server}/profiles/?username=${username}`, {
     headers: { 'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem("user")).access_token }

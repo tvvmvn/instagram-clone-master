@@ -77,7 +77,7 @@ function Result({ error, isLoaded, profiles }) {
         className="flex items-center"
       >
         <img
-          src={`${process.env.REACT_APP_SERVER}/files/profiles/${profile.avatar}`}
+          src={`${process.env.REACT_APP_SERVER}/files/avatar/${profile.avatar}`}
           className="w-10 h-10 object-cover rounded-full"
         />
         <div className="ml-2">

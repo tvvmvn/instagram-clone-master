@@ -50,7 +50,7 @@ export default function ArticleTemplate({ article, handleDelete, handleFavorite,
           className="inline-flex items-center"
         >
           <img
-            src={`${process.env.REACT_APP_SERVER}/files/profiles/${article.author.avatar}`}
+            src={`${process.env.REACT_APP_SERVER}/files/avatar/${article.author.avatar}`}
             className="w-10 h-10 object-cover border rounded-full"
           />
           <span className="ml-2">

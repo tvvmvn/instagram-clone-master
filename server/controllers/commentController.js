@@ -1,4 +1,3 @@
-const User = require('../models/User');
 const Article = require('../models/Article');
 const Comment = require('../models/Comment');
 
@@ -30,7 +29,6 @@ exports.find = async (req, res, next) => {
 
 exports.create = async (req, res, next) => {
   try {
-
     const _comment = new Comment({
       article: req.params.id,
       content: req.body.content,
@@ -54,7 +52,6 @@ exports.create = async (req, res, next) => {
 
 exports.delete = async (req, res, next) => {
   try {
-
     const comment = await Comment
       .findById(req.params.id);
 
@@ -64,7 +61,10 @@ exports.delete = async (req, res, next) => {
       throw err;
     }
 
-    if (req.user._id.toString() !== comment.author.toString()) {
+    const userId = req.user._id;
+    const isAuthor = userId.toString() === comment.author.toString();
+
+    if (!isAuthor) {
       const err = new Error("incorrect user");
       err.status = 400;
       throw err;

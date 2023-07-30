@@ -1,10 +1,41 @@
 const User = require('../models/User');
 const Follow = require('../models/Follow');
-const Article = require('../models/Article');
+const fileHandler = require('../utils/fileHandler');
+
+exports.update = [
+  fileHandler().single('avatar'),
+  async (req, res, next) => {
+    try {
+      const _user = req.user;
+
+      if (req.file) {
+        _user.avatar = req.file.filename;
+      }
+
+      Object.assign(_user, req.body);
+
+      await _user.save();
+
+      const access_token = _user.generateJWT();
+
+      const user = {
+        username: _user.username,
+        fullName: _user.fullName,
+        avatar: _user.avatar,
+        bio: _user.bio,
+        access_token
+      }
+
+      res.json({ user })
+
+    } catch (error) {
+      next(error)
+    }
+  }
+]
 
 exports.find = async (req, res, next) => {
   try {
-
     const where = {};
     const limit = req.query.limit || 10;
     const skip = req.query.skip || 0;
@@ -23,12 +54,6 @@ exports.find = async (req, res, next) => {
         .find({ following: user._id })
 
       where._id = follows.map(follow => follow.follower);
-    }
-
-    if ('favorite' in req.query) {
-      const favorites = await Favorite.find({ article: req.query.favorite })
-
-      where._id = favorites.map(favorite => favorite.user);
     }
 
     if ('username' in req.query) {
@@ -56,40 +81,20 @@ exports.find = async (req, res, next) => {
 exports.findOne = async (req, res, next) => {
   try {
 
-    const _profile = await User
+    const profile = await User
       .findOne({ username: req.params.username }, 'username fullName avatar bio')
+      .populate('articleCount')
+      .populate('followerCount')
+      .populate('followingCount')
       .populate({
         path: 'isFollowing',
         match: { follower: req.user._id }
       })
 
-    if (!_profile) {
+    if (!profile) {
       const err = new Error("Profile not found");
       err.status = 404;
       throw err;
-    }
-    
-    const { 
-      username, 
-      fullName, 
-      avatar, 
-      bio, 
-      isFollowing 
-    } = _profile;
-
-    const followingCount = await Follow.count({ follower: _profile._id })
-    const followerCount = await Follow.count({ following: _profile._id })
-    const articleCount = await Article.count({ author: _profile._id })
-
-    const profile = {
-      username, 
-      fullName, 
-      avatar, 
-      bio, 
-      isFollowing,
-      followingCount,
-      followerCount,
-      articleCount
     }
 
     res.json({ profile });

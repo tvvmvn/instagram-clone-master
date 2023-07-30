@@ -1,34 +1,23 @@
 import { useState, useContext, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { updateUser, updateAvatar } from "../utils/requests";
+import { updateProfile, updateAvatar } from "../utils/requests";
 import AuthContext from "./AuthContext";
 
-export default function Accounts() {
+export default function ProfileEdit() {
   const { user, setUser } = useContext(AuthContext);
-  const [fullName, setFullName] = useState(user.fullName);
-  const [username, setUsername] = useState(user.username);
-  const [bio, setBio] = useState(user.bio);
-
-  // handle rendering at load and cancel editing
-  const editedUser = { fullName, username,  bio };
-
-  Object.keys(user).map(key => {
-    if (user[key] === editedUser[key]) {
-      delete editedUser[key];
-    }
-  })
-
-  console.log(editedUser);
-
-  useEffect(() => {
-    document.title = 'Edit profile - Instagram';
-  }, [])
-
+  const [newFullName, setNewFullName] = useState("");
+  const [newBio, setNewBio] = useState("");
+  
   async function handleSubmit(e) {
     try {
       e.preventDefault();
-
-      const { user } = await updateUser(editedUser);
+      
+      const editedProfile = { 
+        fullName: newFullName,  
+        bio: newBio 
+      };
+      
+      const { user } = await updateProfile(editedProfile);
       setUser(user);
 
       alert('Done');
@@ -53,12 +42,16 @@ export default function Accounts() {
     }
   }
 
+  useEffect(() => {
+    document.title = 'Edit profile - Instagram';
+  }, [])
+
   return (
     <div className="mt-8 px-4">
       {/* Avatar Image */}
       <div className="flex mb-4">
         <img
-          src={`${process.env.REACT_APP_SERVER}/files/profiles/${user.avatar}`}
+          src={`${process.env.REACT_APP_SERVER}/files/avatar/${user.avatar}`}
           className="w-16 h-16 object-cover rounded-full border"
         />
         <div className="flex flex-col grow items-start ml-4">
@@ -85,20 +78,8 @@ export default function Accounts() {
             id="fullName"
             name="fullName"
             className="border px-2 py-1 rounded w-full"
-            value={fullName}
-            onChange={({ target }) => setFullName(target.value)}
-          />
-        </div>
-
-        <div className="mb-2">
-          <label htmlFor="username" className="block font-semibold">Username</label>
-          <input
-            type="text"
-            id="username"
-            name="username"
-            className="border px-2 py-1 rounded w-full"
-            value={username}
-            onChange={({ target }) => setUsername(target.value)}
+            value={newFullName || user.fullName}
+            onChange={({ target }) => setNewFullName(target.value)}
           />
         </div>
 
@@ -109,8 +90,8 @@ export default function Accounts() {
             rows="3"
             name="bio"
             className="border px-2 py-1 rounded w-full"
-            value={bio}
-            onChange={({ target }) => setBio(target.value)}
+            value={newBio || user.bio}
+            onChange={({ target }) => setNewBio(target.value)}
           />
         </div>
 
@@ -118,7 +99,7 @@ export default function Accounts() {
           <button
             type="submit"
             className="text-sm font-semibold bg-gray-200 rounded-lg px-4 py-2 disabled:opacity-[0.2]"
-            disabled={Object.keys(editedUser).length < 1}
+            disabled={!newFullName}
           >
             Save
           </button>

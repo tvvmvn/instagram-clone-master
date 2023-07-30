@@ -82,7 +82,7 @@ export default function Profile() {
         {/* Profile Image and Info */}
         <div className="flex mb-4">
           <img
-            src={`${process.env.REACT_APP_SERVER}/files/profiles/${profile.avatar}`}
+            src={`${process.env.REACT_APP_SERVER}/files/avatar/${profile.avatar}`}
             className="w-20 h-20 object-cover border rounded-full"
           />
 
@@ -160,13 +160,13 @@ export default function Profile() {
               </li>
             </ul>
 
-            <svg
-              className="w-6 fixed right-8 bottom-8 hover:scale-110 cursor-pointer"
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 448 512"
+            <svg 
+              className="opacity-40 w-12 fixed right-8 bottom-8 hover:opacity-80 cursor-pointer z-10"
+              xmlns="http://www.w3.org/2000/svg" 
+              viewBox="0 0 512 512"
               onClick={() => setActive(true)}
             >
-              <path d="M200 344V280H136C122.7 280 112 269.3 112 256C112 242.7 122.7 232 136 232H200V168C200 154.7 210.7 144 224 144C237.3 144 248 154.7 248 168V232H312C325.3 232 336 242.7 336 256C336 269.3 325.3 280 312 280H248V344C248 357.3 237.3 368 224 368C210.7 368 200 357.3 200 344zM0 96C0 60.65 28.65 32 64 32H384C419.3 32 448 60.65 448 96V416C448 451.3 419.3 480 384 480H64C28.65 480 0 451.3 0 416V96zM48 96V416C48 424.8 55.16 432 64 432H384C392.8 432 400 424.8 400 416V96C400 87.16 392.8 80 384 80H64C55.16 80 48 87.16 48 96z" />
+              <path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM232 344V280H168c-13.3 0-24-10.7-24-24s10.7-24 24-24h64V168c0-13.3 10.7-24 24-24s24 10.7 24 24v64h64c13.3 0 24 10.7 24 24s-10.7 24-24 24H280v64c0 13.3-10.7 24-24 24s-24-10.7-24-24z"/>
             </svg>
           </div>
         </div>
@@ -176,13 +176,13 @@ export default function Profile() {
           <h3 className="text-sm font-semibold my-2">{profile.fullName}</h3>
         )}
         {profile.bio && (
-          <p className="text-sm my-2">
+          <p className="text-sm my-2 whitespace-pre-line">
             {profile.bio}
           </p>
         )}
       </div>
 
-      <hr className="mt-4 mb-4" />
+      <div className="border-t my-4"></div>
 
       <Timeline
         articles={articles}

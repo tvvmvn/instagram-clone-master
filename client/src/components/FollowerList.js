@@ -11,6 +11,8 @@ export default function FollowerList() {
   const [followers, setFollowers] = useState([]);
   const [followerCount, setFollowerCount] = useState(0);
 
+  console.log(followers)
+
   useEffect(() => {
     getFollowers(username)
       .then(data => {
@@ -22,8 +24,6 @@ export default function FollowerList() {
       })
       .finally(() => setIsLoaded(true));
   }, [])
-
-  console.log(followers)
 
   async function handleFollow(username) {
     try {
@@ -71,7 +71,7 @@ export default function FollowerList() {
         className="inline-flex items-center"
       >
         <img
-          src={`${process.env.REACT_APP_SERVER}/files/profiles/${follower.avatar}`}
+          src={`${process.env.REACT_APP_SERVER}/files/avatar/${follower.avatar}`}
           className="w-12 h-12 object-cover rounded-full border"
         />
         <div className="ml-2">

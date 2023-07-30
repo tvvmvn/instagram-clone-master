@@ -15,7 +15,7 @@ export default function Timeline({ articles, articleCount }) {
           <Link to={`/p/${article.id}`} className="block h-40 relative">
             {/* Thumbnail Image */}
             <img
-              src={`${process.env.REACT_APP_SERVER}/files/articles/${article.photos[0]}`}
+              src={`${process.env.REACT_APP_SERVER}/files/photos/${article.photos[0]}`}
               className="w-full h-full object-cover"
             />
 

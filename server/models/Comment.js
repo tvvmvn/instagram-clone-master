@@ -6,7 +6,8 @@ const commentSchema = new Schema({
   article: { type: Schema.ObjectId, required: true },
   author: { type: Schema.ObjectId, required: true, ref: 'User' },
   created: { type: Date, default: Date.now },
-}, { // options
+}, 
+{ 
   toJSON: { virtuals: true },
   toObject: { virtuals: true }
 })

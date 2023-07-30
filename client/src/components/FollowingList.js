@@ -11,6 +11,8 @@ export default function FollowingList() {
   const [followings, setFollowings] = useState([]);
   const [followingCount, setFollowingCount] = useState(0);
 
+  console.log(followings)
+
   useEffect(() => {
     getFollowings(username)
       .then(data => {
@@ -71,7 +73,7 @@ export default function FollowingList() {
         className="inline-flex items-center"
       >
         <img
-          src={`${process.env.REACT_APP_SERVER}/files/profiles/${following.avatar}`}
+          src={`${process.env.REACT_APP_SERVER}/files/avatar/${following.avatar}`}
           className="w-12 h-12 object-cover rounded-full border"
         />
         <div className="ml-2">
