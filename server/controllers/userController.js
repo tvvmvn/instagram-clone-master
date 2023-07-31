@@ -119,7 +119,3 @@ exports.login = [
     }
   }
 ]
-
-exports.findOne = async (req, res, next) => {
-  res.json({ authUser: req.user })
-};

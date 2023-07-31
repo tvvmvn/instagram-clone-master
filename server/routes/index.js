@@ -18,7 +18,6 @@ router.get('/', (req, res) => {
 /* USERS */
 router.post('/users', userController.create); 
 router.post('/user/login', userController.login); 
-router.get('/user', auth, userController.findOne);
 
 /* ARTICLES */
 router.get('/feed', auth, articleController.feed) 

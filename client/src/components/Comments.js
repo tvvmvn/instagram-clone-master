@@ -104,7 +104,7 @@ function Form({ handleAddComment }) {
     <form onSubmit={handleSubmit} className="mb-4">
       <textarea
         rows="2"
-        className="border w-full px-2 py-1 rounded"
+        className="border w-full px-2 py-1 rounded resize-none"
         value={content}
         onChange={({ target }) => setContent(target.value)}
       />

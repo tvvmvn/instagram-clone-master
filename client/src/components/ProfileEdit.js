@@ -5,22 +5,29 @@ import AuthContext from "./AuthContext";
 
 export default function ProfileEdit() {
   const { user, setUser } = useContext(AuthContext);
-  const [newFullName, setNewFullName] = useState("");
-  const [newBio, setNewBio] = useState("");
+  const [newFullName, setNewFullName] = useState(user.fullName);
+  const [newBio, setNewBio] = useState(user.bio);
+
+  const isEqual = {
+    fullName: user.fullName === newFullName,
+    bio: user.bio === newBio,
+  }
   
   async function handleSubmit(e) {
     try {
       e.preventDefault();
       
       const editedProfile = { 
-        fullName: newFullName,  
+        fullName: newFullName, 
         bio: newBio 
       };
       
       const { user } = await updateProfile(editedProfile);
+      
       setUser(user);
 
       alert('Done');
+
     } catch (error) {
       alert(error);
     }
@@ -31,12 +38,15 @@ export default function ProfileEdit() {
       const file = e.target.files[0];
 
       const formData = new FormData();
+
       formData.append("avatar", file);
 
       const { user } = await updateAvatar(formData);
+
       setUser(user);
 
       alert("Done");
+
     } catch (error) {
       alert(error)
     }
@@ -78,7 +88,7 @@ export default function ProfileEdit() {
             id="fullName"
             name="fullName"
             className="border px-2 py-1 rounded w-full"
-            value={newFullName || user.fullName}
+            value={newFullName}
             onChange={({ target }) => setNewFullName(target.value)}
           />
         </div>
@@ -89,8 +99,8 @@ export default function ProfileEdit() {
             id="bio"
             rows="3"
             name="bio"
-            className="border px-2 py-1 rounded w-full"
-            value={newBio || user.bio}
+            className="border px-2 py-1 rounded w-full resize-none"
+            value={newBio}
             onChange={({ target }) => setNewBio(target.value)}
           />
         </div>
@@ -99,7 +109,7 @@ export default function ProfileEdit() {
           <button
             type="submit"
             className="text-sm font-semibold bg-gray-200 rounded-lg px-4 py-2 disabled:opacity-[0.2]"
-            disabled={!newFullName}
+            disabled={isEqual.fullName && isEqual.bio}
           >
             Save
           </button>

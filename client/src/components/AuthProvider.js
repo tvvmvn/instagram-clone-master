@@ -7,13 +7,11 @@ export default function AuthProvider({ children }) {
 
   // user state listener
   useEffect(() => {
-    
     if (user) {
       localStorage.setItem('user', JSON.stringify(user));
     } else {
       localStorage.removeItem('user');
     }
-
   }, [user])
 
   const value = { user, setUser };
