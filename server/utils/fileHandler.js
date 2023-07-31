@@ -19,7 +19,7 @@ module.exports = function fileHandler() {
     fileFilter: (req, file, cb) => {
       const extname = path.extname(file.originalname);
 
-      const err = null;
+      let err = null;
 
       switch(extname) {
         case '.jpg':
