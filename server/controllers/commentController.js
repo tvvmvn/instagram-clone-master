@@ -30,6 +30,14 @@ exports.find = async (req, res, next) => {
 
 exports.create = async (req, res, next) => {
   try {
+    const article = await Article.findById(req.params.id);
+
+    if (!article) {
+      const err = new Error("Article is not found")
+      err.status = 404;
+      throw err;
+    }
+
     const comment = new Comment({
       article: req.params.id,
       content: req.body.content,

@@ -42,18 +42,20 @@ exports.find = async (req, res, next) => {
 
     if ('following' in req.query) {
       const user = await User.findOne({ username: req.query.following });
-      const follows = await Follow
+
+      const followingUsers = await Follow
         .find({ follower: user._id })
 
-      where._id = follows.map(follow => follow.following);
+      where._id = followingUsers.map(follow => follow.following);
     }
 
     if ('followers' in req.query) {
       const user = await User.findOne({ username: req.query.followers });
-      const follows = await Follow
+      
+      const followers = await Follow
         .find({ following: user._id })
 
-      where._id = follows.map(follow => follow.follower);
+      where._id = followers.map(follow => follow.follower);
     }
 
     if ('username' in req.query) {
