@@ -39,7 +39,7 @@ async function seedDatabase() {
       }
     ]
 
-    for (const i = 0; i < users.length; i++) {
+    for (let i = 0; i < users.length; i++) {
       const user = new User();
       user.username = users[i].username;
       user.email = users[i].email;
@@ -52,7 +52,7 @@ async function seedDatabase() {
       console.log(user);
     }
 
-    for (const i = 1; i <= 4; i++) {
+    for (let i = 1; i <= 4; i++) {
       const user = await User.findOne({ username: 'cat' });
 
       const article = new Article();

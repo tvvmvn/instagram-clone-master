@@ -80,7 +80,6 @@ exports.find = async (req, res, next) => {
 
 exports.findOne = async (req, res, next) => {
   try {
-
     const profile = await User
       .findOne({ username: req.params.username }, 'username fullName avatar bio')
       .populate('articleCount')
@@ -92,7 +91,7 @@ exports.findOne = async (req, res, next) => {
       })
 
     if (!profile) {
-      const err = new Error("Profile not found");
+      const err = new Error("Profile is not found");
       err.status = 404;
       throw err;
     }
@@ -106,6 +105,17 @@ exports.findOne = async (req, res, next) => {
 
 exports.follow = async (req, res, next) => {
   try {
+    const profile = await User.findOne({ username: req.params.username })
+      .populate({
+        path: 'isFollowing',
+        match: { follower: req.user._id }
+      })
+
+    if (!profile) {
+      const err = new Error('Profile is not found')
+      err.status = 404;
+      throw err;
+    }
 
     if (req.user.username === req.params.username) {
       const err = new Error('Cannot Follow yourself')
@@ -113,19 +123,7 @@ exports.follow = async (req, res, next) => {
       throw err;
     }
 
-    const profile = await User
-      .findOne({ username: req.params.username }, 'username fullName avatar bio');
-
-    if (!profile) {
-      const err = new Error('Profile not found')
-      err.status = 404;
-      throw err;
-    }
-
-    const _follow = await Follow
-      .findOne({ follower: req.user._id, following: profile._id })
-
-    if (!_follow) {
+    if (!profile.isFollowing) {
       const follow = new Follow({
         follower: req.user._id,
         following: profile._id
@@ -143,20 +141,24 @@ exports.follow = async (req, res, next) => {
 
 exports.unfollow = async (req, res, next) => {
   try {
-
-    const username = req.params.username;
-    const profile = await User.findOne({ username }, 'username fullName avatar bio');
+    const profile = await User.findOne({ username: req.params.username })
+      .populate({
+        path: 'isFollowing',
+        match: { follower: req.user._id }
+      })
 
     if (!profile) {
-      const err = new Error('Profile not found')
+      const err = new Error('Profile is not found')
       err.status = 404;
       throw err;
     }
 
-    const follow = await Follow
-      .findOne({ follower: req.user._id, following: profile._id });
-
-    if (follow) {
+    if (profile.isFollowing) {
+      const follow = await Follow.findOne({ 
+        follower: req.user._id, 
+        following: profile._id 
+      });
+  
       await follow.delete();
     }
 

@@ -234,7 +234,7 @@ export async function getFollowers(username) {
   return await res.json();
 }
 
-export async function getFollowings(username) {
+export async function getFollowingUsers(username) {
   const res = await fetch(`${server}/profiles/?following=${username}`, {
     headers: { 'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem("user")).access_token }
   });

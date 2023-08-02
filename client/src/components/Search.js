@@ -22,6 +22,7 @@ export default function Search() {
       }
   
       setError(null);
+      
       setIsLoaded(false);
   
       const { profiles } = await getProfiles(username);
@@ -52,7 +53,7 @@ export default function Search() {
         />
       </label>
 
-      <Result 
+      <SearchResult 
         error={error} 
         isLoaded={isLoaded} 
         profiles={profiles}
@@ -61,7 +62,7 @@ export default function Search() {
   )
 }
 
-function Result({ error, isLoaded, profiles }) {
+function SearchResult({ error, isLoaded, profiles }) {
   if (error) {
     return <p className="text-red-500">{error.message}</p>
   }
@@ -89,6 +90,7 @@ function Result({ error, isLoaded, profiles }) {
           </span>
         </div>
       </Link>
+
       {/* Follwing Status */}
       {profile.isFollowing && (
         <div className="ml-2 text-sm text-blue-500 font-semibold">following</div>

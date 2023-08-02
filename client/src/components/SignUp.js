@@ -14,7 +14,7 @@ export default function SignUp() {
   const isValid = {
     email: email.match(/[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,}$/),
     username: username.match(/^[a-zA-Z0-9]{5,}$/),
-    password: password.length >= 5
+    password: password.trim().length >= 5
   }
 
   console.log(isValid)

@@ -1,4 +1,3 @@
-// IMPORT MODULES
 const express = require("express");
 const createError = require('http-errors');
 const cookieParser = require("cookie-parser");
@@ -18,7 +17,7 @@ mongoose
   .connect(process.env.MONGODB_URI)
   .catch(err => console.log(err));
 
-// MIDDLEWARE
+// Middleware
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -29,19 +28,19 @@ app.use(helmet.crossOriginResourcePolicy({
 app.use(compression()); // Compress all routes
 app.use(cors());
 
-// set static path in this app.
+// Set static path in this app.
 app.use('/api/static', express.static('public'));
 app.use('/api/files', express.static('files'));
 
-// ROUTER
+// Router with prefix
 app.use('/api', indexRouter);
 
-// catch 404 and forward to error handler
+// Catch 404 and forward to error handler
 app.use((req, res, next) => {
   next(createError(404))
 })
 
-// ERROR HANDLER
+// Error handler
 app.use((err, req, res, next) => {
   console.error(err);
   res.status(err.status || 500).json(err); 

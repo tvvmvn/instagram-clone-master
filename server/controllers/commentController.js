@@ -10,6 +10,7 @@ exports.find = async (req, res, next) => {
     const skip = req.query.skip || 0;
 
     const commentCount = await Comment.count(where);
+
     const comments = await Comment
       .find(where)
       .populate({
@@ -29,19 +30,18 @@ exports.find = async (req, res, next) => {
 
 exports.create = async (req, res, next) => {
   try {
-    const _comment = new Comment({
+    const comment = new Comment({
       article: req.params.id,
       content: req.body.content,
       author: req.user._id
     })
 
-    await _comment.save();
+    await comment.save();
 
-    const comment = await _comment
-      .populate({
-        path: 'author',
-        select: 'username avatar'
-      })
+    await comment.populate({
+      path: 'author',
+      select: 'username avatar'
+    })
 
     res.json({ comment });
 
@@ -52,11 +52,10 @@ exports.create = async (req, res, next) => {
 
 exports.delete = async (req, res, next) => {
   try {
-    const comment = await Comment
-      .findById(req.params.id);
+    const comment = await Comment.findById(req.params.id);
 
     if (!comment) {
-      const err = new Error("Comment not found")
+      const err = new Error("Comment is not found")
       err.status = 404;
       throw err;
     }
@@ -65,7 +64,7 @@ exports.delete = async (req, res, next) => {
     const isAuthor = userId.toString() === comment.author.toString();
 
     if (!isAuthor) {
-      const err = new Error("incorrect user");
+      const err = new Error("Incorrect user");
       err.status = 400;
       throw err;
     }

@@ -7,8 +7,8 @@ const articleSchema = new Schema({
   description: { type: String },
   author: { type: Schema.ObjectId, required: true, ref: 'User' },
   favoriteCount: { type: Number, default: 0 },
-  created: { type: Date, default: Date.now },
 }, {
+  timestamps: true,
   toJSON: { virtuals: true },
   toObject: { virtuals: true }
 })
@@ -16,7 +16,7 @@ const articleSchema = new Schema({
 // Virtual field
 articleSchema.virtual('displayDate').get(function () {
    return DateTime
-    .fromJSDate(this.created)
+    .fromJSDate(this.createdAt)
     .toLocaleString(DateTime.DATE_MED);
 })
 
@@ -29,8 +29,8 @@ articleSchema.virtual('commentCount', {
 
 articleSchema.virtual('isFavorite', {
   ref: 'Favorite',
-  localField: '_id', // Article
-  foreignField: 'article', // Favorite
+  localField: '_id', 
+  foreignField: 'article',
   justOne: true
 })
 

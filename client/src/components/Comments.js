@@ -26,32 +26,21 @@ export default function Comments() {
   }, [])
 
   async function handleAddComment(content) {
-    try {
+    const data = await createComment(id, content);
 
-      const data = await createComment(id, content);
-
-      setCommentCount(commentCount + 1);
-    
-      let updatedComments = [data.comment, ...comments];
-      setComments(updatedComments);
-
-    } catch (error) {
-      alert(error)
-    }
+    setCommentCount(commentCount + 1);
+  
+    const updatedComments = [data.comment, ...comments];
+    setComments(updatedComments);
   }
 
   async function handleDelete(id) {
-    try {
-      await deleteComment(id);
-      
-      const remainingComments = comments.filter(comment => comment.id !== id);
-
-      setComments(remainingComments);
-      setCommentCount(commentCount - 1);
+    await deleteComment(id);
     
-    } catch (error) {
-      alert(error)
-    }
+    const remainingComments = comments.filter(comment => comment.id !== id);
+
+    setComments(remainingComments);
+    setCommentCount(commentCount - 1);
   }
 
   const commentList = comments.map(comment => (
@@ -84,7 +73,6 @@ export default function Comments() {
 }
 
 function Form({ handleAddComment }) {
-  
   const [content, setContent] = useState("");
 
   async function handleSubmit(e) {
@@ -120,13 +108,14 @@ function Form({ handleAddComment }) {
 }
 
 function Comment({ comment, handleDelete }) {
-
   const [active, setActive] = useState(false);
 
   async function handleClick() {
     try {
       await handleDelete(comment.id);
+      
       setActive(false);
+
     } catch (error) {
       alert(error)
     }
@@ -180,7 +169,7 @@ function Comment({ comment, handleDelete }) {
         </Link>
         {comment.content}
         <p>
-          <small className="font-xs text-gray-400">{comment.created}</small>
+          <small className="font-xs text-gray-400">{comment.displayDate}</small>
         </p>
       </div>
 

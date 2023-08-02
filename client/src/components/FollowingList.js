@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { getFollowings, follow, unfollow } from '../utils/requests';
+import { getFollowingUsers, follow, unfollow } from '../utils/requests';
 import Spinner from './Spinner';
 
 export default function FollowingList() {
@@ -8,16 +8,16 @@ export default function FollowingList() {
   const { username } = useParams();
   const [error, setError] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
-  const [followings, setFollowings] = useState([]);
+  const [followingUsers, setFollowingUsers] = useState([]);
   const [followingCount, setFollowingCount] = useState(0);
 
-  console.log(followings)
+  console.log(followingUsers)
 
   useEffect(() => {
-    getFollowings(username)
+    getFollowingUsers(username)
       .then(data => {
         setFollowingCount(data.profileCount);
-        setFollowings([...followings, ...data.profiles]);
+        setFollowingUsers([...followingUsers, ...data.profiles]);
       })
       .catch(error => {
         setError(error);
@@ -25,21 +25,19 @@ export default function FollowingList() {
       .finally(() => setIsLoaded(true))
   }, [])
 
-  console.log(followings)
-
   async function handleFollow(username) {
     try {
       await follow(username)
 
-      const updatedFollowings = followings.map(following => {
-        if (following.username === username) {
-          return { ...following, isFollowing: true }
+      const updatedFollowingUsers = followingUsers.map(followingUser => {
+        if (followingUser.username === username) {
+          return { ...followingUser, isFollowing: true }
         }
 
-        return following;
+        return followingUser;
       })
 
-      setFollowings(updatedFollowings);
+      setFollowingUsers(updatedFollowingUsers);
 
     } catch (error) {
       alert(error)
@@ -50,54 +48,54 @@ export default function FollowingList() {
     try {
       await unfollow(username)
 
-      const updatedFollowings = followings.map(following => {
-        if (following.username === username) {
-          return { ...following, isFollowing: false }
+      const updatedFollowingUsers = followingUsers.map(followingUser => {
+        if (followingUser.username === username) {
+          return { ...followingUser, isFollowing: false }
         }
 
-        return following;
+        return followingUser;
       })
 
-      setFollowings(updatedFollowings);
+      setFollowingUsers(updatedFollowingUsers);
 
     } catch (error) {
       alert(error)
     }
   }
 
-  const followingList = followings.map(following => (
-    <div key={following.username} className="flex justify-between items-center mb-2">
+  const followingList = followingUsers.map(followingUser => (
+    <div key={followingUser.username} className="flex justify-between items-center mb-2">
       {/* Profile Avatar */}
       <Link
-        to={`/profiles/${following.username}`}
+        to={`/profiles/${followingUser.username}`}
         className="inline-flex items-center"
       >
         <img
-          src={`${process.env.REACT_APP_SERVER}/files/avatar/${following.avatar}`}
+          src={`${process.env.REACT_APP_SERVER}/files/avatar/${followingUser.avatar}`}
           className="w-12 h-12 object-cover rounded-full border"
         />
         <div className="ml-2">
           <span className="block font-semibold">
-            {following.username}
+            {followingUser.username}
           </span>
           <span className="block text-gray-400 text-sm">
-            {following.fullName}
+            {followingUser.fullName}
           </span>
         </div>
       </Link>
 
       {/* Follow Button */}
-      {following.isFollowing ? (
+      {followingUser.isFollowing ? (
         <button
           className="ml-2 bg-gray-200 text-sm px-4 py-2 font-semibold p-2 rounded-lg"
-          onClick={() => handleUnfollow(following.username)}
+          onClick={() => handleUnfollow(followingUser.username)}
         >
           Following
         </button>
       ) : (
         <button
           className="ml-2 bg-blue-500 text-white text-sm px-4 py-2 font-semibold p-2 rounded-lg"
-          onClick={() => handleFollow(following.username)}
+          onClick={() => handleFollow(followingUser.username)}
         >
           Follow
         </button>

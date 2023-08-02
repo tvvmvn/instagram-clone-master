@@ -4,15 +4,14 @@ const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
 
 const userSchema = new Schema({
-  username: { type: String, required: true, minLength: 3, maxLength: 100 },
-  password: { type: String, minLength: 5 },
-  salt: { type: String },
-  email: { type: String, required: true, maxLength: 100 },
+  username: { type: String, minLength: 5, required: true },
+  password: { type: String, minLength: 5, required: true },
+  salt: { type: String, required: true },
+  email: { type: String, minLength: 5, required: true },
   fullName: { type: String },
   avatar: { type: String, default: 'default.png' },
-  bio: { type: String },
-},
-{ 
+  bio: { type: String }
+}, { 
   toJSON: { virtuals: true },
   toObject: { virtuals: true }
 })
@@ -65,7 +64,10 @@ userSchema.methods.checkPassword = function (password) {
 }
 
 userSchema.methods.generateJWT = function () {
-  return jwt.sign({ username: this.username }, process.env.SECRET);
+  return jwt.sign(
+    { sub: this._id, username: this.username }, 
+    process.env.SECRET
+  );
 }
 
 module.exports = mongoose.model('User', userSchema);

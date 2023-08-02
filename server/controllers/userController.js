@@ -36,7 +36,7 @@ const doesEmailExists = async (email) => {
   const user = await User.findOne({ email });
 
   if (!user) {
-    return Promise.reject('User is not found');
+    return Promise.reject('E-mail does not exists');
   }
 }
 

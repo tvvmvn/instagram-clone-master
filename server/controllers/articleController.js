@@ -6,11 +6,12 @@ const fileHandler = require('../utils/fileHandler');
 
 exports.feed = async (req, res, next) => {
   try {
-    const follows = await Follow.find({ follower: req.user._id });
-    const followings = follows.map(follow => follow.following);
+    const followingUsers = await Follow.find({ follower: req.user._id });
+    const followingIds = followingUsers
+      .map(followingUser => followingUser.following);
     const userId = req.user._id;
 
-    const where = { author: [...followings, userId] }
+    const where = { author: [...followingIds, userId] }
     const limit = req.query.limit || 5;
     const skip = req.query.skip || 0;
 
@@ -50,7 +51,7 @@ exports.find = async (req, res, next) => {
 
     const articleCount = await Article.count(where);
     const articles = await Article
-      .find(where, 'photos favoriteCount created')
+      .find(where)
       .populate('commentCount')
       .sort({ created: 'desc' })
       .limit(limit)
@@ -78,7 +79,7 @@ exports.findOne = async (req, res, next) => {
       })
 
     if (!article) {
-      const err = new Error("Article not found");
+      const err = new Error("Article is not found");
       err.status = 404;
       throw err;
     }
@@ -123,11 +124,10 @@ exports.create = [
 
 exports.delete = async (req, res, next) => {
   try {
-
     const article = await Article.findById(req.params.id);
 
     if (!article) {
-      const err = new Error("Article not found")
+      const err = new Error("Article is not found")
       err.status = 404;
       throw err;
     }
@@ -136,7 +136,7 @@ exports.delete = async (req, res, next) => {
     const isAuthor = userId.toString() === article.author.toString();
 
     if (!isAuthor) {
-      const err = new Error("Author is not correct")
+      const err = new Error("Incorrect user")
       err.staus = 400;
       throw err;
     }
@@ -152,25 +152,28 @@ exports.delete = async (req, res, next) => {
 
 exports.favorite = async (req, res, next) => {
   try {
-    const article = await Article.findById(req.params.id);
+    const article = await Article.findById(req.params.id)
+      .populate({
+        path: 'isFavorite',
+        match: { user: req.user._id }
+      })
 
     if (!article) {
-      const err = new Error("Article not found");
+      const err = new Error("Article is not found");
       err.status = 404;
       throw err;
     }
 
-    const _favorite = await Favorite
-      .findOne({ user: req.user._id, article: article._id })
-
-    if (!_favorite) {
+    if (!article.isFavorite) {
       const favorite = new Favorite({
         user: req.user._id,
         article: article._id
       })
+      
       await favorite.save();
   
       article.favoriteCount++;
+
       await article.save();
     }
 
@@ -183,21 +186,28 @@ exports.favorite = async (req, res, next) => {
 
 exports.unfavorite = async (req, res, next) => {
   try {
-    const article = await Article.findById(req.params.id);
+    const article = await Article.findById(req.params.id)
+      .populate({
+        path: 'isFavorite',
+        match: { user: req.user._id }
+      })
 
     if (!article) {
-      const err = new Error("Article not found");
+      const err = new Error("Article is not found");
       err.status = 404;
       throw err;
     }
 
-    const favorite = await Favorite
-      .findOne({ user: req.user._id, article: article._id });
+    if (article.isFavorite) {
+      const favorite = await Favorite.findOne({ 
+        user: req.user._id, 
+        article: article._id 
+      });
 
-    if (favorite) {
       await favorite.delete();
-
+  
       article.favoriteCount--;
+
       await article.save();
     }
 
