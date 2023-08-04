@@ -51,7 +51,7 @@ exports.find = async (req, res, next) => {
 
     if ('followers' in req.query) {
       const user = await User.findOne({ username: req.query.followers });
-      
+
       const followers = await Follow
         .find({ following: user._id })
 

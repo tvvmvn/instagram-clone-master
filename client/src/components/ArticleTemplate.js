@@ -5,20 +5,20 @@ import Carousel from "./Carousel";
 
 export default function ArticleTemplate({ article, handleDelete, handleFavorite, handleUnfavorite }) {
 
-  const [active, setActive] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
   const { user } = useContext(AuthContext);
   const isMaster = user.username === article.author.username;
 
-  function close(e) {
+  function handleOverlay(e) {
     if (e.target === e.currentTarget) {
-      setActive(false);
+      setModalOpen(false);
     }
   }
 
   const modal = (
     <div 
       className="fixed inset-0 flex justify-center items-center bg-black/[0.2] z-10" 
-      onClick={close}
+      onClick={handleOverlay}
     >
       <ul className="bg-white w-60 rounded-lg">
         <li className="border-b">
@@ -32,7 +32,7 @@ export default function ArticleTemplate({ article, handleDelete, handleFavorite,
         <li>
           <button
             className="w-full px-4 py-2 text-sm font-semibold"
-            onClick={() => setActive(false)}
+            onClick={() => setModalOpen(false)}
           >
             Close
           </button>
@@ -58,12 +58,12 @@ export default function ArticleTemplate({ article, handleDelete, handleFavorite,
           </span>
         </Link>
 
-        {active && modal}
+        {modalOpen && modal}
 
         {isMaster && (
           <svg
             className="w-1 cursor-pointer"
-            onClick={() => setActive(true)}
+            onClick={() => setModalOpen(true)}
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 128 512"
           >

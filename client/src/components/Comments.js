@@ -108,32 +108,35 @@ function Form({ handleAddComment }) {
 }
 
 function Comment({ comment, handleDelete }) {
-  const [active, setActive] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
 
-  async function handleClick() {
+  async function handleDeleteClick() {
     try {
       await handleDelete(comment.id);
       
-      setActive(false);
+      setModalOpen(false);
 
     } catch (error) {
       alert(error)
     }
   }
 
-  function close(e) {
+  function handleOverlay(e) {
     if (e.target === e.currentTarget) {
-      setActive(false);
+      setModalOpen(false);
     }
   }
 
   const modal = (
-    <div className="fixed inset-0 flex justify-center items-center bg-black/[0.2] z-10" onClick={close}>
+    <div 
+      className="fixed inset-0 flex justify-center items-center bg-black/[0.2] z-10" 
+      onClick={handleOverlay}
+    >
       <ul className="bg-white w-60 rounded-xl">
         <li className="border-b">
           <button
             className="w-full px-4 py-2 text-sm font-semibold text-red-500"
-            onClick={handleClick}
+            onClick={handleDeleteClick}
           >
             Delete
           </button>
@@ -141,7 +144,7 @@ function Comment({ comment, handleDelete }) {
         <li>
           <button
             className="text-sm font-semibold w-full px-4 py-2"
-            onClick={() => setActive(false)}
+            onClick={() => setModalOpen(false)}
           >
             Close
           </button>
@@ -175,10 +178,10 @@ function Comment({ comment, handleDelete }) {
 
       {/* More button */}
       <div className="shrink-0 ml-4">
-        {active && modal}
+        {modalOpen && modal}
         <svg
           className="w-1 cursor-pointer"
-          onClick={() => setActive(true)}
+          onClick={() => setModalOpen(true)}
           xmlns="http://www.w3.org/2000/svg" 
           viewBox="0 0 128 512"
           >

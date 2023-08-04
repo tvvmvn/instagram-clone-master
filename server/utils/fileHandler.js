@@ -3,6 +3,7 @@ const path = require('path');
 
 module.exports = function fileHandler() {
   const multerOptions = {
+    // Storage
     storage: multer.diskStorage({
       destination: (req, file, cb) => {
         cb(null, `${__dirname}/../files/${file.fieldname}/`);
@@ -16,6 +17,7 @@ module.exports = function fileHandler() {
       }
     }),
 
+    // Filter
     fileFilter: (req, file, cb) => {
       const extname = path.extname(file.originalname);
 
@@ -37,6 +39,7 @@ module.exports = function fileHandler() {
       cb(null, true);
     },
 
+    // Limits
     limits: {
       fileSize: 1e7,
       files: 10

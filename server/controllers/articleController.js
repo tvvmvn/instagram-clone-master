@@ -7,8 +7,10 @@ const fileHandler = require('../utils/fileHandler');
 exports.feed = async (req, res, next) => {
   try {
     const followingUsers = await Follow.find({ follower: req.user._id });
+
     const followingIds = followingUsers
       .map(followingUser => followingUser.following);
+      
     const userId = req.user._id;
 
     const where = { author: [...followingIds, userId] }
@@ -46,10 +48,12 @@ exports.find = async (req, res, next) => {
 
     if ('username' in req.query) {
       const user = await User.findOne({ username: req.query.username });
+      
       where.author = user._id;
     }
 
     const articleCount = await Article.count(where);
+
     const articles = await Article
       .find(where)
       .populate('commentCount')
@@ -95,7 +99,6 @@ exports.create = [
   fileHandler().array('photos'),
   async (req, res, next) => {
     try {
-      
       const files = req.files;
 
       if (files.length < 1) {
