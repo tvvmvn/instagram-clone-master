@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { createArticle } from '../utils/requests';
+import { createPost } from '../utils/requests';
 
-export default function ArticleCreate({ setModalOpen }) {
+export default function PostCreate({ setModalOpen }) {
 
   const navigate = useNavigate();
-  const [description, setDescription] = useState("");
+  const [caption, setCaption] = useState("");
   const [files, setFiles] = useState([]);
 
   async function handleSubmit(e) {
@@ -18,9 +18,9 @@ export default function ArticleCreate({ setModalOpen }) {
         formData.append('photos', file);
       })
 
-      formData.append('description', description);
+      formData.append('caption', caption);
 
-      await createArticle(formData);
+      await createPost(formData);
 
       navigate('/');
 
@@ -35,12 +35,22 @@ export default function ArticleCreate({ setModalOpen }) {
     }
   }
 
+  const photoPreviewList = files.map(file => (
+    <li key={file.name} className="pt-[100%] relative">
+      <img
+        className="absolute inset-0 w-full h-full object-cover"
+        src={URL.createObjectURL(file)}
+        alt={file.name}
+      />
+    </li>
+  ))
+
   return (
     <div 
       className="fixed inset-0 bg-black/[0.2] z-10" 
       onClick={handleOverlay}
     >
-      {/* Modal Close Button */}
+      {/* Modal close Button */}
       <button
         type="button"
         className="float-right text-2xl px-4 py-2 text-white"
@@ -54,6 +64,7 @@ export default function ArticleCreate({ setModalOpen }) {
         className="bg-white max-w-xs mt-20 mx-auto rounded-2xl"
         onSubmit={handleSubmit}
       >
+        {/* Title */}
         <div className="p-4 border-b">
           <h3 className="text-lg font-semibold text-center">Create new post</h3>
         </div>
@@ -71,35 +82,27 @@ export default function ArticleCreate({ setModalOpen }) {
             Select Photos +
           </label>
 
-          {/* Chosen List */}
+          {/* Chosen files */}
           {files.length > 0 && (
             <ul className="grid grid-cols-3 mb-2">
-              {files.map(file => (
-                <li key={file.name} className="pt-[100%] relative">
-                  <img
-                    className="absolute inset-0 w-full h-full object-cover"
-                    src={URL.createObjectURL(file)}
-                    alt={file.name}
-                  />
-                </li>
-              ))}
+              {photoPreviewList}
             </ul>
           )}
 
           {/* Photo Caption */}
           <div className="mb-2">
             <label
-              htmlFor="description"
+              htmlFor="caption"
               className="block font-semibold"
             >
-              Description
+              Caption
             </label>
             <textarea
               rows="2"
-              id="description"
-              className="block w-full px-2 py-1 rounded border"
-              onChange={({ target }) => setDescription(target.value)}
-              value={description}
+              id="caption"
+              className="block w-full px-2 py-1 rounded border resize-none"
+              onChange={({ target }) => setCaption(target.value)}
+              value={caption}
             />
           </div>
 

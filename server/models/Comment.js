@@ -4,8 +4,8 @@ const { DateTime } = require('luxon');
 
 const commentSchema = new Schema({
   content: { type: String },
-  article: { type: Schema.ObjectId, required: true },
-  author: { type: Schema.ObjectId, required: true, ref: 'User' },
+  post: { type: Schema.ObjectId, required: true },
+  user: { type: Schema.ObjectId, required: true, ref: 'User' },
 }, { 
   timestamps: true,
   toJSON: { virtuals: true },
@@ -14,9 +14,11 @@ const commentSchema = new Schema({
 
 // Virtual field
 commentSchema.virtual('displayDate').get(function () {
-  return DateTime
+  const displayDate = DateTime
    .fromJSDate(this.createdAt)
    .toLocaleString(DateTime.DATETIME_MED);
+
+  return displayDate;
 })
 
 module.exports = mongoose.model('Comment', commentSchema);

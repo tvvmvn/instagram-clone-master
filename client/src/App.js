@@ -3,7 +3,7 @@ import AuthProvider from './components/AuthProvider';
 import AuthRequired from "./components/AuthRequired";
 import Layout from "./components/Layout";
 import Feed from "./components/Feed";
-import ArticleView from "./components/ArticleView";
+import PostView from "./components/PostView";
 import Comments from "./components/Comments";
 import Search from "./components/Search";
 import Login from "./components/Login";
@@ -28,7 +28,7 @@ export default function App() {
             <Route index element={<Feed />} />
             <Route path="search" element={<Search />} />
             <Route path="p/:id">
-              <Route index element={<ArticleView />} />
+              <Route index element={<PostView />} />
               <Route path="comments" element={<Comments />} />
             </Route>
             <Route path="profiles/:username">

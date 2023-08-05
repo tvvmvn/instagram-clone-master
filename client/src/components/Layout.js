@@ -11,7 +11,9 @@ export default function Layout() {
       {/* NavBar */}
       <nav className="fixed top-0 left-0 w-full border-b z-10 bg-white">
         <div className="max-w-sm mx-auto px-2 h-10 flex justify-between items-center">
+          {/* Logo */}
           <img className="w-24" src="/images/logo.png" />
+          {/* Menu */}
           <ul className="flex items-center">
             <li>
               <Link to="/" className="block">
@@ -47,7 +49,7 @@ export default function Layout() {
             <li className="ml-2">
               <Link to={`/profiles/${user.username}`}>
                 <img
-                  src={`${process.env.REACT_APP_SERVER}/files/avatar/${user.avatar}`}
+                  src={user.avatarUrl}
                   className="w-8 h-8 object-cover border rounded-full"
                 />
               </Link>

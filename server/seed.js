@@ -1,7 +1,7 @@
 const userArgs = process.argv.slice(2);
 const mongoose = require("mongoose");
 const User = require('./models/User');
-const Article = require('./models/Article');
+const Post = require('./models/Post');
 
 if (!userArgs[0].startsWith('mongodb')) {
   console.log('ERROR: You need to specify a valid mongodb URL as the first argument.');
@@ -19,21 +19,21 @@ async function seedDatabase() {
       {
         username: 'cat',
         email: 'cat@example.com',
-        fullName: 'Kitty',
+        name: 'Kitty',
         avatar: 'cat.jpeg',
         bio: 'Meow',
       },
       {
         username: 'dog',
         email: 'dot@example.com',
-        fullName: 'Mr.Loyal',
+        name: 'Mr.Loyal',
         avatar: 'dog.jpeg',
         bio: 'Bark',
       },
       {
         username: 'bird',
         email: 'bird@example.com',
-        fullName: 'Blue and White',
+        name: 'Blue and White',
         avatar: 'bird.jpeg',
         bio: '',
       }
@@ -43,7 +43,7 @@ async function seedDatabase() {
       const user = new User();
       user.username = users[i].username;
       user.email = users[i].email;
-      user.fullName = users[i].fullName;
+      user.name = users[i].name;
       user.avatar = users[i].avatar;
       user.bio = users[i].bio;
 
@@ -55,20 +55,20 @@ async function seedDatabase() {
     for (let i = 1; i <= 4; i++) {
       const user = await User.findOne({ username: 'cat' });
 
-      const article = new Article();
-      article.photos = [`${i}.jpeg`];
-      article.description = `cat photos ${i}`;
-      article.author = user._id;
+      const post = new Post();
+      post.photos = [`${i}.jpeg`];
+      post.caption = `cat photos ${i}`;
+      post.user = user._id;
 
-      await article.save();
+      await post.save();
 
-      console.log(article);
+      console.log(post);
     }
-
-    mongoose.connection.close();
 
   } catch (error) {
     console.error(error);
+  } finally {
+    mongoose.connection.close();
   }
 }
 

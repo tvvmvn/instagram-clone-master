@@ -1,4 +1,4 @@
-const server = process.env.REACT_APP_SERVER;
+const server = "http://localhost:3000/api";
 
 /* USER  */
 export async function createUser(newUser) {
@@ -29,7 +29,7 @@ export async function signIn(email, password) {
   return await res.json();
 }
 
-/* ARTICLES */
+/* POST */
 export async function getFeed(skip) {
   const res = await fetch(`${server}/feed?skip=${skip}`, {
     headers: { 'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem("user")).access_token }
@@ -42,8 +42,8 @@ export async function getFeed(skip) {
   return await res.json();
 }
 
-export async function getArticle(id) {
-  const res = await fetch(`${server}/articles/${id}`, {
+export async function getPost(id) {
+  const res = await fetch(`${server}/posts/${id}`, {
     headers: { 'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem("user")).access_token }
   });
 
@@ -54,8 +54,8 @@ export async function getArticle(id) {
   return await res.json();
 }
 
-export async function createArticle(formData) {
-  const res = await fetch(`${server}/articles`, {
+export async function createPost(formData) {
+  const res = await fetch(`${server}/posts`, {
     method: "POST",
     headers: { "Authorization": 'Bearer ' + JSON.parse(localStorage.getItem("user")).access_token },
     body: formData
@@ -68,8 +68,8 @@ export async function createArticle(formData) {
   return await res.json();
 }
 
-export async function deleteArticle(id) {
-  const res = await fetch(`${server}/articles/${id}`, {
+export async function deletePost(id) {
+  const res = await fetch(`${server}/posts/${id}`, {
     method: 'DELETE',
     headers: { 'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem("user")).access_token }
   })
@@ -81,8 +81,8 @@ export async function deleteArticle(id) {
   return await res.json();
 }
 
-export async function favorite(id) {
-  const res = await fetch(`${server}/articles/${id}/favorite`, {
+export async function likePost(id) {
+  const res = await fetch(`${server}/posts/${id}/like`, {
     method: 'POST',
     headers: { 'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem("user")).access_token }
   })
@@ -94,8 +94,8 @@ export async function favorite(id) {
   return await res.json();
 }
 
-export async function unfavorite(id) {
-  const res = await fetch(`${server}/articles/${id}/favorite`, {
+export async function unlikePost(id) {
+  const res = await fetch(`${server}/posts/${id}/unlike`, {
     method: 'DELETE',
     headers: { 'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem("user")).access_token }
   })
@@ -107,9 +107,9 @@ export async function unfavorite(id) {
   return await res.json();
 }
 
-/* COMMENTS */
+/* COMMENT */
 export async function getComments(id) {
-  const res = await fetch(`${server}/articles/${id}/comments`, {
+  const res = await fetch(`${server}/posts/${id}/comments`, {
     headers: { 'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem("user")).access_token }
   });
 
@@ -122,7 +122,7 @@ export async function getComments(id) {
 
 export async function createComment(id, content) {
 
-  const res = await fetch(`${server}/articles/${id}/comments`, {
+  const res = await fetch(`${server}/posts/${id}/comments`, {
     method: "POST",
     headers: {
       "Authorization": 'Bearer ' + JSON.parse(localStorage.getItem("user")).access_token,
@@ -211,7 +211,7 @@ export async function getProfile(username) {
 }
 
 export async function getTimeline(username) {
-  const res = await fetch(`${server}/articles/?username=${username}`, {
+  const res = await fetch(`${server}/posts/?username=${username}`, {
     headers: { 'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem("user")).access_token }
   })
 
@@ -260,7 +260,7 @@ export async function follow(username) {
 }
 
 export async function unfollow(username) {
-  const res = await fetch(`${server}/profiles/${username}/follow`, {
+  const res = await fetch(`${server}/profiles/${username}/unfollow`, {
     method: 'DELETE',
     headers: { 'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem("user")).access_token }
   })

@@ -37,12 +37,24 @@ export default function Login() {
     document.title = `Login - Instagram`
   }, [])
 
+  const passwordToggleButton = (
+    <button
+      type="button"
+      className="absolute right-0 h-full px-4 py-2 text-sm font-semibold"
+      onClick={() => setShowPassword(!showPassword)}
+    >
+      {showPassword ? 'Hide' : 'Show'}
+    </button>
+  )
+
   return (
     <form onSubmit={handleSubmit} className="max-w-xs p-4 mt-16 mx-auto">
+      {/* Logo image */}
       <div className="mt-4 mb-4 flex justify-center">
         <img src="/images/logo.png" className="w-36" />
       </div>
 
+      {/* Email input */}
       <div className="mb-2">
         <label className="block">
           <input
@@ -55,6 +67,7 @@ export default function Login() {
         </label>
       </div>
 
+      {/* Password input */}
       <div className="mb-2">
         <label className="block relative">
           <input
@@ -65,18 +78,11 @@ export default function Login() {
             autoComplete="new-password"
             onChange={({ target }) => setPassword(target.value)}
           />
-          {password.trim().length > 0 && (
-            <button
-              type="button"
-              className="absolute right-0 h-full px-4 py-2 text-sm font-semibold"
-              onClick={() => setShowPassword(!showPassword)}
-            >
-              {showPassword ? 'Hide' : 'Show'}
-            </button>
-          )}
+          {password.trim().length > 0 && passwordToggleButton}
         </label>
       </div>
 
+      {/* Submit button */}
       <button
         type="submit"
         className="bg-blue-500 text-sm text-white font-semibold rounded-lg px-4 py-2 w-full disabled:opacity-[0.5]"

@@ -7,7 +7,7 @@ export default function SignUp() {
   const navigate = useNavigate();
   const [error, setError] = useState(null);
   const [email, setEmail] = useState("");
-  const [fullName, setFullName] = useState("");
+  const [name, setName] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
@@ -23,11 +23,11 @@ export default function SignUp() {
     try {
       e.preventDefault();
 
-      const newUser = { email, fullName, username, password }
+      const newUser = { email, name, username, password }
       
       await createUser(newUser);
 
-      alert(`Welcome ${fullName}!`);
+      alert(`Welcome ${name}!`);
 
       navigate('/');
 
@@ -42,10 +42,12 @@ export default function SignUp() {
 
   return (
     <form onSubmit={handleSubmit} className="max-w-xs mx-auto p-4 mt-16">
+      {/* Logo image */}
       <div className="mt-4 mb-4 flex justify-center">
         <img src="/images/logo.png" className="w-36" />
       </div>
 
+      {/* Email input */}
       <div className="mb-2">
         <label className="block">
           <input
@@ -58,18 +60,20 @@ export default function SignUp() {
         </label>
       </div>
 
+      {/* name input */}
       <div className="mb-2">
         <label className="block">
           <input
             type="text"
-            name="fullName"
+            name="name"
             className="border rounded px-2 py-1 w-full"
-            onChange={({ target }) => setFullName(target.value)}
+            onChange={({ target }) => setName(target.value)}
             placeholder="Full Name"
           />
         </label>
       </div>
 
+      {/* Username input */}
       <div className="mb-2">
         <label className="block">
           <input
@@ -82,6 +86,7 @@ export default function SignUp() {
         </label>
       </div>
 
+      {/* Password input */}
       <div className="mb-2">
         <label className="block">
           <input
@@ -95,6 +100,7 @@ export default function SignUp() {
         </label>
       </div>
 
+      {/* Submit button */}
       <div className="mb-2">
         <button
           type="submit"

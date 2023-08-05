@@ -3,11 +3,16 @@ import { Link } from 'react-router-dom';
 import AuthContext from './AuthContext';
 import Carousel from "./Carousel";
 
-export default function ArticleTemplate({ article, handleDelete, handleFavorite, handleUnfavorite }) {
+export default function PostTemplate({ 
+  post, 
+  handleDelete, 
+  handleLike, 
+  handleUnlike 
+}) {
 
   const [modalOpen, setModalOpen] = useState(false);
   const { user } = useContext(AuthContext);
-  const isMaster = user.username === article.author.username;
+  const isMaster = user.username === post.user.username;
 
   function handleOverlay(e) {
     if (e.target === e.currentTarget) {
@@ -24,7 +29,7 @@ export default function ArticleTemplate({ article, handleDelete, handleFavorite,
         <li className="border-b">
           <button
             className="w-full px-4 py-2 text-sm font-semibold text-red-500"
-            onClick={() => handleDelete(article.id)}
+            onClick={() => handleDelete(post.id)}
           >
             Delete
           </button>
@@ -41,25 +46,49 @@ export default function ArticleTemplate({ article, handleDelete, handleFavorite,
     </div>
   )
 
+  const likeButton = (
+    <svg
+      className="w-6"
+      onClick={() => handleLike(post.id)}
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 512 512"
+    >
+      <path d="M244 84L255.1 96L267.1 84.02C300.6 51.37 347 36.51 392.6 44.1C461.5 55.58 512 115.2 512 185.1V190.9C512 232.4 494.8 272.1 464.4 300.4L283.7 469.1C276.2 476.1 266.3 480 256 480C245.7 480 235.8 476.1 228.3 469.1L47.59 300.4C17.23 272.1 0 232.4 0 190.9V185.1C0 115.2 50.52 55.58 119.4 44.1C164.1 36.51 211.4 51.37 244 84C243.1 84 244 84.01 244 84L244 84zM255.1 163.9L210.1 117.1C188.4 96.28 157.6 86.4 127.3 91.44C81.55 99.07 48 138.7 48 185.1V190.9C48 219.1 59.71 246.1 80.34 265.3L256 429.3L431.7 265.3C452.3 246.1 464 219.1 464 190.9V185.1C464 138.7 430.4 99.07 384.7 91.44C354.4 86.4 323.6 96.28 301.9 117.1L255.1 163.9z" />
+    </svg>
+  )
+
+  const unlikeButton = (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      onClick={() => handleUnlike(post.id)}
+      viewBox="0 0 512 512"
+      className="w-6 fill-red-500"
+    >
+      <path d="M0 190.9V185.1C0 115.2 50.52 55.58 119.4 44.1C164.1 36.51 211.4 51.37 244 84.02L256 96L267.1 84.02C300.6 51.37 347 36.51 392.6 44.1C461.5 55.58 512 115.2 512 185.1V190.9C512 232.4 494.8 272.1 464.4 300.4L283.7 469.1C276.2 476.1 266.3 480 256 480C245.7 480 235.8 476.1 228.3 469.1L47.59 300.4C17.23 272.1 .0003 232.4 .0003 190.9L0 190.9z" />
+    </svg>
+  )
+
   return (
     <div className="mt-4 bg-white">
-      {/* Avatar Image and Modal Button */}
       <div className="px-2 mb-2 flex justify-between items-center">
+        {/* User avatar */}
         <Link
-          to={`/profiles/${article.author.username}`}
+          to={`/profiles/${post.user.username}`}
           className="inline-flex items-center"
         >
           <img
-            src={`${process.env.REACT_APP_SERVER}/files/avatar/${article.author.avatar}`}
+            src={post.user.avatarUrl}
             className="w-10 h-10 object-cover border rounded-full"
           />
           <span className="ml-2">
-            {article.author.username}
+            {post.user.username}
           </span>
         </Link>
 
+        {/* Modal */}
         {modalOpen && modal}
 
+        {/* More button */}
         {isMaster && (
           <svg
             className="w-1 cursor-pointer"
@@ -73,34 +102,14 @@ export default function ArticleTemplate({ article, handleDelete, handleFavorite,
       </div>
 
       {/* Photos Carousel */}
-      <Carousel 
-        photos={article.photos} 
-      />
+      <Carousel photoUrls={post.photoUrls} />
 
       <div className="mt-2 px-2">
-        {/* Like Button and Comment Button */}
+        {/* Like/unlike button and comment link */}
         <div className="flex">
-          {article.isFavorite ? (
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              onClick={() => handleUnfavorite(article.id)}
-              viewBox="0 0 512 512"
-              className="w-6 fill-red-500"
-            >
-              <path d="M0 190.9V185.1C0 115.2 50.52 55.58 119.4 44.1C164.1 36.51 211.4 51.37 244 84.02L256 96L267.1 84.02C300.6 51.37 347 36.51 392.6 44.1C461.5 55.58 512 115.2 512 185.1V190.9C512 232.4 494.8 272.1 464.4 300.4L283.7 469.1C276.2 476.1 266.3 480 256 480C245.7 480 235.8 476.1 228.3 469.1L47.59 300.4C17.23 272.1 .0003 232.4 .0003 190.9L0 190.9z" />
-            </svg>
-          ) : (
-            <svg
-              className="w-6"
-              onClick={() => handleFavorite(article.id)}
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 512 512"
-            >
-              <path d="M244 84L255.1 96L267.1 84.02C300.6 51.37 347 36.51 392.6 44.1C461.5 55.58 512 115.2 512 185.1V190.9C512 232.4 494.8 272.1 464.4 300.4L283.7 469.1C276.2 476.1 266.3 480 256 480C245.7 480 235.8 476.1 228.3 469.1L47.59 300.4C17.23 272.1 0 232.4 0 190.9V185.1C0 115.2 50.52 55.58 119.4 44.1C164.1 36.51 211.4 51.37 244 84C243.1 84 244 84.01 244 84L244 84zM255.1 163.9L210.1 117.1C188.4 96.28 157.6 86.4 127.3 91.44C81.55 99.07 48 138.7 48 185.1V190.9C48 219.1 59.71 246.1 80.34 265.3L256 429.3L431.7 265.3C452.3 246.1 464 219.1 464 190.9V185.1C464 138.7 430.4 99.07 384.7 91.44C354.4 86.4 323.6 96.28 301.9 117.1L255.1 163.9z" />
-            </svg>
-          )}
+          {post.liked ? unlikeButton : likeButton}
 
-          <Link to={`/p/${article.id}/comments`} className="ml-2">
+          <Link to={`/p/${post.id}/comments`} className="ml-2">
             <svg 
               className="w-6"
               xmlns="http://www.w3.org/2000/svg" 
@@ -111,27 +120,31 @@ export default function ArticleTemplate({ article, handleDelete, handleFavorite,
           </Link>
         </div>
 
-        {/* Favorite Count */}
-        <p className="text-sm my-2">{article.favoriteCount} likes</p>
+        {/* likes count */}
+        <p className="text-sm my-2">{post.likesCount} likes</p>
 
         {/* Caption */}
-        {article.description && (
+        {post.caption && (
           <p className="my-4">
-            <Link to={`/profiles/${article.author.username}`} className="font-semibold">{article.author.username}</Link>
+            <Link to={`/profiles/${post.user.username}`} className="font-semibold">
+              {post.user.username}
+            </Link>
             {" "}
-            {article.description}
+            {post.caption}
           </p>
         )}
 
         {/* Link to Comment Page */}
-        {article.commentCount > 0 && (
+        {post.commentCount > 0 && (
           <p className="text-gray-400 text-sm my-2">
-            <Link to={`/p/${article.id}/comments`}> View all {article.commentCount} Comments</Link>
+            <Link to={`/p/${post.id}/comments`}> 
+              View all {post.commentCount} Comments
+            </Link>
           </p>
         )}
 
-        {/* Date */}
-        <p className="text-gray-400 text-xs">{article.displayDate}</p>
+        {/* Display date */}
+        <p className="text-gray-400 text-xs">{post.displayDate}</p>
       </div>
     </div>
   )

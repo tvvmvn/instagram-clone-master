@@ -1,5 +1,5 @@
 const User = require('../models/User');
-const Follow = require('../models/Follow');
+const Following = require('../models/Following');
 const fileHandler = require('../utils/fileHandler');
 
 exports.update = [
@@ -20,8 +20,8 @@ exports.update = [
 
       const user = {
         username: _user.username,
-        fullName: _user.fullName,
-        avatar: _user.avatar,
+        name: _user.name,
+        avatarUrl: _user.avatarUrl,
         bio: _user.bio,
         access_token
       }
@@ -43,19 +43,19 @@ exports.find = async (req, res, next) => {
     if ('following' in req.query) {
       const user = await User.findOne({ username: req.query.following });
 
-      const followingUsers = await Follow
-        .find({ follower: user._id })
+      const followingUsers = await Following
+        .find({ user: user._id })
 
-      where._id = followingUsers.map(follow => follow.following);
+      where._id = followingUsers.map(followingUser => followingUser.following);
     }
 
     if ('followers' in req.query) {
       const user = await User.findOne({ username: req.query.followers });
 
-      const followers = await Follow
+      const followers = await Following
         .find({ following: user._id })
 
-      where._id = followers.map(follow => follow.follower);
+      where._id = followers.map(follower => follower.user);
     }
 
     if ('username' in req.query) {
@@ -65,10 +65,10 @@ exports.find = async (req, res, next) => {
     const profileCount = await User.count(where);
 
     const profiles = await User
-      .find(where, 'username fullName avatar bio')
+      .find(where, 'username name avatar avatarUrl bio')
       .populate({ 
         path: 'isFollowing',
-        match: { follower: req.user._id }
+        match: { user: req.user._id }
       })
       .limit(limit)
       .skip(skip)
@@ -83,13 +83,13 @@ exports.find = async (req, res, next) => {
 exports.findOne = async (req, res, next) => {
   try {
     const profile = await User
-      .findOne({ username: req.params.username }, 'username fullName avatar bio')
-      .populate('articleCount')
+      .findOne({ username: req.params.username }, 'username name avatar avatarUrl bio')
+      .populate('postCount')
       .populate('followerCount')
       .populate('followingCount')
       .populate({
         path: 'isFollowing',
-        match: { follower: req.user._id }
+        match: { user: req.user._id }
       })
 
     if (!profile) {
@@ -110,7 +110,7 @@ exports.follow = async (req, res, next) => {
     const profile = await User.findOne({ username: req.params.username })
       .populate({
         path: 'isFollowing',
-        match: { follower: req.user._id }
+        match: { user: req.user._id }
       })
 
     if (!profile) {
@@ -126,12 +126,12 @@ exports.follow = async (req, res, next) => {
     }
 
     if (!profile.isFollowing) {
-      const follow = new Follow({
-        follower: req.user._id,
+      const following = new Following({
+        user: req.user._id,
         following: profile._id
       })
   
-      await follow.save();
+      await following.save();
     }
 
     res.json({ profile });
@@ -146,7 +146,7 @@ exports.unfollow = async (req, res, next) => {
     const profile = await User.findOne({ username: req.params.username })
       .populate({
         path: 'isFollowing',
-        match: { follower: req.user._id }
+        match: { user: req.user._id }
       })
 
     if (!profile) {
@@ -156,12 +156,12 @@ exports.unfollow = async (req, res, next) => {
     }
 
     if (profile.isFollowing) {
-      const follow = await Follow.findOne({ 
-        follower: req.user._id, 
+      const following = await Following.findOne({ 
+        user: req.user._id, 
         following: profile._id 
       });
   
-      await follow.delete();
+      await following.delete();
     }
 
     res.json({ profile });

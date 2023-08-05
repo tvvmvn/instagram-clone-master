@@ -5,11 +5,11 @@ import AuthContext from "./AuthContext";
 
 export default function ProfileEdit() {
   const { user, setUser } = useContext(AuthContext);
-  const [newFullName, setNewFullName] = useState(user.fullName);
+  const [newName, setNewName] = useState(user.name);
   const [newBio, setNewBio] = useState(user.bio);
 
   const isEqual = {
-    fullName: user.fullName === newFullName,
+    name: user.name === newName,
     bio: user.bio === newBio,
   }
   
@@ -18,7 +18,7 @@ export default function ProfileEdit() {
       e.preventDefault();
       
       const editedProfile = { 
-        fullName: newFullName, 
+        name: newName, 
         bio: newBio 
       };
       
@@ -58,15 +58,18 @@ export default function ProfileEdit() {
 
   return (
     <div className="mt-8 px-4">
-      {/* Avatar Image */}
       <div className="flex mb-4">
+        {/* Avatar image */}
         <img
-          src={`${process.env.REACT_APP_SERVER}/files/avatar/${user.avatar}`}
+          src={user.avatarUrl}
           className="w-16 h-16 object-cover rounded-full border"
         />
+
         <div className="flex flex-col grow items-start ml-4">
+          {/* username */}
           <h3>{user.username}</h3>
 
+          {/* Photo upload button */}
           <label className="text-sm font-semibold text-blue-500 cursor-pointer">
             <input
               type="file"
@@ -79,20 +82,22 @@ export default function ProfileEdit() {
         </div>
       </div>
 
-      {/* Profile Form */}
+      {/* Update form */}
       <form onSubmit={handleSubmit}>
+        {/* Name input */}
         <div className="mb-2">
-          <label htmlFor="fullName" className="block font-semibold">Name</label>
+          <label htmlFor="name" className="block font-semibold">Name</label>
           <input
             type="text"
-            id="fullName"
-            name="fullName"
+            id="name"
+            name="name"
             className="border px-2 py-1 rounded w-full"
-            value={newFullName}
-            onChange={({ target }) => setNewFullName(target.value)}
+            value={newName}
+            onChange={({ target }) => setNewName(target.value)}
           />
         </div>
 
+        {/* Bio input */}
         <div className="mb-2">
           <label htmlFor="bio" className="block font-semibold">Bio</label>
           <textarea
@@ -106,13 +111,16 @@ export default function ProfileEdit() {
         </div>
 
         <div className="flex">
+          {/* Submit button */}
           <button
             type="submit"
             className="text-sm font-semibold bg-gray-200 rounded-lg px-4 py-2 disabled:opacity-[0.2]"
-            disabled={isEqual.fullName && isEqual.bio}
+            disabled={isEqual.name && isEqual.bio}
           >
             Save
           </button>
+
+          {/* Cancel button */}
           <Link
             to={`/profiles/${user.username}`}
             className="text-sm font-semibold bg-gray-200 rounded-lg px-4 py-2 ml-2"

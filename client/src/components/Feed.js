@@ -1,6 +1,6 @@
 import {useState, useEffect, useContext} from "react"
-import ArticleTemplate from "./ArticleTemplate";
-import { getFeed, deleteArticle, favorite, unfavorite } from "../utils/requests";
+import PostTemplate from "./PostTemplate";
+import { getFeed, deletePost, likePost, unlikePost } from "../utils/requests";
 import Spinner from './Spinner';
 
 const limit = 5;
@@ -9,11 +9,11 @@ export default function Feed() {
   
   const [error, setError] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
-  const [articles, setArticles] = useState([]);
+  const [posts, setPosts] = useState([]);
   const [skip, setSkip] = useState(0);
-  const [articleCount, setArticleCount] = useState(0);
+  const [postCount, setPostCount] = useState(0);
 
-  console.log(articles)
+  console.log(posts)
 
   useEffect(() => {
     setError(null);
@@ -21,10 +21,10 @@ export default function Feed() {
     
     getFeed(skip)
       .then(data => {
-        setArticleCount(data.articleCount);
+        setPostCount(data.postCount);
           
-        let updatedArticles = [...articles, ...data.articles];
-        setArticles(updatedArticles);
+        let updatedPosts = [...posts, ...data.posts];
+        setPosts(updatedPosts);
       })
       .catch(error => {
         setError(error);
@@ -33,44 +33,44 @@ export default function Feed() {
       
   }, [skip])
 
-  async function handleFavorite(id) {
+  async function handleLike(id) {
     try {
-      await favorite(id);
+      await likePost(id);
 
-      const updatedArticles = articles.map(article => {
-        if (article.id === id) {
+      const updatedPosts = posts.map(post => {
+        if (post.id === id) {
           return {
-            ...article,
-            isFavorite: true,
-            favoriteCount: article.favoriteCount + 1
+            ...post,
+            liked: true,
+            likesCount: post.likesCount + 1
           }
         }
-        return article;
+        return post;
       })
   
-      setArticles(updatedArticles);
+      setPosts(updatedPosts);
 
     } catch (error) {
       alert(error)
     }
   }
 
-  async function handleUnfavorite(id) {
+  async function handleUnlike(id) {
     try {
-      await unfavorite(id)
+      await unlikePost(id)
 
-      const updatedArticles = articles.map(article => {
-        if (article.id === id) {
+      const updatedPosts = posts.map(post => {
+        if (post.id === id) {
           return {
-            ...article,
-            isFavorite: false,
-            favoriteCount: article.favoriteCount - 1
+            ...post,
+            liked: false,
+            likesCount: post.likesCount - 1
           }
         }
-        return article;
+        return post;
       })
   
-      setArticles(updatedArticles);
+      setPosts(updatedPosts);
 
     } catch (error) {
       alert(error)
@@ -79,33 +79,35 @@ export default function Feed() {
 
   async function handleDelete(id) {
     try {
-      await deleteArticle(id); 
+      await deletePost(id); 
 
-      const remainingArticles = articles.filter(article => {
-        if (id !== article.id) {
-          return article;
+      const remainingPosts = posts.filter(post => {
+        if (id !== post.id) {
+          return post;
         }
       });
   
-      setArticles(remainingArticles);
+      setPosts(remainingPosts);
     
     } catch (error) {
       alert(error)
     }
   }
 
-  const articleList = articles.map(article => (
-    <li key={article.id} className="border-b pb-4">
-      <ArticleTemplate
-        article={article}
-        handleFavorite={handleFavorite}
-        handleUnfavorite={handleUnfavorite}
+  const postList = posts.map(post => (
+    <li key={post.id} className="border-b pb-4">
+      <PostTemplate
+        post={post}
+        handleLike={handleLike}
+        handleUnlike={handleUnlike}
         handleDelete={handleDelete}
       />
     </li>
   ))
 
-  const moreButton = (articleCount > limit && articleCount > articles.length) && (
+  const doesMoreExists = postCount > limit && postCount > posts.length;
+
+  const moreButton = doesMoreExists && (
     <div className="flex justify-center my-2">
       <button 
         className="p-1 text-blue-500 font-semibold" 
@@ -118,11 +120,12 @@ export default function Feed() {
 
   return (
     <>
-      <ul className="">
-        {articleList}
+      <ul>
+        {postList}
       </ul>
 
       {isLoaded ? moreButton : <Spinner />}
+
       {error && <p className="text-red-500">{error.message}</p>}
     </>  
   )

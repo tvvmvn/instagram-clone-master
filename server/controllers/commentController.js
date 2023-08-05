@@ -1,11 +1,11 @@
-const Article = require('../models/Article');
+const Post = require('../models/Post');
 const Comment = require('../models/Comment');
 
 exports.find = async (req, res, next) => {
   try {
-    const article = await Article.findById(req.params.id);
+    const post = await Post.findById(req.params.id);
 
-    const where = { article: article._id };
+    const where = { post: post._id };
     const limit = req.query.limit || 10;
     const skip = req.query.skip || 0;
 
@@ -14,10 +14,10 @@ exports.find = async (req, res, next) => {
     const comments = await Comment
       .find(where)
       .populate({
-        path: 'author',
-        select: 'username avatar'
+        path: 'user',
+        select: 'username avatar avatarUrl'
       })
-      .sort({ created: 'desc' })
+      .sort({ createdAt: 'desc' })
       .limit(limit)
       .skip(skip)
 
@@ -30,25 +30,25 @@ exports.find = async (req, res, next) => {
 
 exports.create = async (req, res, next) => {
   try {
-    const article = await Article.findById(req.params.id);
+    const post = await Post.findById(req.params.id);
 
-    if (!article) {
-      const err = new Error("Article is not found")
+    if (!post) {
+      const err = new Error("Post is not found")
       err.status = 404;
       throw err;
     }
 
     const comment = new Comment({
-      article: req.params.id,
       content: req.body.content,
-      author: req.user._id
+      post: req.params.id,
+      user: req.user._id
     })
 
     await comment.save();
 
     await comment.populate({
-      path: 'author',
-      select: 'username avatar'
+      path: 'user',
+      select: 'username avatar avatarUrl'
     })
 
     res.json({ comment });
@@ -69,9 +69,9 @@ exports.delete = async (req, res, next) => {
     }
 
     const userId = req.user._id;
-    const isAuthor = userId.toString() === comment.author.toString();
+    const isMaster = userId.toString() === comment.user.toString();
 
-    if (!isAuthor) {
+    if (!isMaster) {
       const err = new Error("Incorrect user");
       err.status = 400;
       throw err;

@@ -46,14 +46,18 @@ export default function Comments() {
   const commentList = comments.map(comment => (
     <Comment
       key={comment.id}
-      comment={comment}
+      id={comment.id}
+      username={comment.user.username}
+      avatarUrl={comment.user.avatarUrl}
+      content={comment.content}
+      displayDate={comment.displayDate}
       handleDelete={handleDelete}
     />
   ))
 
   return (
     <div className="px-4">
-      <h3 className="text-lg font-semibold my-4">This article's comments</h3>
+      <h3 className="text-lg font-semibold my-4">This post's comments</h3>
       <Form
         handleAddComment={handleAddComment}
       />
@@ -63,10 +67,11 @@ export default function Comments() {
           {commentList}
         </ul>
       ) : (
-        <p className="text-center">This article has no comments.</p>
+        <p className="text-center">This post has no comments.</p>
       )}
 
       {!isLoaded && <Spinner />}
+      
       {error && <p className="text-red-500">{error.message}</p>}
     </div>
   )
@@ -107,12 +112,20 @@ function Form({ handleAddComment }) {
   )
 }
 
-function Comment({ comment, handleDelete }) {
+function Comment({ 
+  id,
+  username, 
+  avatarUrl,
+  displayDate,
+  content,
+  handleDelete 
+}) {
+  
   const [modalOpen, setModalOpen] = useState(false);
 
   async function handleDeleteClick() {
     try {
-      await handleDelete(comment.id);
+      await handleDelete(id);
       
       setModalOpen(false);
 
@@ -155,11 +168,11 @@ function Comment({ comment, handleDelete }) {
   
   return (
     <li className="py-4 flex border-b">
-      {/* Author Avatar */}
+      {/* User avatar */}
       <div className="shrink-0">
-        <Link to={`/profiles/${comment.author.username}`}>
+        <Link to={`/profiles/${username}`}>
           <img
-            src={`${process.env.REACT_APP_SERVER}/files/avatar/${comment.author.avatar}`}
+            src={avatarUrl}
             className="w-8 h-8 object-cover border rounded-full"
           />
         </Link>
@@ -167,12 +180,12 @@ function Comment({ comment, handleDelete }) {
 
       {/* Comment Content */}
       <div className="grow ml-4">
-        <Link to={`/profiles/${comment.author.username}`} className="font-semibold">
-          {comment.author.username} {" "}
+        <Link to={`/profiles/${username}`} className="font-semibold">
+          {username} {" "}
         </Link>
-        {comment.content}
+        {content}
         <p>
-          <small className="font-xs text-gray-400">{comment.displayDate}</small>
+          <small className="font-xs text-gray-400">{displayDate}</small>
         </p>
       </div>
 

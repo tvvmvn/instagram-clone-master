@@ -1,5 +1,4 @@
 const User = require('../models/User');
-const fileHandler = require('../utils/fileHandler');
 const { body, validationResult } = require('express-validator');
 
 // Middleware for validation
@@ -55,7 +54,6 @@ exports.create = [
   isValidPassword(),
   async (req, res, next) => {
     try {
-
       const errors = validationResult(req);
 
       if (!errors.isEmpty()) {
@@ -65,12 +63,12 @@ exports.create = [
         throw err;
       }
 
-      const { email, fullName, username, password } = req.body;
+      const { email, name, username, password } = req.body;
 
       const user = new User();
 
       user.email = email;
-      user.fullName = fullName;
+      user.name = name;
       user.username = username;
       user.setPassword(password);
 
@@ -106,8 +104,8 @@ exports.login = [
   
       const user = {
         username: _user.username,
-        fullName: _user.fullName,
-        avatar: _user.avatar,
+        name: _user.name,
+        avatarUrl: _user.avatarUrl,
         bio: _user.bio,
         access_token
       }

@@ -64,43 +64,15 @@ export default function FollowerList() {
   }
 
   const followerList = followers.map(follower => (
-    <div key={follower.username} className="flex justify-between items-center mb-2">
-      {/* Profile Avatar */}
-      <Link
-        to={`/profiles/${follower.username}`}
-        className="inline-flex items-center"
-      >
-        <img
-          src={`${process.env.REACT_APP_SERVER}/files/avatar/${follower.avatar}`}
-          className="w-12 h-12 object-cover rounded-full border"
-        />
-        <div className="ml-2">
-          <span className="block font-semibold">
-            {follower.username}
-          </span>
-          <span className="block text-gray-400 text-sm">
-            {follower.fullName}
-          </span>
-        </div>
-      </Link>
-
-      {/* Follow Button */}
-      {follower.isFollowing ? (
-        <button
-          className="ml-2 bg-gray-200 text-sm px-4 py-2 font-semibold p-2 rounded-lg"
-          onClick={() => handleUnfollow(follower.username)}
-        >
-          Following
-        </button>
-      ) : (
-        <button
-          className="ml-2 bg-blue-500 text-white text-sm px-4 py-2 font-semibold p-2 rounded-lg"
-          onClick={() => handleFollow(follower.username)}
-        >
-          Follow
-        </button>
-      )}
-    </div>
+    <Follower 
+      key={follower.id}
+      username={follower.username}
+      name={follower.name}
+      isFollowing={follower.isFollowing}
+      avatarUrl={follower.avatarUrl}
+      handleFollow={handleFollow}
+      handleUnfollow={handleUnfollow}
+    />
   ))
 
   return (
@@ -111,7 +83,62 @@ export default function FollowerList() {
       </ul>
 
       {!isLoaded && <Spinner />}
+      
       {error && <p className="text-red-500">{error.message}</p>}
+    </div>
+  )
+}
+
+function Follower({
+  username,
+  name,
+  isFollowing,
+  avatarUrl,
+  handleFollow, 
+  handleUnfollow 
+}) {
+
+  const followButton = (
+    <button
+      className="ml-2 bg-blue-500 text-white text-sm px-4 py-2 font-semibold p-2 rounded-lg"
+      onClick={() => handleFollow(username)}
+    >
+      Follow
+    </button>
+  )
+
+  const unfollowButton = (
+    <button
+      className="ml-2 bg-gray-200 text-sm px-4 py-2 font-semibold p-2 rounded-lg"
+      onClick={() => handleUnfollow(username)}
+    >
+      Following
+    </button>
+  )
+
+  return (
+    <div className="flex justify-between items-center mb-2">
+      {/* Profile Avatar */}
+      <Link
+        to={`/profiles/${username}`}
+        className="inline-flex items-center"
+      >
+        <img
+          src={avatarUrl}
+          className="w-12 h-12 object-cover rounded-full border"
+        />
+        <div className="ml-2">
+          <span className="block font-semibold">
+            {username}
+          </span>
+          <span className="block text-gray-400 text-sm">
+            {name}
+          </span>
+        </div>
+      </Link>
+
+      {/* Follow Button */}
+      {isFollowing ? unfollowButton : followButton}
     </div>
   )
 }

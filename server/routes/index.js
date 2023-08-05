@@ -3,7 +3,7 @@ const router = express.Router();
 const passport = require("passport");
 const auth = passport.authenticate("jwt", { session: false });
 const jwtStrategy = require("../auth/jwtStrategy");
-const articleController = require("../controllers/articleController");
+const postController = require("../controllers/postController");
 const commentController = require("../controllers/commentController");
 const userController = require("../controllers/userController");
 const profileController = require("../controllers/profileController");
@@ -15,29 +15,29 @@ router.get('/', (req, res) => {
   res.json({ message: "API Server - INDEX PAGE" });
 })
 
-/* USERS */
+/* USER */
 router.post('/users', userController.create); 
 router.post('/user/login', userController.login); 
 
-/* ARTICLES */
-router.get('/feed', auth, articleController.feed) 
-router.get('/articles', auth, articleController.find)
-router.post('/articles', auth, articleController.create)  
-router.get('/articles/:id', auth, articleController.findOne)
-router.delete('/articles/:id', auth, articleController.delete) 
-router.post('/articles/:id/favorite', auth, articleController.favorite) 
-router.delete('/articles/:id/favorite', auth, articleController.unfavorite)
+/* POST */
+router.get('/feed', auth, postController.feed) 
+router.get('/posts', auth, postController.find)
+router.post('/posts', auth, postController.create)  
+router.get('/posts/:id', auth, postController.findOne)
+router.delete('/posts/:id', auth, postController.delete) 
+router.post('/posts/:id/like', auth, postController.like) 
+router.delete('/posts/:id/unlike', auth, postController.unlike)
 
-/* COMMENTS */
-router.get('/articles/:id/comments', auth, commentController.find) 
-router.post('/articles/:id/comments', auth, commentController.create) 
+/* COMMENT */
+router.get('/posts/:id/comments', auth, commentController.find) 
+router.post('/posts/:id/comments', auth, commentController.create) 
 router.delete('/comments/:id', auth, commentController.delete) 
 
-/* PROFILES */
+/* PROFILE */
 router.put('/profiles', auth, profileController.update); 
 router.get('/profiles', auth, profileController.find); 
 router.get('/profiles/:username', auth, profileController.findOne)
 router.post('/profiles/:username/follow', auth, profileController.follow) 
-router.delete('/profiles/:username/follow', auth, profileController.unfollow)
+router.delete('/profiles/:username/unfollow', auth, profileController.unfollow)
 
 module.exports = router;

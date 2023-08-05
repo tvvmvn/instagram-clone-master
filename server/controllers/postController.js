@@ -1,39 +1,40 @@
 const User = require('../models/User');
-const Follow = require('../models/Follow');
-const Article = require('../models/Article');
-const Favorite = require('../models/Favorite');
+const Following = require('../models/Following');
+const Post = require('../models/Post');
+const Likes = require('../models/Likes');
 const fileHandler = require('../utils/fileHandler');
 
 exports.feed = async (req, res, next) => {
   try {
-    const followingUsers = await Follow.find({ follower: req.user._id });
-
+    const followingUsers = await Following.find({ user: req.user._id });
     const followingIds = followingUsers
       .map(followingUser => followingUser.following);
-      
     const userId = req.user._id;
-
-    const where = { author: [...followingIds, userId] }
+    
+    const where = { user: [...followingIds, userId] }
     const limit = req.query.limit || 5;
     const skip = req.query.skip || 0;
 
-    const articleCount = await Article.count(where);
-    const articles = await Article
+    const postCount = await Post.count(where);
+    
+    const posts = await Post
       .find(where)
       .populate({
-        path: 'author',
-        select: 'username avatar'
+        path: 'user',
+        select: 'username avatar avatarUrl'
       })
       .populate('commentCount')
       .populate({
-        path: 'isFavorite',
+        path: 'liked',
         match: { user: req.user._id }
       })
-      .sort({ created: 'desc' })
+      .sort({ createdAt: 'desc' })
       .skip(skip)
       .limit(limit)
 
-    res.json({ articles, articleCount });
+    console.log(posts)
+
+    res.json({ posts, postCount });
 
   } catch (error) {
     next(error)
@@ -49,19 +50,19 @@ exports.find = async (req, res, next) => {
     if ('username' in req.query) {
       const user = await User.findOne({ username: req.query.username });
       
-      where.author = user._id;
+      where.user = user._id;
     }
 
-    const articleCount = await Article.count(where);
+    const postCount = await Post.count(where);
 
-    const articles = await Article
+    const posts = await Post
       .find(where)
       .populate('commentCount')
-      .sort({ created: 'desc' })
+      .sort({ createdAt: 'desc' })
       .limit(limit)
       .skip(skip)
 
-    res.json({ articles, articleCount });
+    res.json({ posts, postCount });
 
   } catch (error) {
     next(error)
@@ -70,25 +71,25 @@ exports.find = async (req, res, next) => {
 
 exports.findOne = async (req, res, next) => {
   try {
-    const article = await Article
+    const post = await Post
       .findById(req.params.id)
       .populate({
-        path: 'author',
-        select: 'username avatar'
+        path: 'user',
+        select: 'username avatar avatarUrl'
       })
       .populate('commentCount')
       .populate({
-        path: 'isFavorite',
+        path: 'liked',
         match: { user: req.user._id }
       })
 
-    if (!article) {
-      const err = new Error("Article is not found");
+    if (!post) {
+      const err = new Error("Post is not found");
       err.status = 404;
       throw err;
     }
 
-    res.json({ article });
+    res.json({ post });
 
   } catch (error) {
     next(error)
@@ -109,15 +110,15 @@ exports.create = [
 
       const photos = files.map(file => file.filename);
 
-      const article = new Article({
+      const post = new Post({
         photos,
-        description: req.body.description,
-        author: req.user._id
+        caption: req.body.caption,
+        user: req.user._id
       });
 
-      await article.save();
+      await post.save();
 
-      res.json({ article });
+      res.json({ post });
 
     } catch (error) {
       next(error)
@@ -127,94 +128,94 @@ exports.create = [
 
 exports.delete = async (req, res, next) => {
   try {
-    const article = await Article.findById(req.params.id);
+    const post = await Post.findById(req.params.id);
 
-    if (!article) {
-      const err = new Error("Article is not found")
+    if (!post) {
+      const err = new Error("Post is not found")
       err.status = 404;
       throw err;
     }
 
     const userId = req.user._id;
-    const isAuthor = userId.toString() === article.author.toString();
+    const isMaster = userId.toString() === post.user.toString();
 
-    if (!isAuthor) {
+    if (!isMaster) {
       const err = new Error("Incorrect user")
       err.staus = 400;
       throw err;
     }
 
-    await article.delete();
+    await post.delete();
 
-    res.json({ article });
+    res.json({ post });
 
   } catch (error) {
     next(error)
   }
 }
 
-exports.favorite = async (req, res, next) => {
+exports.like = async (req, res, next) => {
   try {
-    const article = await Article.findById(req.params.id)
+    const post = await Post.findById(req.params.id)
       .populate({
-        path: 'isFavorite',
+        path: 'liked',
         match: { user: req.user._id }
       })
 
-    if (!article) {
-      const err = new Error("Article is not found");
+    if (!post) {
+      const err = new Error("Post is not found");
       err.status = 404;
       throw err;
     }
 
-    if (!article.isFavorite) {
-      const favorite = new Favorite({
+    if (!post.liked) {
+      const likes = new Likes({
         user: req.user._id,
-        article: article._id
+        post: post._id
       })
       
-      await favorite.save();
+      await likes.save();
   
-      article.favoriteCount++;
+      post.likesCount++;
 
-      await article.save();
+      await post.save();
     }
 
-    res.json({ article })
+    res.json({ post })
 
   } catch (error) {
     next(error)
   }
 }
 
-exports.unfavorite = async (req, res, next) => {
+exports.unlike = async (req, res, next) => {
   try {
-    const article = await Article.findById(req.params.id)
+    const post = await Post.findById(req.params.id)
       .populate({
-        path: 'isFavorite',
+        path: 'liked',
         match: { user: req.user._id }
       })
 
-    if (!article) {
-      const err = new Error("Article is not found");
+    if (!post) {
+      const err = new Error("Post is not found");
       err.status = 404;
       throw err;
     }
 
-    if (article.isFavorite) {
-      const favorite = await Favorite.findOne({ 
+    if (post.liked) {
+      const likes = await Likes.findOne({ 
         user: req.user._id, 
-        article: article._id 
+        post: post._id 
       });
 
-      await favorite.delete();
+      await likes.delete();
   
-      article.favoriteCount--;
+      post.likesCount--;
 
-      await article.save();
+      await post.save();
     }
 
-    res.json({ article });
+    res.json({ post });
 
   } catch (error) {
     next(error)
