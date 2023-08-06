@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import { Link, Outlet } from "react-router-dom";
-import AuthContext from "./AuthContext";
+import AuthContext from "../auth/AuthContext";
 
 export default function Layout() {
 
@@ -11,10 +11,13 @@ export default function Layout() {
       {/* NavBar */}
       <nav className="fixed top-0 left-0 w-full border-b z-10 bg-white">
         <div className="max-w-sm mx-auto px-2 h-10 flex justify-between items-center">
+          
           {/* Logo */}
           <img className="w-24" src="/images/logo.png" />
+
           {/* Menu */}
           <ul className="flex items-center">
+            {/* Home */}
             <li>
               <Link to="/" className="block">
                 <svg 
@@ -32,8 +35,10 @@ export default function Layout() {
                 </svg>
               </Link>
             </li>
+
+            {/* Explore */}
             <li className="ml-2">
-              <Link to="/search" className="block">
+              <Link to="/explore" className="block">
                 <svg 
                   className="w-6"
                   viewBox="0 0 24 24" 
@@ -46,6 +51,8 @@ export default function Layout() {
                 </svg>
               </Link>
             </li>
+
+            {/* My profile */}
             <li className="ml-2">
               <Link to={`/profiles/${user.username}`}>
                 <img

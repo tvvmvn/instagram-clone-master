@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { createUser } from "../utils/requests";
+import { createUser } from "../service/api";
 
 export default function SignUp() {
 

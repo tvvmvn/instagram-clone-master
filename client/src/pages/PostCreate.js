@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { createPost } from '../utils/requests';
+import { createPost } from '../service/api';
 
 export default function PostCreate({ setModalOpen }) {
 

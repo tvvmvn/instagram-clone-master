@@ -1,14 +1,16 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import PostTemplate from "./PostTemplate";
-import { getPost, deletePost, likePost, unlikePost } from "../utils/requests";
-import Spinner from "./Spinner";
+import PostTemplate from "./common/PostTemplate";
+import { getPost, deletePost, likePost, unlikePost } from "../service/api";
+import Spinner from "./common/Spinner";
+import AuthContext from "../auth/AuthContext";
 
 export default function PostView() {
 
   const { id } = useParams();
   const [post, setPost] = useState(null);
   const navigate = useNavigate();
+  const { user } = useContext(AuthContext)
 
   console.log(post);
 
@@ -74,10 +76,19 @@ export default function PostView() {
 
   return (
     <PostTemplate
-      post={post}
+      id={post.id}
+      username={post.user.username}
+      avatarUrl={post.user.avatarUrl}
+      photoUrls={post.photoUrls}
+      caption={post.caption}
+      likesCount={post.likesCount}
+      commentCount={post.commentCount}
+      displayDate={post.displayDate}
+      liked={post.liked}
       handleLike={handleLike}
       handleUnlike={handleUnlike}
       handleDelete={handleDelete}
+      isMaster={user.username === post.user.username}
     />
   )
 }

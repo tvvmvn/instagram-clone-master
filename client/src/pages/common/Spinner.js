@@ -1,5 +1,4 @@
 export default function Spinner() {
-
   return (
     <div className="flex justify-center py-4">
       <div 

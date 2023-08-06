@@ -1,4 +1,12 @@
-const server = "http://localhost:3000/api";
+/* Server URL */
+const server = process.env.REACT_APP_SERVER;
+
+/* Get access token */
+function getBearerToken() {
+  const user = JSON.parse(localStorage.getItem("user"));
+  
+  return 'Bearer ' + user.access_token;
+}
 
 /* USER  */
 export async function createUser(newUser) {
@@ -32,7 +40,9 @@ export async function signIn(email, password) {
 /* POST */
 export async function getFeed(skip) {
   const res = await fetch(`${server}/feed?skip=${skip}`, {
-    headers: { 'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem("user")).access_token }
+    headers: { 
+      'Authorization': getBearerToken() 
+    }
   });
 
   if (!res.ok) {
@@ -44,7 +54,9 @@ export async function getFeed(skip) {
 
 export async function getPost(id) {
   const res = await fetch(`${server}/posts/${id}`, {
-    headers: { 'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem("user")).access_token }
+    headers: { 
+      'Authorization': getBearerToken() 
+    }
   });
 
   if (!res.ok) {
@@ -57,7 +69,9 @@ export async function getPost(id) {
 export async function createPost(formData) {
   const res = await fetch(`${server}/posts`, {
     method: "POST",
-    headers: { "Authorization": 'Bearer ' + JSON.parse(localStorage.getItem("user")).access_token },
+    headers: { 
+      "Authorization": getBearerToken() 
+    },
     body: formData
   })
 
@@ -71,7 +85,9 @@ export async function createPost(formData) {
 export async function deletePost(id) {
   const res = await fetch(`${server}/posts/${id}`, {
     method: 'DELETE',
-    headers: { 'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem("user")).access_token }
+    headers: { 
+      'Authorization': getBearerToken() 
+    }
   })
 
   if (!res.ok) {
@@ -84,7 +100,9 @@ export async function deletePost(id) {
 export async function likePost(id) {
   const res = await fetch(`${server}/posts/${id}/like`, {
     method: 'POST',
-    headers: { 'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem("user")).access_token }
+    headers: { 
+      'Authorization': getBearerToken() 
+    }
   })
 
   if (!res.ok) {
@@ -97,7 +115,9 @@ export async function likePost(id) {
 export async function unlikePost(id) {
   const res = await fetch(`${server}/posts/${id}/unlike`, {
     method: 'DELETE',
-    headers: { 'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem("user")).access_token }
+    headers: { 
+      'Authorization': getBearerToken() 
+    }
   })
 
   if (!res.ok) {
@@ -110,7 +130,9 @@ export async function unlikePost(id) {
 /* COMMENT */
 export async function getComments(id) {
   const res = await fetch(`${server}/posts/${id}/comments`, {
-    headers: { 'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem("user")).access_token }
+    headers: { 
+      'Authorization': getBearerToken() 
+    }
   });
 
   if (!res.ok) {
@@ -125,7 +147,7 @@ export async function createComment(id, content) {
   const res = await fetch(`${server}/posts/${id}/comments`, {
     method: "POST",
     headers: {
-      "Authorization": 'Bearer ' + JSON.parse(localStorage.getItem("user")).access_token,
+      "Authorization": getBearerToken(),
       "Content-Type": "application/json",
     },
     body: JSON.stringify({ content })
@@ -142,7 +164,9 @@ export async function createComment(id, content) {
 export async function deleteComment(id) {
   const res = await fetch(`${server}/comments/${id}`, {
     method: 'DELETE',
-    headers: { 'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem("user")).access_token }
+    headers: { 
+      'Authorization': getBearerToken() 
+    }
   })
 
   if (!res.ok) {
@@ -158,7 +182,7 @@ export async function updateProfile(editedProfile) {
     method: "PUT",
     headers: { 
       'Content-Type': 'application/json',
-      "Authorization": 'Bearer ' + JSON.parse(localStorage.getItem("user")).access_token 
+      "Authorization": getBearerToken() 
     },
     body: JSON.stringify(editedProfile)
   })
@@ -174,7 +198,7 @@ export async function updateAvatar(formData) {
   const res = await fetch(`${server}/profiles`, {
     method: "PUT",
     headers: { 
-      "Authorization": 'Bearer ' + JSON.parse(localStorage.getItem("user")).access_token 
+      "Authorization": getBearerToken() 
     },
     body: formData
   })
@@ -188,7 +212,9 @@ export async function updateAvatar(formData) {
 
 export async function getProfiles(username) {
   const res = await fetch(`${server}/profiles/?username=${username}`, {
-    headers: { 'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem("user")).access_token }
+    headers: { 
+      'Authorization': getBearerToken() 
+    }
   });
 
   if (!res.ok) {
@@ -200,7 +226,9 @@ export async function getProfiles(username) {
 
 export async function getProfile(username) {
   const res = await fetch(`${server}/profiles/${username}`, {
-    headers: { 'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem("user")).access_token }
+    headers: { 
+      'Authorization': getBearerToken() 
+    }
   })
 
   if (!res.ok) {
@@ -212,7 +240,9 @@ export async function getProfile(username) {
 
 export async function getTimeline(username) {
   const res = await fetch(`${server}/posts/?username=${username}`, {
-    headers: { 'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem("user")).access_token }
+    headers: { 
+      'Authorization': getBearerToken() 
+    }
   })
 
   if (!res.ok) {
@@ -224,7 +254,9 @@ export async function getTimeline(username) {
 
 export async function getFollowers(username) {
   const res = await fetch(`${server}/profiles/?followers=${username}`, {
-    headers: { 'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem("user")).access_token }
+    headers: { 
+      'Authorization': getBearerToken() 
+    }
   });
 
   if (!res.ok) {
@@ -236,7 +268,9 @@ export async function getFollowers(username) {
 
 export async function getFollowingUsers(username) {
   const res = await fetch(`${server}/profiles/?following=${username}`, {
-    headers: { 'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem("user")).access_token }
+    headers: { 
+      'Authorization': getBearerToken() 
+    }
   });
 
   if (!res.ok) {
@@ -249,7 +283,9 @@ export async function getFollowingUsers(username) {
 export async function follow(username) {
   const res = await fetch(`${server}/profiles/${username}/follow`, {
     method: 'POST',
-    headers: { 'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem("user")).access_token }
+    headers: { 
+      'Authorization': getBearerToken() 
+    }
   })
 
   if (!res.ok) {
@@ -262,7 +298,9 @@ export async function follow(username) {
 export async function unfollow(username) {
   const res = await fetch(`${server}/profiles/${username}/unfollow`, {
     method: 'DELETE',
-    headers: { 'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem("user")).access_token }
+    headers: { 
+      'Authorization': getBearerToken() 
+    }
   })
 
   if (!res.ok) {

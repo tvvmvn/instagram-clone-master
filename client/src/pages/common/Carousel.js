@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 export default function Carousel({ photoUrls }) {
-
+  
   const [photoIndex, setPhotoIndex] = useState(0);
   const isFirstPhoto = photoIndex === 0;
   const isLastPhoto = photoIndex === photoUrls.length - 1;

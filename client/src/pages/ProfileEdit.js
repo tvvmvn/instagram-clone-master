@@ -1,7 +1,7 @@
 import { useState, useContext, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { updateProfile, updateAvatar } from "../utils/requests";
-import AuthContext from "./AuthContext";
+import { updateProfile, updateAvatar } from "../service/api";
+import AuthContext from "../auth/AuthContext";
 
 export default function ProfileEdit() {
   const { user, setUser } = useContext(AuthContext);

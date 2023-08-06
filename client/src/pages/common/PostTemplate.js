@@ -1,18 +1,24 @@
 import { useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
-import AuthContext from './AuthContext';
 import Carousel from "./Carousel";
 
 export default function PostTemplate({ 
-  post, 
-  handleDelete, 
+  id, 
+  username,
+  avatarUrl,
+  photoUrls,
+  caption,
+  liked,
+  likesCount,
+  commentCount,
+  displayDate,
   handleLike, 
-  handleUnlike 
+  handleUnlike,
+  handleDelete, 
+  isMaster
 }) {
 
   const [modalOpen, setModalOpen] = useState(false);
-  const { user } = useContext(AuthContext);
-  const isMaster = user.username === post.user.username;
 
   function handleOverlay(e) {
     if (e.target === e.currentTarget) {
@@ -29,7 +35,7 @@ export default function PostTemplate({
         <li className="border-b">
           <button
             className="w-full px-4 py-2 text-sm font-semibold text-red-500"
-            onClick={() => handleDelete(post.id)}
+            onClick={() => handleDelete(id)}
           >
             Delete
           </button>
@@ -49,7 +55,7 @@ export default function PostTemplate({
   const likeButton = (
     <svg
       className="w-6"
-      onClick={() => handleLike(post.id)}
+      onClick={() => handleLike(id)}
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 512 512"
     >
@@ -60,7 +66,7 @@ export default function PostTemplate({
   const unlikeButton = (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      onClick={() => handleUnlike(post.id)}
+      onClick={() => handleUnlike(id)}
       viewBox="0 0 512 512"
       className="w-6 fill-red-500"
     >
@@ -73,15 +79,15 @@ export default function PostTemplate({
       <div className="px-2 mb-2 flex justify-between items-center">
         {/* User avatar */}
         <Link
-          to={`/profiles/${post.user.username}`}
+          to={`/profiles/${username}`}
           className="inline-flex items-center"
         >
           <img
-            src={post.user.avatarUrl}
+            src={avatarUrl}
             className="w-10 h-10 object-cover border rounded-full"
           />
           <span className="ml-2">
-            {post.user.username}
+            {username}
           </span>
         </Link>
 
@@ -101,15 +107,15 @@ export default function PostTemplate({
         )}
       </div>
 
-      {/* Photos Carousel */}
-      <Carousel photoUrls={post.photoUrls} />
+      {/* Photos carousel */}
+      <Carousel photoUrls={photoUrls} />
 
       <div className="mt-2 px-2">
         {/* Like/unlike button and comment link */}
         <div className="flex">
-          {post.liked ? unlikeButton : likeButton}
+          {liked ? unlikeButton : likeButton}
 
-          <Link to={`/p/${post.id}/comments`} className="ml-2">
+          <Link to={`/p/${id}/comments`} className="ml-2">
             <svg 
               className="w-6"
               xmlns="http://www.w3.org/2000/svg" 
@@ -121,30 +127,30 @@ export default function PostTemplate({
         </div>
 
         {/* likes count */}
-        <p className="text-sm my-2">{post.likesCount} likes</p>
+        <p className="text-sm my-2">{likesCount} likes</p>
 
         {/* Caption */}
-        {post.caption && (
+        {caption && (
           <p className="my-4">
-            <Link to={`/profiles/${post.user.username}`} className="font-semibold">
-              {post.user.username}
+            <Link to={`/profiles/${username}`} className="font-semibold">
+              {username}
             </Link>
             {" "}
-            {post.caption}
+            {caption}
           </p>
         )}
 
-        {/* Link to Comment Page */}
-        {post.commentCount > 0 && (
+        {/* Link to comment page */}
+        {commentCount > 0 && (
           <p className="text-gray-400 text-sm my-2">
-            <Link to={`/p/${post.id}/comments`}> 
-              View all {post.commentCount} Comments
+            <Link to={`/p/${id}/comments`}> 
+              View all {commentCount} Comments
             </Link>
           </p>
         )}
 
         {/* Display date */}
-        <p className="text-gray-400 text-xs">{post.displayDate}</p>
+        <p className="text-gray-400 text-xs">{displayDate}</p>
       </div>
     </div>
   )

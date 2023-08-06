@@ -1,7 +1,8 @@
-import {useState, useEffect, useContext} from "react"
-import PostTemplate from "./PostTemplate";
-import { getFeed, deletePost, likePost, unlikePost } from "../utils/requests";
-import Spinner from './Spinner';
+import { useState, useEffect, useContext } from "react"
+import PostTemplate from "./common/PostTemplate";
+import { getFeed, deletePost, likePost, unlikePost } from "../service/api";
+import Spinner from './common/Spinner';
+import AuthContext from "../auth/AuthContext";
 
 const limit = 5;
 
@@ -12,6 +13,7 @@ export default function Feed() {
   const [posts, setPosts] = useState([]);
   const [skip, setSkip] = useState(0);
   const [postCount, setPostCount] = useState(0);
+  const { user } = useContext(AuthContext)
 
   console.log(posts)
 
@@ -95,14 +97,22 @@ export default function Feed() {
   }
 
   const postList = posts.map(post => (
-    <li key={post.id} className="border-b pb-4">
-      <PostTemplate
-        post={post}
-        handleLike={handleLike}
-        handleUnlike={handleUnlike}
-        handleDelete={handleDelete}
-      />
-    </li>
+    <PostTemplate
+      key={post.id}
+      id={post.id}
+      username={post.user.username}
+      avatarUrl={post.user.avatarUrl}
+      photoUrls={post.photoUrls}
+      caption={post.caption}
+      liked={post.liked}
+      likesCount={post.likesCount}
+      commentCount={post.commentCount}
+      displayDate={post.displayDate}
+      handleLike={handleLike}
+      handleUnlike={handleUnlike}
+      handleDelete={handleDelete}
+      isMaster={user.username === post.user.username}
+    />
   ))
 
   const doesMoreExists = postCount > limit && postCount > posts.length;
