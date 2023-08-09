@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { createUser } from "../service/api";
+import { isEmail, isValidUsername, isValidPassword } from "../utils/validator";
 
 export default function SignUp() {
 
@@ -10,14 +11,6 @@ export default function SignUp() {
   const [name, setName] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-
-  const isValid = {
-    email: email.match(/[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,}$/),
-    username: username.match(/^[a-zA-Z0-9]{5,}$/),
-    password: password.trim().length >= 5
-  }
-
-  console.log(isValid)
 
   async function handleSubmit(e) {
     try {
@@ -42,7 +35,6 @@ export default function SignUp() {
 
   return (
     <form onSubmit={handleSubmit} className="max-w-xs mx-auto p-4 mt-16">
-      {/* Logo image */}
       <div className="mt-4 mb-4 flex justify-center">
         <img src="/images/logo.png" className="w-36" />
       </div>
@@ -105,7 +97,7 @@ export default function SignUp() {
         <button
           type="submit"
           className="bg-blue-500 rounded-lg text-sm font-semibold px-4 py-2 text-white w-full disabled:opacity-[0.5]"
-          disabled={!isValid.email || !isValid.username || !isValid.password}
+          disabled={!isEmail(email) || !isValidUsername(username) || !isValidPassword(password)}
         >
           Sign Up
         </button>

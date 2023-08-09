@@ -26,7 +26,7 @@ export default function Feed() {
       setError(null);
       setIsLoaded(false);
 
-      const data = await getFeed(skip);
+      const data = await getFeed(limit, skip);
 
       const  updatedPosts = [...posts, ...data.posts];
       setPosts(updatedPosts);
@@ -121,7 +121,7 @@ export default function Feed() {
 
   const doesMoreExists = postCount > limit && postCount > posts.length;
 
-  const moreButton = doesMoreExists && (
+  const moreButton =  (
     <div className="flex justify-center my-2">
       <button 
         className="p-1 text-blue-500 font-semibold" 
@@ -138,7 +138,9 @@ export default function Feed() {
         {postList}
       </ul>
 
-      {isLoaded ? moreButton : <Spinner />}
+      {doesMoreExists && moreButton}
+
+      {!isLoaded && <Spinner />}
 
       {error && <p className="text-red-500">{error.message}</p>}
     </>  

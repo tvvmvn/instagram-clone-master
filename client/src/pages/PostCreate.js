@@ -82,14 +82,14 @@ export default function PostCreate({ setModalOpen }) {
             Select Photos +
           </label>
 
-          {/* Chosen files */}
+          {/* Preview list */}
           {files.length > 0 && (
             <ul className="grid grid-cols-3 mb-2">
               {photoPreviewList}
             </ul>
           )}
 
-          {/* Photo Caption */}
+          {/* Caption writing area */}
           <div className="mb-2">
             <label
               htmlFor="caption"

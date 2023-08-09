@@ -58,18 +58,16 @@ export default function ProfileEdit() {
 
   return (
     <div className="mt-8 px-4">
+      {/* Avatar image and update button */}
       <div className="flex mb-4">
-        {/* Avatar image */}
         <img
           src={user.avatarUrl}
           className="w-16 h-16 object-cover rounded-full border"
         />
 
         <div className="flex flex-col grow items-start ml-4">
-          {/* username */}
           <h3>{user.username}</h3>
 
-          {/* Photo upload button */}
           <label className="text-sm font-semibold text-blue-500 cursor-pointer">
             <input
               type="file"
@@ -84,7 +82,6 @@ export default function ProfileEdit() {
 
       {/* Update form */}
       <form onSubmit={handleSubmit}>
-        {/* Name input */}
         <div className="mb-2">
           <label htmlFor="name" className="block font-semibold">Name</label>
           <input
@@ -97,7 +94,6 @@ export default function ProfileEdit() {
           />
         </div>
 
-        {/* Bio input */}
         <div className="mb-2">
           <label htmlFor="bio" className="block font-semibold">Bio</label>
           <textarea
@@ -111,7 +107,6 @@ export default function ProfileEdit() {
         </div>
 
         <div className="flex">
-          {/* Submit button */}
           <button
             type="submit"
             className="text-sm font-semibold bg-gray-200 rounded-lg px-4 py-2 disabled:opacity-[0.2]"
@@ -120,7 +115,6 @@ export default function ProfileEdit() {
             Save
           </button>
 
-          {/* Cancel button */}
           <Link
             to={`/profiles/${user.username}`}
             className="text-sm font-semibold bg-gray-200 rounded-lg px-4 py-2 ml-2"

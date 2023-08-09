@@ -38,8 +38,8 @@ export async function signIn(email, password) {
 }
 
 /* POST */
-export async function getFeed(skip) {
-  const res = await fetch(`${server}/feed?skip=${skip}`, {
+export async function getFeed(limit, skip) {
+  const res = await fetch(`${server}/feed?limit=${limit}&skip=${skip}`, {
     headers: { 
       'Authorization': getBearerToken() 
     }
