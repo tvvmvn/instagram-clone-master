@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { getFollowers, follow, unfollow } from '../../service/api';
 import Follower from './Follower';
-import Spinner from '../common/Spinner';
+import Spinner from '../shared/Spinner';
 
 export default function FollowerList() {
 
@@ -12,19 +12,27 @@ export default function FollowerList() {
   const [followers, setFollowers] = useState([]);
   const [followerCount, setFollowerCount] = useState(0);
 
+  // key state
   console.log(followers)
 
   useEffect(() => {
-    getFollowers(username)
-      .then(data => {
-        setFollowerCount(data.profileCount);
-        setFollowers([...followers, ...data.profiles]);
-      })
-      .catch(error => {
-        setError(error)
-      })
-      .finally(() => setIsLoaded(true));
+    fetchData()
   }, [])
+
+  async function fetchData() {
+    try {
+      const data = await getFollowers(username)
+      
+      setFollowerCount(data.profileCount);
+      setFollowers([...followers, ...data.profiles]);
+
+    } catch (error) {
+      setError(error)
+    
+    } finally {
+      setIsLoaded(true)
+    }
+  }
 
   async function handleFollow(username) {
     try {

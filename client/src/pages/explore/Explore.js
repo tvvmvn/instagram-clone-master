@@ -2,7 +2,7 @@ import { useState } from "react";
 import { getProfiles } from "../../service/api";
 import Form from "./Form";
 import Profile from "./Profile";
-import Spinner from '../common/Spinner';
+import Spinner from '../shared/Spinner';
 
 export default function Search() {
   const [error, setError] = useState(null);

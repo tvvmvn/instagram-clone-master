@@ -15,7 +15,6 @@ import ProfileEdit from "./pages/ProfileEdit";
 import NotFound from "./pages/NotFound";
 
 export default function App() {
-
   return (
     <Router>
       <AuthProvider>

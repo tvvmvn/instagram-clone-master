@@ -5,7 +5,7 @@ import ProfileInfo from "./ProfileInfo";
 import Thumbnail from "./Thumbnail";
 import PostCreate from "../PostCreate";
 import { getProfile, getTimeline, follow, unfollow } from "../../service/api";
-import Spinner from "../common/Spinner";
+import Spinner from "../shared/Spinner";
 
 export default function Profile() {
 
@@ -17,33 +17,27 @@ export default function Profile() {
   const [modalOpen, setModalOpen] = useState(false);
   const navigate = useNavigate();
 
+  // key state
   console.log(profile)
   console.log(posts)
 
   useEffect(() => {
-    setProfile(null);
-
-    Promise.all([
-      getProfile(username),
-      getTimeline(username)
-    ])
-      .then(([profileData, timelineData]) => {
-        setProfile(profileData.profile);
-
-        setPosts(timelineData.posts);
-        setPostCount(timelineData.postCount)
-      })
-      .catch(error => {
-        navigate('/notfound', { replace: true });
-      })
-
+    fetchData()
   }, [username]);
 
-  function handleSignOut() {
-    const confirmed = window.confirm('Are you sure to log out?');
+  async function fetchData() {
+    try {
+      setProfile(null)
 
-    if (confirmed) {
-      setUser(null);
+      const profileData = await getProfile(username);
+      const timelineData = await getTimeline(username);
+      
+      setProfile(profileData.profile)
+      setPosts(timelineData.posts);
+      setPostCount(timelineData.postCount)
+
+    } catch {
+      navigate('/notfound', { replace: true });
     }
   }
 
@@ -66,6 +60,15 @@ export default function Profile() {
 
     } catch (error) {
       alert(error)
+    }
+  }
+
+
+  function handleSignOut() {
+    const confirmed = window.confirm('Are you sure to log out?');
+
+    if (confirmed) {
+      setUser(null);
     }
   }
 

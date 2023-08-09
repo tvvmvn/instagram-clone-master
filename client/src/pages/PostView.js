@@ -1,8 +1,8 @@
 import { useState, useEffect, useContext } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import PostTemplate from "./common/PostTemplate";
+import PostTemplate from "./shared/PostTemplate";
 import { getPost, deletePost, likePost, unlikePost } from "../service/api";
-import Spinner from "./common/Spinner";
+import Spinner from "./shared/Spinner";
 import AuthContext from "../auth/AuthContext";
 
 export default function PostView() {
@@ -15,14 +15,19 @@ export default function PostView() {
   console.log(post);
 
   useEffect(() => {
-    getPost(id)
-      .then(data => {
-        setPost(data.post);
-      })
-      .catch(error => {
-        navigate('/notfound', { replace: true });
-      })
+    fetchData()
   }, [])
+
+  async function fetchData() {
+    try {
+      const data = await getPost(id);
+
+      setPost(data.post);
+
+    } catch (error) {
+      navigate('/notfound', { replace: true });
+    }
+  }
 
   async function handleLike(id) {
     try {

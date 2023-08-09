@@ -1,39 +1,43 @@
 import { useState, useEffect, useContext } from "react"
-import PostTemplate from "./common/PostTemplate";
+import PostTemplate from "./shared/PostTemplate";
 import { getFeed, deletePost, likePost, unlikePost } from "../service/api";
-import Spinner from './common/Spinner';
+import Spinner from './shared/Spinner';
 import AuthContext from "../auth/AuthContext";
-
-const limit = 5;
 
 export default function Feed() {
   
+  const { user } = useContext(AuthContext)
   const [error, setError] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [posts, setPosts] = useState([]);
-  const [skip, setSkip] = useState(0);
   const [postCount, setPostCount] = useState(0);
-  const { user } = useContext(AuthContext)
-
+  const [skip, setSkip] = useState(0);
+  const limit = 5;
+  
+  // key state
   console.log(posts)
 
   useEffect(() => {
-    setError(null);
-    setIsLoaded(false);
-    
-    getFeed(skip)
-      .then(data => {
-        setPostCount(data.postCount);
-          
-        let updatedPosts = [...posts, ...data.posts];
-        setPosts(updatedPosts);
-      })
-      .catch(error => {
-        setError(error);
-      })
-      .finally(() => setIsLoaded(true))
-      
+    fetchData()
   }, [skip])
+
+  async function fetchData() {
+    try {
+      setError(null);
+      setIsLoaded(false);
+
+      const data = await getFeed(skip);
+
+      const  updatedPosts = [...posts, ...data.posts];
+      setPosts(updatedPosts);
+      setPostCount(data.postCount);
+
+    } catch (error) {
+      setError(error);
+    } finally {
+      setIsLoaded(true)
+    }
+  }
 
   async function handleLike(id) {
     try {

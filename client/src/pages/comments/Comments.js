@@ -3,7 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import { getComments, createComment, deleteComment } from "../../service/api";
 import Form from "./Form";
 import Comment from './Comment';
-import Spinner from '../common/Spinner';
+import Spinner from '../shared/Spinner';
 
 export default function Comments() {
 
@@ -13,19 +13,26 @@ export default function Comments() {
   const [comments, setComments] = useState([]);
   const [commentCount, setCommentCount] = useState(0);
 
+  // key state
   console.log(comments)
 
   useEffect(() => {
-    getComments(id)
-      .then(data => {
-        setComments([...comments, ...data.comments]);
-        setCommentCount(data.commentCount);
-      })
-      .catch(error => {
-        setError(error);
-      })
-      .finally(() => setIsLoaded(true));
+    fetchData();
   }, [])
+
+  async function fetchData() {
+    try {
+      const data = await getComments(id);
+
+      setComments([...comments, ...data.comments]);
+      setCommentCount(data.commentCount);
+
+    } catch (error) {
+      setError(error)
+    } finally {
+      setIsLoaded(true)
+    }
+  }
 
   async function handleAddComment(content) {
     const data = await createComment(id, content);
