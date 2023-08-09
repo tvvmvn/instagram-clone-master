@@ -29,7 +29,6 @@ export default function FollowingUser({
 
   return (
     <div className="flex justify-between items-center mb-2">
-      {/* Profile Avatar */}
       <Link
         to={`/profiles/${username}`}
         className="inline-flex items-center"
@@ -49,7 +48,6 @@ export default function FollowingUser({
         </div>
       </Link>
 
-      {/* Follow Button */}
       {isFollowing ? unfollowButton : followButton}
     </div>
   )

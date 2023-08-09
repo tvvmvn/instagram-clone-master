@@ -46,7 +46,10 @@ exports.find = async (req, res, next) => {
       const followingUsers = await Following
         .find({ user: user._id })
 
-      where._id = followingUsers.map(followingUser => followingUser.following);
+      const followingIds = followingUsers
+        .map(followingUser => followingUser.following);
+
+      where._id = followingIds;
     }
 
     if ('followers' in req.query) {
@@ -55,24 +58,30 @@ exports.find = async (req, res, next) => {
       const followers = await Following
         .find({ following: user._id })
 
-      where._id = followers.map(follower => follower.user);
+      const followerIds = followers.map(follower => follower.user);
+
+      where._id = followerIds;
     }
 
     if ('username' in req.query) {
-      where.username = new RegExp(req.query.username, 'i');
+      const patt = new RegExp(req.query.username, 'i');
+      
+      where.username = patt;
     }
-
-    const profileCount = await User.count(where);
-
+    
+    const profileFields = 'username name avatar avatarUrl bio';
+    
     const profiles = await User
-      .find(where, 'username name avatar avatarUrl bio')
-      .populate({ 
-        path: 'isFollowing',
-        match: { user: req.user._id }
-      })
-      .limit(limit)
-      .skip(skip)
-
+    .find(where, profileFields)
+    .populate({ 
+      path: 'isFollowing',
+      match: { user: req.user._id }
+    })
+    .limit(limit)
+    .skip(skip)
+    
+    const profileCount = await User.count(where);
+    
     res.json({ profiles, profileCount });
 
   } catch (error) {
@@ -82,8 +91,10 @@ exports.find = async (req, res, next) => {
 
 exports.findOne = async (req, res, next) => {
   try {
+    const profileFields = 'username name avatar avatarUrl bio';
+
     const profile = await User
-      .findOne({ username: req.params.username }, 'username name avatar avatarUrl bio')
+      .findOne({ username: req.params.username }, profileFields)
       .populate('postCount')
       .populate('followerCount')
       .populate('followingCount')

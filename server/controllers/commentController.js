@@ -9,8 +9,6 @@ exports.find = async (req, res, next) => {
     const limit = req.query.limit || 10;
     const skip = req.query.skip || 0;
 
-    const commentCount = await Comment.count(where);
-
     const comments = await Comment
       .find(where)
       .populate({
@@ -20,6 +18,8 @@ exports.find = async (req, res, next) => {
       .sort({ createdAt: 'desc' })
       .limit(limit)
       .skip(skip)
+
+    const commentCount = await Comment.count(where);
 
     res.json({ comments, commentCount });
 

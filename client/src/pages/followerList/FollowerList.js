@@ -87,6 +87,7 @@ export default function FollowerList() {
   return (
     <div className="px-2">
       <h3 className="text-lg my-4 font-semibold">{username}'s followers</h3>
+      
       <ul>
         {followerList}
       </ul>

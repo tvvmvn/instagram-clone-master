@@ -68,10 +68,13 @@ userSchema.methods.checkPassword = function (password) {
 }
 
 userSchema.methods.generateJWT = function () {
-  const access_token = jwt.sign(
-    { sub: this._id, username: this.username }, 
-    process.env.SECRET
-  );
+  const payload = { 
+    sub: this._id, 
+    username: this.username 
+  }
+  const secret = process.env.SECRET;
+  
+  const access_token = jwt.sign(payload, secret);
 
   return access_token;
 }

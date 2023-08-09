@@ -13,6 +13,7 @@ seedDatabase();
 async function seedDatabase() {
   try {
     const MONGODB_URI = userArgs[0];
+    
     await mongoose.connect(MONGODB_URI);
 
     const users = [
@@ -41,6 +42,7 @@ async function seedDatabase() {
 
     for (let i = 0; i < users.length; i++) {
       const user = new User();
+
       user.username = users[i].username;
       user.email = users[i].email;
       user.name = users[i].name;
@@ -56,8 +58,9 @@ async function seedDatabase() {
       const user = await User.findOne({ username: 'cat' });
 
       const post = new Post();
+
       post.photos = [`${i}.jpeg`];
-      post.caption = `cat photos ${i}`;
+      post.caption = `cat photo ${i}`;
       post.user = user._id;
 
       await post.save();

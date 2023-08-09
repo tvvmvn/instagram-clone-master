@@ -76,8 +76,8 @@ export default function PostTemplate({
 
   return (
     <div className="mt-4 bg-white">
+      {/* Top: User avatar and modal */}
       <div className="px-2 mb-2 flex justify-between items-center">
-        {/* User avatar */}
         <Link
           to={`/profiles/${username}`}
           className="inline-flex items-center"
@@ -91,10 +91,8 @@ export default function PostTemplate({
           </span>
         </Link>
 
-        {/* Modal */}
         {modalOpen && modal}
 
-        {/* More button */}
         {isMaster && (
           <svg
             className="w-1 cursor-pointer"
@@ -107,11 +105,11 @@ export default function PostTemplate({
         )}
       </div>
 
-      {/* Photos carousel */}
+      {/* Carousel */}
       <Carousel photoUrls={photoUrls} />
 
+      {/* Info about post */}
       <div className="mt-2 px-2">
-        {/* Like/unlike button and comment link */}
         <div className="flex">
           {liked ? unlikeButton : likeButton}
 
@@ -126,10 +124,8 @@ export default function PostTemplate({
           </Link>
         </div>
 
-        {/* likes count */}
         <p className="text-sm my-2">{likesCount} likes</p>
 
-        {/* Caption */}
         {caption && (
           <p className="my-4">
             <Link to={`/profiles/${username}`} className="font-semibold">
@@ -140,7 +136,6 @@ export default function PostTemplate({
           </p>
         )}
 
-        {/* Link to comment page */}
         {commentCount > 0 && (
           <p className="text-gray-400 text-sm my-2">
             <Link to={`/p/${id}/comments`}> 
@@ -149,7 +144,6 @@ export default function PostTemplate({
           </p>
         )}
 
-        {/* Display date */}
         <p className="text-gray-400 text-xs">{displayDate}</p>
       </div>
     </div>

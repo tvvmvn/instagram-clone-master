@@ -15,10 +15,7 @@ exports.feed = async (req, res, next) => {
     const limit = req.query.limit || 5;
     const skip = req.query.skip || 0;
 
-    const postCount = await Post.count(where);
-    
-    const posts = await Post
-      .find(where)
+    const posts = await Post.find(where)
       .populate({
         path: 'user',
         select: 'username avatar avatarUrl'
@@ -31,8 +28,8 @@ exports.feed = async (req, res, next) => {
       .sort({ createdAt: 'desc' })
       .skip(skip)
       .limit(limit)
-
-    console.log(posts)
+    
+    const postCount = await Post.count(where);
 
     res.json({ posts, postCount });
 
@@ -52,9 +49,7 @@ exports.find = async (req, res, next) => {
       
       where.user = user._id;
     }
-
-    const postCount = await Post.count(where);
-
+    
     const posts = await Post
       .find(where)
       .populate('commentCount')
@@ -62,6 +57,8 @@ exports.find = async (req, res, next) => {
       .limit(limit)
       .skip(skip)
 
+    const postCount = await Post.count(where);
+    
     res.json({ posts, postCount });
 
   } catch (error) {
@@ -108,10 +105,10 @@ exports.create = [
         throw err;
       }
 
-      const photos = files.map(file => file.filename);
+      const photoNames = files.map(file => file.filename);
 
       const post = new Post({
-        photos,
+        photos: photoNames,
         caption: req.body.caption,
         user: req.user._id
       });
@@ -140,7 +137,7 @@ exports.delete = async (req, res, next) => {
     const isMaster = userId.toString() === post.user.toString();
 
     if (!isMaster) {
-      const err = new Error("Incorrect user")
+      const err = new Error("Incorrect user");
       err.staus = 400;
       throw err;
     }

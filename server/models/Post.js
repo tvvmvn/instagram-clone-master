@@ -23,11 +23,11 @@ postSchema.virtual('displayDate').get(function () {
 })
 
 postSchema.virtual('photoUrls').get(function () {
-  const photoUrls = this.photos.map(photo => {
-    return process.env.FILE_URL + '/photos/' + photo
+  const urls = this.photos.map(photoName => {
+    return process.env.FILE_URL + '/photos/' + photoName
   })
 
-  return photoUrls;
+  return urls;
 })
 
 postSchema.virtual('commentCount', {

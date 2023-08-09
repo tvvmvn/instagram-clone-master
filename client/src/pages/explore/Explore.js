@@ -46,10 +46,9 @@ export default function Search() {
   return (
     <div className="px-4">
       <h3 className="text-lg font-semibold my-4">Explore</h3>
-      {/* Search input */}
+
       <Form search={search} />
       
-      {/* profile list */}
       <ul>
         {profileList}
       </ul>

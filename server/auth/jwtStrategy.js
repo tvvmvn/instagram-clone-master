@@ -5,14 +5,15 @@ const User = require('../models/User');
 require('dotenv').config();
 
 const opts = {};
+
 opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
 opts.secretOrKey = process.env.SECRET;
 // opts.issuer = 'accounts.examplesoft.com';
 // opts.audience = 'yoursite.net';
 
-const jwtStrategy = new JwtStrategy(opts, async (jwt_payload, done) => {
+async function accessHandler(payload, done) {
   try {
-    const user = await User.findById(jwt_payload.sub);
+    const user = await User.findById(payload.sub);
 
     if (!user) {
       return done(null, false);
@@ -23,7 +24,6 @@ const jwtStrategy = new JwtStrategy(opts, async (jwt_payload, done) => {
   } catch (err) {
     return done(err, false);
   }
-})
+}
 
-module.exports = jwtStrategy;
-
+module.exports = new JwtStrategy(opts, accessHandler)

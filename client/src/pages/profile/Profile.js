@@ -118,7 +118,7 @@ export default function Profile() {
         <p className="text-center">This user has no posts.</p>
       )}
 
-      {/* Modal open button */}
+      {/* Modal button */}
       <svg
         className="opacity-40 w-12 fixed right-8 bottom-8 hover:opacity-80 cursor-pointer z-10"
         xmlns="http://www.w3.org/2000/svg"
@@ -129,11 +129,7 @@ export default function Profile() {
       </svg>
 
       {/* Modal for post*/}
-      {modalOpen && (
-        <PostCreate 
-          setModalOpen={setModalOpen} 
-        />
-      )}
+      {modalOpen && <PostCreate setModalOpen={setModalOpen} /> }
     </>
   )
 }

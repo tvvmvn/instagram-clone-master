@@ -48,6 +48,38 @@ export default function ProfileInfo({
     </button>
   )
 
+  const countAboutProfile = (
+    <ul className="flex items-center">
+      <li className="w-1/3">
+        <div className="text-sm">
+          <span className="font-semibold">
+            {postCount}
+          </span>
+          {" "}
+          photos
+        </div>
+      </li>
+      <li className="w-1/3">
+        <Link to={`/profiles/${username}/followers`} className="block text-sm">
+          <span className="font-semibold">
+            {followerCount}
+          </span>
+          {" "}
+          followers
+        </Link>
+      </li>
+      <li className="w-1/3">
+        <Link to={`/profiles/${username}/following`} className="block text-sm">
+          <span className="font-semibold">
+            {followingCount}
+          </span>
+          {" "}
+          following
+        </Link>
+      </li>
+    </ul>
+  )
+
   return (
     <div className="px-4 mt-8">
       <div className="flex mb-4">
@@ -77,51 +109,17 @@ export default function ProfileInfo({
             {(!isMaster && isFollowing) && unfollowButton}
           </div>
 
-          <ul className="flex items-center">
-            {/* Post count */}
-            <li className="w-1/3">
-              <div className="text-sm">
-                <span className="font-semibold">
-                  {postCount}
-                </span>
-                {" "}
-                photos
-              </div>
-            </li>
-
-            {/* Follower count */}
-            <li className="w-1/3">
-              <Link to={`/profiles/${username}/followers`} className="block text-sm">
-                <span className="font-semibold">
-                  {followerCount}
-                </span>
-                {" "}
-                followers
-              </Link>
-            </li>
-
-            {/* Following count */}
-            <li className="w-1/3">
-              <Link to={`/profiles/${username}/following`} className="block text-sm">
-                <span className="font-semibold">
-                  {followingCount}
-                </span>
-                {" "}
-                following
-              </Link>
-            </li>
-          </ul>
+          {/* Post, follower, following count */}
+          {countAboutProfile}
         </div>
       </div>
 
-      {/* Name */}
       {name && (
         <h3 className="text-sm font-semibold my-2">
           {name}
         </h3>
       )}
 
-      {/* Bio */}
       {bio && (
         <p className="text-sm my-2 whitespace-pre-line">
           {bio}
