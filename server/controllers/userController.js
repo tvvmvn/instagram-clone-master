@@ -1,52 +1,14 @@
 const User = require('../models/User');
-const { body, validationResult } = require('express-validator');
-
-// Middleware for validation
-const isValidUsername = () => body('username')
-  .trim()
-  .isLength({ min: 5 }).withMessage('Username must be at least 5 characters')
-  .isAlphanumeric().withMessage("Username is only allowed in alphabet and number.")
-
-const isValidEmail = () => body('email')
-  .trim()
-  .isEmail().withMessage('E-mail is not valid')
-
-const isValidPassword = () => body('password')
-  .trim()
-  .isLength({ min: 5 }).withMessage('Password must be at least 5 characters')
-
-const emailInUse = async (email) => {
-  const user = await User.findOne({ email });
-  
-  if (user) {
-    return Promise.reject('E-mail is already in use');
-  }
-}
-
-const usernameInUse = async (username) => {
-  const user = await User.findOne({ username });
-
-  if (user) {
-    return Promise.reject('Username is already in use');
-  }
-}
-
-const doesEmailExists = async (email) => {
-  const user = await User.findOne({ email });
-
-  if (!user) {
-    return Promise.reject('E-mail does not exists');
-  }
-}
-
-const doesPasswordMatch = async (password, { req }) => {
-  const email = req.body.email;
-  const user = await User.findOne({ email });
-  
-  if (!user.checkPassword(password)) {
-    return Promise.reject('Password does not match');
-  }
-}
+const { validationResult } = require('express-validator');
+const { 
+  isValidEmail,
+  isValidUsername,
+  isValidPassword,
+  emailInUse,
+  usernameInUse,
+  doesEmailExists,
+  doesPasswordMatch
+} = require('../utils/validator');
 
 exports.create = [
   isValidUsername().custom(usernameInUse),

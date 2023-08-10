@@ -15,8 +15,8 @@ const commentSchema = new Schema({
 // Virtual field
 commentSchema.virtual('displayDate').get(function () {
   const displayDate = DateTime
-   .fromJSDate(this.createdAt)
-   .toLocaleString(DateTime.DATETIME_MED);
+    .fromJSDate(this.createdAt)
+    .toLocaleString(DateTime.DATETIME_MED);
 
   return displayDate;
 })

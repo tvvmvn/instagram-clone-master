@@ -2,7 +2,7 @@ import { useState, useContext, useEffect } from "react";
 import { Link, isRouteErrorResponse, useNavigate } from "react-router-dom";
 import AuthContext from "../auth/AuthContext";
 import { signIn } from "../service/api";
-import { isEmail, isValidPassword } from "../service/validator";
+import { isEmail, isValidPassword } from "../utils/validator";
 
 export default function Login() {
 

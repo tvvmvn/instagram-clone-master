@@ -1,10 +1,6 @@
-# Instagram-clone-app CLIENT
+# Instagram-clone CLIENT
  
 "Instagram Clone" Client is written in REACT
-
----
-
-![A UML diagram showing the relation of components](/client/public/images/diagram.png?raw=true)
 
 
 ## Quick Start
@@ -19,6 +15,6 @@ To get this project up and running locally on your computer:
    npm start
    ```
 
-3. Open a browser to <http://localhost:3001/> to open the library site.
+3. Open a browser to <http://localhost:3000/> to open the web site.
 
-> **Note:** The app needs API Server URI.
+> **Note:** The app needs server URL.

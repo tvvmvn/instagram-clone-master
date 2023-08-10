@@ -18,33 +18,29 @@ async function seedDatabase() {
 
     const users = [
       {
-        username: 'cat',
-        email: 'cat@example.com',
-        name: 'Kitty',
-        avatar: 'cat.jpeg',
-        bio: 'Meow',
+        username: 'michelangelo',
+        name: 'Michelangelo',
+        avatar: 'michelangelo.jpg',
+        bio: '나는 대리석 안에서 천사를 보았고 그를 자유롭게 해줄 때까지 조각했다',
+      },
+      {
+        username: 'jobs',
+        name: 'Steve Jobs',
+        avatar: 'jobs.jpeg',
+        bio: '이야 아이폰 많이 좋아졌다',
       },
       {
         username: 'dog',
-        email: 'dot@example.com',
         name: 'Mr.Loyal',
         avatar: 'dog.jpeg',
-        bio: 'Bark',
+        bio: '멍',
       },
-      {
-        username: 'bird',
-        email: 'bird@example.com',
-        name: 'Blue and White',
-        avatar: 'bird.jpeg',
-        bio: '',
-      }
     ]
 
     for (let i = 0; i < users.length; i++) {
       const user = new User();
 
       user.username = users[i].username;
-      user.email = users[i].email;
       user.name = users[i].name;
       user.avatar = users[i].avatar;
       user.bio = users[i].bio;
@@ -54,13 +50,32 @@ async function seedDatabase() {
       console.log(user);
     }
 
-    for (let i = 1; i <= 4; i++) {
-      const user = await User.findOne({ username: 'cat' });
+    const posts = [
+      {
+        photos: ["david.jpg"],
+        caption: "David, Galleria dell'Accademia, Florence"
+      },
+      {
+        photos: ["pieta_1.jpg", "pieta_2.jpg"],
+        caption: "Pieta, St. Peter's Basilica, Rome"
+      },
+      {
+        photos: ["bacchus.png"],
+        caption: "Bacchus, Museo Nazionale del Bargello, Florence"
+      },
+      {
+        photos: ["angel.jpg"],
+        caption: "Angel, Basilica of San Domenico, Bologna"
+      },
+    ]
+
+    for (let i = 0; i < posts.length; i++) {
+      const user = await User.findOne({ username: 'michelangelo' });
 
       const post = new Post();
 
-      post.photos = [`${i}.jpeg`];
-      post.caption = `cat photo ${i}`;
+      post.photos = posts[i].photos
+      post.caption = posts[i].caption
       post.user = user._id;
 
       await post.save();

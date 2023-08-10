@@ -7,7 +7,6 @@
 ![A UML diagram showing the relation of database entities in this example repository](/server/public/images/diagram.png?raw=true)
 
 
-
 ## Quick Start
 
 To get this project up and running locally on your computer:

@@ -22,10 +22,10 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(compression()); // Compress all routes
 app.use(helmet.crossOriginResourcePolicy({
   policy: "cross-origin" 
 }));
-app.use(compression()); // Compress all routes
 app.use(cors());
 
 // Set static path in this app.

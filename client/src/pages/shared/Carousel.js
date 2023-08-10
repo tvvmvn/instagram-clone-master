@@ -7,7 +7,7 @@ export default function Carousel({ photoUrls }) {
   const isLastPhoto = photoIndex === photoUrls.length - 1;
 
   const photoList = photoUrls.map(photoUrl => (
-    <li key={photoUrl} className="w-full h-96 flex-none">
+    <li key={photoUrl} className="w-full h-[500px] flex-none">
       <img
         src={photoUrl}
         className="w-full h-full object-cover"
