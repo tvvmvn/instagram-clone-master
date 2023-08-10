@@ -1,4 +1,4 @@
-# Instagram-clone-app SERVER
+# Instagram-clone SERVER
 
 "Instagram Clone" API Server written in in Node/Express.
 
@@ -11,10 +11,10 @@
 
 To get this project up and running locally on your computer:
 
-1. Set up a [Node.js](https://wiki.developer.mozilla.org/en-US/docs/Learn/Server-side/Express_Nodejs/development_environment) development environment.
+1. Set up a [Node.js](https://nodejs.org) development environment.
 2. Once you have node setup, enter the following commands in the root of your clone of this repo:
 
-   ```bash
+   ```
    npm install
    npm run devstart  
    ```
