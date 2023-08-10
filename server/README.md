@@ -19,10 +19,6 @@ To get this project up and running locally on your computer:
    npm run devstart  
    ```
 
-3. Open a browser to <http://localhost:3000/> to open the library site.
-
-4. References (Presentation)
-
-https://docs.google.com/presentation/d/e/2PACX-1vQrfhGQrcI_10dY7lCzYU-Q1XfNKI8bgoxGa59r3PiFKVLp_iLMLfBEeku_f7Cgu_Bbrs2S0ZAiDmBk/pub?start=false&loop=false&delayms=60000&slide=id.g225e7a437c3_0_17
+3. Send requests to <http://localhost:3000/> to test server.
 
 > **Note:** The app needs MongoDB URI and SECRET for JWT.
