@@ -69,9 +69,9 @@ async function seedDatabase() {
       },
     ]
 
-    for (let i = 0; i < posts.length; i++) {
-      const user = await User.findOne({ username: 'michelangelo' });
+    const user = await User.findOne({ username: 'michelangelo' });
 
+    for (let i = 0; i < posts.length; i++) {
       const post = new Post();
 
       post.photos = posts[i].photos
