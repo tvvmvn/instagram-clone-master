@@ -8,7 +8,6 @@ const app = express();
 const mongoose = require("mongoose");
 const compression = require('compression');
 const helmet = require('helmet');
-
 require('dotenv').config();
 
 // DATABASE Connection

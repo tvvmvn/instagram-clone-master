@@ -1,38 +1,34 @@
 const User = require('../models/User');
 const Following = require('../models/Following');
-const fileHandler = require('../utils/fileHandler');
 
-exports.update = [
-  fileHandler().single('avatar'),
-  async (req, res, next) => {
-    try {
-      const _user = req.user;
+exports.update = async (req, res, next) => {
+  try {
+    const _user = req.user;
 
-      if (req.file) {
-        _user.avatar = req.file.filename;
-      }
-
-      Object.assign(_user, req.body);
-
-      await _user.save();
-
-      const access_token = _user.generateJWT();
-
-      const user = {
-        username: _user.username,
-        name: _user.name,
-        avatarUrl: _user.avatarUrl,
-        bio: _user.bio,
-        access_token
-      }
-
-      res.json({ user })
-
-    } catch (error) {
-      next(error)
+    if (req.file) {
+      _user.avatar = req.file.filename;
     }
+
+    Object.assign(_user, req.body);
+
+    await _user.save();
+
+    const access_token = _user.generateJWT();
+
+    const user = {
+      username: _user.username,
+      name: _user.name,
+      avatarUrl: _user.avatarUrl,
+      bio: _user.bio,
+      access_token
+    }
+
+    res.json({ user })
+
+  } catch (error) {
+    next(error)
   }
-]
+}
 
 exports.find = async (req, res, next) => {
   try {
@@ -41,7 +37,8 @@ exports.find = async (req, res, next) => {
     const skip = req.query.skip || 0;
 
     if ('following' in req.query) {
-      const user = await User.findOne({ username: req.query.following });
+      const user = await User
+        .findOne({ username: req.query.following });
 
       const followingUsers = await Following
         .find({ user: user._id })
@@ -53,7 +50,8 @@ exports.find = async (req, res, next) => {
     }
 
     if ('followers' in req.query) {
-      const user = await User.findOne({ username: req.query.followers });
+      const user = await User
+        .findOne({ username: req.query.followers });
 
       const followers = await Following
         .find({ following: user._id })
@@ -72,13 +70,13 @@ exports.find = async (req, res, next) => {
     const profileFields = 'username name avatar avatarUrl bio';
     
     const profiles = await User
-    .find(where, profileFields)
-    .populate({ 
-      path: 'isFollowing',
-      match: { user: req.user._id }
-    })
-    .limit(limit)
-    .skip(skip)
+      .find(where, profileFields)
+      .populate({ 
+        path: 'isFollowing',
+        match: { user: req.user._id }
+      })
+      .limit(limit)
+      .skip(skip)
     
     const profileCount = await User.count(where);
     
@@ -118,7 +116,8 @@ exports.findOne = async (req, res, next) => {
 
 exports.follow = async (req, res, next) => {
   try {
-    const profile = await User.findOne({ username: req.params.username })
+    const profile = await User
+      .findOne({ username: req.params.username })
       .populate({
         path: 'isFollowing',
         match: { user: req.user._id }
@@ -154,7 +153,8 @@ exports.follow = async (req, res, next) => {
 
 exports.unfollow = async (req, res, next) => {
   try {
-    const profile = await User.findOne({ username: req.params.username })
+    const profile = await User
+      .findOne({ username: req.params.username })
       .populate({
         path: 'isFollowing',
         match: { user: req.user._id }
@@ -167,12 +167,13 @@ exports.unfollow = async (req, res, next) => {
     }
 
     if (profile.isFollowing) {
-      const following = await Following.findOne({ 
-        user: req.user._id, 
-        following: profile._id 
-      });
+      const following = await Following
+        .findOne({ 
+          user: req.user._id, 
+          following: profile._id 
+        });
   
-      await following.delete();
+      await following.deleteOne();
     }
 
     res.json({ profile });

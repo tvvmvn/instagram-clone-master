@@ -1,7 +1,7 @@
 const JwtStrategy = require('passport-jwt').Strategy;
 const ExtractJwt = require('passport-jwt').ExtractJwt;
 const User = require('../models/User');
-
+const passport = require("passport");
 require('dotenv').config();
 
 const opts = {};
@@ -11,7 +11,7 @@ opts.secretOrKey = process.env.SECRET;
 // opts.issuer = 'accounts.examplesoft.com';
 // opts.audience = 'yoursite.net';
 
-async function accessHandler(payload, done) {
+const jwtStrategy = new JwtStrategy(opts, async (payload, done) => {
   try {
     const user = await User.findById(payload.sub);
 
@@ -24,6 +24,8 @@ async function accessHandler(payload, done) {
   } catch (err) {
     return done(err, false);
   }
-}
+})
 
-module.exports = new JwtStrategy(opts, accessHandler)
+passport.use(jwtStrategy);
+
+module.exports = passport.authenticate("jwt", { session: false });

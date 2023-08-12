@@ -8,7 +8,7 @@ function getBearerToken() {
   return 'Bearer ' + user.access_token;
 }
 
-/* USER  */
+/* USERS  */
 export async function createUser(newUser) {
   const res = await fetch(`${server}/users`, {
     method: "POST",
@@ -24,7 +24,7 @@ export async function createUser(newUser) {
 }
 
 export async function signIn(email, password) {
-  const res = await fetch(`${server}/user/login`, {
+  const res = await fetch(`${server}/users/login`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ email, password })
@@ -37,9 +37,9 @@ export async function signIn(email, password) {
   return await res.json();
 }
 
-/* POST */
+/* POSTS */
 export async function getFeed(limit, skip) {
-  const res = await fetch(`${server}/feed?limit=${limit}&skip=${skip}`, {
+  const res = await fetch(`${server}/posts/feed?limit=${limit}&skip=${skip}`, {
     headers: { 
       'Authorization': getBearerToken() 
     }
@@ -127,7 +127,7 @@ export async function unlikePost(id) {
   return await res.json();
 }
 
-/* COMMENT */
+/* COMMENTS */
 export async function getComments(id) {
   const res = await fetch(`${server}/posts/${id}/comments`, {
     headers: { 
@@ -162,7 +162,7 @@ export async function createComment(id, content) {
 
 
 export async function deleteComment(id) {
-  const res = await fetch(`${server}/comments/${id}`, {
+  const res = await fetch(`${server}/posts/comments/${id}`, {
     method: 'DELETE',
     headers: { 
       'Authorization': getBearerToken() 

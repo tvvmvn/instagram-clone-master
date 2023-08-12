@@ -58,7 +58,7 @@ exports.create = async (req, res, next) => {
   }
 }
 
-exports.delete = async (req, res, next) => {
+exports.deleteOne = async (req, res, next) => {
   try {
     const comment = await Comment.findById(req.params.id);
 
@@ -77,7 +77,7 @@ exports.delete = async (req, res, next) => {
       throw err;
     }
 
-    await comment.delete();
+    await comment.deleteOne();
 
     res.json({ comment });
 

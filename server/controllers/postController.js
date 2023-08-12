@@ -2,7 +2,6 @@ const User = require('../models/User');
 const Following = require('../models/Following');
 const Post = require('../models/Post');
 const Likes = require('../models/Likes');
-const fileHandler = require('../utils/fileHandler');
 
 exports.feed = async (req, res, next) => {
   try {
@@ -93,37 +92,27 @@ exports.findOne = async (req, res, next) => {
   }
 }
 
-exports.create = [
-  fileHandler().array('photos'),
-  async (req, res, next) => {
-    try {
-      const files = req.files;
+exports.create = async (req, res, next) => {
+  try {
+    const files = req.files;
+    const photoNames = files.map(file => file.filename);
 
-      if (files.length < 1) {
-        const err = new Error('File is required');
-        err.status = 400;
-        throw err;
-      }
+    const post = new Post({
+      photos: photoNames,
+      caption: req.body.caption,
+      user: req.user._id
+    });
 
-      const photoNames = files.map(file => file.filename);
+    await post.save();
 
-      const post = new Post({
-        photos: photoNames,
-        caption: req.body.caption,
-        user: req.user._id
-      });
+    res.json({ post });
 
-      await post.save();
-
-      res.json({ post });
-
-    } catch (error) {
-      next(error)
-    }
+  } catch (error) {
+    next(error)
   }
-]
+}
 
-exports.delete = async (req, res, next) => {
+exports.deleteOne = async (req, res, next) => {
   try {
     const post = await Post.findById(req.params.id);
 
@@ -142,7 +131,7 @@ exports.delete = async (req, res, next) => {
       throw err;
     }
 
-    await post.delete();
+    await post.deleteOne();
 
     res.json({ post });
 
@@ -205,7 +194,7 @@ exports.unlike = async (req, res, next) => {
         post: post._id 
       });
 
-      await likes.delete();
+      await likes.deleteOne();
   
       post.likesCount--;
 

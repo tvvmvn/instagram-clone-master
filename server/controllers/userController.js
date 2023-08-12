@@ -1,81 +1,44 @@
 const User = require('../models/User');
-const { validationResult } = require('express-validator');
-const { 
-  isValidEmail,
-  isValidUsername,
-  isValidPassword,
-  emailInUse,
-  usernameInUse,
-  doesEmailExists,
-  doesPasswordMatch
-} = require('../utils/validator');
 
-exports.create = [
-  isValidUsername().custom(usernameInUse),
-  isValidEmail().custom(emailInUse),
-  isValidPassword(),
-  async (req, res, next) => {
-    try {
-      const errors = validationResult(req);
+exports.create = async (req, res, next) => {
+  try {
+    const { email, name, username, password } = req.body;
 
-      if (!errors.isEmpty()) {
-        const err = new Error();
-        err.errors = errors.array();
-        err.status = 400;
-        throw err;
-      }
+    const user = new User();
 
-      const { email, name, username, password } = req.body;
+    user.email = email;
+    user.name = name;
+    user.username = username;
+    user.setPassword(password);
 
-      const user = new User();
+    await user.save();
 
-      user.email = email;
-      user.name = name;
-      user.username = username;
-      user.setPassword(password);
+    res.json({ user });
 
-      await user.save();
-
-      res.json({ user });
-
-    } catch (error) {
-      next(error)
-    }
+  } catch (error) {
+    next(error)
   }
-]
+}
 
-exports.login = [
-  isValidEmail().custom(doesEmailExists),
-  isValidPassword().custom(doesPasswordMatch),
-  async (req, res, next) => {
-    try {
-      const errors = validationResult(req);
+exports.login = async (req, res, next) => {
+  try {
+    const { email } = req.body;
 
-      if (!errors.isEmpty()) {
-        const err = new Error();
-        err.errors = errors.array();
-        err.status = 401;
-        throw err;
-      }
+    const _user = await User.findOne({ email });
 
-      const { email } = req.body;
+    const access_token = _user.generateJWT();
 
-      const _user = await User.findOne({ email });
-
-      const access_token = _user.generateJWT();
-  
-      const user = {
-        username: _user.username,
-        name: _user.name,
-        avatarUrl: _user.avatarUrl,
-        bio: _user.bio,
-        access_token
-      }
-  
-      res.json({ user })
-  
-    } catch (error) {
-      next(error)
+    const user = {
+      username: _user.username,
+      name: _user.name,
+      avatarUrl: _user.avatarUrl,
+      bio: _user.bio,
+      access_token
     }
+
+    res.json({ user })
+
+  } catch (error) {
+    next(error)
   }
-]
+}
