@@ -1,47 +1,44 @@
 const User = require('../models/User');
-const { body, validationResult } = require('express-validator');
+const { body } = require('express-validator');
 
 module.exports = async (req, res, next) => {
   try {
-    const doesEmailExists = async (email) => {
-      const user = await User.findOne({ email });
-    
-      if (!user) {
-        return Promise.reject('E-mail does not exists');
-      }
-    }
-    
-    const doesPasswordMatch = async (password, { req }) => {
-      const email = req.body.email;
-      const user = await User.findOne({ email });
-      
-      if (!user.checkPassword(password)) {
-        return Promise.reject('Password does not match');
-      }
-    }
-    
-    const validations =[
-      body('email').isEmail()
-        .custom(doesEmailExists),
-      body('password').trim().notEmpty()
-        .custom(doesPasswordMatch),
-    ]
+    const emailResult = await body('email')
+      .isEmail()
+      .custom(async (email) => {
+        const user = await User.findOne({ email });
 
-    for (let validation of validations) {
-      const result = await validation.run(req);
-  
-      if (result.errors.length) break;
-    }
-  
-    const errors = validationResult(req);
-  
-    if (!errors.isEmpty()) {
-      const err = new Error();
-      err.errors = errors.array();
+        if (!user) {
+          throw new Error('E-mail does not exists');
+        }
+      })
+      .run(req);
+      
+    if (!emailResult.isEmpty()) {
+      const err = new Error('E-mail validation failed');
       err.status = 400;
       throw err;
     }
     
+    const passwordResult = await body('password')
+      .trim()
+      .notEmpty()
+      .custom(async (password, { req }) => {
+        const email = req.body.email;
+        const user = await User.findOne({ email });
+        
+        if (!user.checkPassword(password)) {
+          throw new Erorr('Password does not match');
+        }
+      })
+      .run(req)
+
+    if (!passwordResult.isEmpty()) {
+      const err = new Error('Password validation failed');
+      err.status = 400;
+      throw err;
+    }
+
     next();
 
   } catch (error) {

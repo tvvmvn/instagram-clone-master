@@ -5,11 +5,19 @@ exports.update = async (req, res, next) => {
   try {
     const _user = req.user;
 
+    // return res.json(req.body)
+
     if (req.file) {
       _user.avatar = req.file.filename;
     }
 
-    Object.assign(_user, req.body);
+    if ('name' in req.body) {
+      _user.name = req.body.name;
+    }
+
+    if ('bio' in req.body) {
+      _user.bio = req.body.bio;
+    }
 
     await _user.save();
 

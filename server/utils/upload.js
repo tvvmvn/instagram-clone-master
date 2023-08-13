@@ -31,7 +31,7 @@ opts.fileFilter = (req, file, cb) => {
   }
 
   if (isError) {
-    const err = new TypeError('This type of file is not acceptable.');
+    const err = new TypeError('Unacceptable type of file');
     err.status = 400;
     return cb(err);
   }

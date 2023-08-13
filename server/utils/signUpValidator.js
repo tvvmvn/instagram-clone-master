@@ -1,43 +1,51 @@
 const User = require('../models/User');
-const { body, validationResult } = require('express-validator');
+const { body } = require('express-validator');
 
 module.exports = async (req, res, next) => {
   try {
-    const emailInUse = async (email) => {
-      const user = await User.findOne({ email });
+    const emailResult = await body('email')
+      .isEmail()
+      .custom(async (email) => {
+        const user = await User.findOne({ email });
+        
+        if (user) {
+          throw new Error('E-mail is already in use');
+        }
+      })
+      .run(req)
+
+    if (!emailResult.isEmpty()) {
+      const err = new Error('E-mail validation failed');
+      err.status = 400;
+      throw err;
+    }
+
+    const usernameResult = await body('username')
+      .trim()
+      .isLength({ min: 5 })
+      .isAlphanumeric()
+      .custom(async (username) => {
+        const user = await User.findOne({ username });
       
-      if (user) {
-        return Promise.reject('E-mail is already in use');
-      }
+        if (user) {
+          throw new Error('Username is already in use');
+        }
+      })
+      .run(req)
+
+    if (!usernameResult.isEmpty()) {
+      const err = new Error('Username validation failed');
+      err.status = 400;
+      throw err;
     }
-    
-    const usernameInUse = async (username) => {
-      const user = await User.findOne({ username });
-    
-      if (user) {
-        return Promise.reject('Username is already in use');
-      }
-    }
-  
-    const validations = [
-      body('email').isEmail()
-        .custom(emailInUse),
-      body('username').trim().isLength({ min: 5 }).isAlphanumeric()
-        .custom(usernameInUse),
-      body('password').trim().isLength({ min: 5 }),
-    ]
-  
-    for (let validation of validations) {
-      const result = await validation.run(req);
-  
-      if (result.errors.length) break;
-    }
-  
-    const errors = validationResult(req);
-  
-    if (!errors.isEmpty()) {
-      const err = new Error();
-      err.errors = errors.array();
+
+    const passwordError = await body('password')
+      .trim()
+      .isLength({ min: 5 })
+      .run(req)
+
+    if (!passwordError.isEmpty()) {
+      const err = new Error('Password validation failed');
       err.status = 400;
       throw err;
     }
