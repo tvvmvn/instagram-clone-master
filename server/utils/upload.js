@@ -18,7 +18,6 @@ opts.storage = multer.diskStorage({
 
 opts.fileFilter = (req, file, cb) => {
   const extname = path.extname(file.originalname);
-
   let isError = false;
 
   switch (extname) {
