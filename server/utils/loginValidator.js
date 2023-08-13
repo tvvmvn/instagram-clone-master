@@ -1,44 +1,50 @@
 const User = require('../models/User');
 const { body, validationResult } = require('express-validator');
 
-const doesEmailExists = async (email) => {
-  const user = await User.findOne({ email });
+module.exports = async (req, res, next) => {
+  try {
+    const doesEmailExists = async (email) => {
+      const user = await User.findOne({ email });
+    
+      if (!user) {
+        return Promise.reject('E-mail does not exists');
+      }
+    }
+    
+    const doesPasswordMatch = async (password, { req }) => {
+      const email = req.body.email;
+      const user = await User.findOne({ email });
+      
+      if (!user.checkPassword(password)) {
+        return Promise.reject('Password does not match');
+      }
+    }
+    
+    const validations =[
+      body('email').isEmail()
+        .custom(doesEmailExists),
+      body('password').trim().notEmpty()
+        .custom(doesPasswordMatch),
+    ]
 
-  if (!user) {
-    return Promise.reject('E-mail does not exists');
-  }
-}
-
-const doesPasswordMatch = async (password, { req }) => {
-  const email = req.body.email;
-  const user = await User.findOne({ email });
+    for (let validation of validations) {
+      const result = await validation.run(req);
   
-  if (!user.checkPassword(password)) {
-    return Promise.reject('Password does not match');
-  }
-}
-
-module.exports = [
-  body('email')
-    .trim()
-    .notEmpty()
-    .withMessage('E-mail is required')
-    .custom(doesEmailExists),
-  body('password')
-    .trim()
-    .notEmpty()
-    .withMessage('Password is required')
-    .custom(doesPasswordMatch),
-  (req, res, next) => {
+      if (result.errors.length) break;
+    }
+  
     const errors = validationResult(req);
-
+  
     if (!errors.isEmpty()) {
       const err = new Error();
       err.errors = errors.array();
-      err.status = 401;
-      return next(err);
+      err.status = 400;
+      throw err;
     }
+    
+    next();
 
-    next()
+  } catch (error) {
+    next(error)
   }
-]
+}

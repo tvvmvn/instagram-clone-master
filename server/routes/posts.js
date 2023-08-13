@@ -10,13 +10,13 @@ const {
   unlike
 } = require("../controllers/postController");
 const commentController = require('../controllers/commentController');
-const photoUpload = require("../utils/photoUpload");
+const upload = require("../utils/upload");
 const auth = require("../auth/auth");
 
 // posts
 router.get('/feed', auth, feed)
 router.get('/', auth, find)
-router.post('/', auth, photoUpload, create)
+router.post('/', auth, upload.array('photos', 10), create)
 router.get('/:id', auth, findOne)
 router.delete('/:id', auth, deleteOne)
 router.post('/:id/like', auth, like)

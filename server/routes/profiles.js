@@ -7,10 +7,10 @@ const {
   follow, 
   unfollow 
 } = require("../controllers/profileController");
-const avatarUpload = require("../utils/avatarUpload");
+const upload = require("../utils/upload");
 const auth = require("../auth/auth");
 
-router.put('/', auth, avatarUpload, update);
+router.put('/', auth, upload.single('avatar'), update);
 router.get('/', auth, find);
 router.get('/:username', auth, findOne)
 router.post('/:username/follow', auth, follow)

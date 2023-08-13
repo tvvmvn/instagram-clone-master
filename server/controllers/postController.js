@@ -67,8 +67,7 @@ exports.find = async (req, res, next) => {
 
 exports.findOne = async (req, res, next) => {
   try {
-    const post = await Post
-      .findById(req.params.id)
+    const post = await Post.findById(req.params.id)
       .populate({
         path: 'user',
         select: 'username avatar avatarUrl'
@@ -93,8 +92,15 @@ exports.findOne = async (req, res, next) => {
 }
 
 exports.create = async (req, res, next) => {
-  try {
+  try {    
     const files = req.files;
+
+    if (!files || !files.length) {
+      const err = new Error('File is required');
+      err.status = 400;
+      throw err;
+    }
+
     const photoNames = files.map(file => file.filename);
 
     const post = new Post({
