@@ -3,6 +3,7 @@ const router = express.Router();
 const usersRouter = require("./users");
 const postsRouter = require("./posts");
 const profilesRouter = require("./profiles");
+const auth = require("../auth/auth");
 
 /* INDEX */
 router.get('/', (req, res) => {
@@ -10,8 +11,8 @@ router.get('/', (req, res) => {
 })
 
 router.use('/users', usersRouter)
-router.use('/posts', postsRouter)
-router.use('/profiles', profilesRouter)
+router.use('/posts', auth, postsRouter)
+router.use('/profiles', auth, profilesRouter)
 
 module.exports = router;
 

@@ -8,12 +8,11 @@ const {
   unfollow 
 } = require("../controllers/profileController");
 const upload = require("../utils/upload");
-const auth = require("../auth/auth");
 
-router.put('/', auth, upload.single('avatar'), update);
-router.get('/', auth, find);
-router.get('/:username', auth, findOne)
-router.post('/:username/follow', auth, follow)
-router.delete('/:username/unfollow', auth, unfollow)
+router.put('/', upload.single('avatar'), update);
+router.get('/', find);
+router.get('/:username', findOne)
+router.post('/:username/follow', follow)
+router.delete('/:username/unfollow', unfollow)
 
 module.exports = router;

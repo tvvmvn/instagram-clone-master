@@ -11,20 +11,19 @@ const {
 } = require("../controllers/postController");
 const commentController = require('../controllers/commentController');
 const upload = require("../utils/upload");
-const auth = require("../auth/auth");
 
 // posts
-router.get('/feed', auth, feed)
-router.get('/', auth, find)
-router.post('/', auth, upload.array('photos', 10), create)
-router.get('/:id', auth, findOne)
-router.delete('/:id', auth, deleteOne)
-router.post('/:id/like', auth, like)
-router.delete('/:id/unlike', auth, unlike)
+router.get('/feed', feed)
+router.get('/', find)
+router.post('/', upload.array('photos', 10), create)
+router.get('/:id', findOne)
+router.delete('/:id', deleteOne)
+router.post('/:id/like', like)
+router.delete('/:id/unlike', unlike)
 
 // comments
-router.get('/:id/comments', auth, commentController.find)
-router.post('/:id/comments',auth, commentController.create)
-router.delete('/comments/:id', auth, commentController.deleteOne)
+router.get('/:id/comments', commentController.find)
+router.post('/:id/comments', commentController.create)
+router.delete('/comments/:id', commentController.deleteOne)
 
 module.exports = router;

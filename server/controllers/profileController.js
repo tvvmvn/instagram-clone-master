@@ -7,7 +7,7 @@ exports.update = async (req, res, next) => {
 
     // return res.json(req.body)
 
-    if (req.file) {
+    if (req.file && req.file.length) {
       _user.avatar = req.file.filename;
     }
 
