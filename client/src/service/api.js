@@ -1,5 +1,5 @@
 /* Server URL */
-const server = process.env.REACT_APP_SERVER;
+const server = "http://localhost:3000/api";
 
 /* Get access token */
 function getBearerToken() {
