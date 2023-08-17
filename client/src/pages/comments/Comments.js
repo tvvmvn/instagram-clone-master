@@ -11,7 +11,6 @@ export default function Comments() {
   const [error, setError] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [comments, setComments] = useState([]);
-  const [commentCount, setCommentCount] = useState(0);
 
   // key state
   console.log(comments)
@@ -25,7 +24,6 @@ export default function Comments() {
       const data = await getComments(id);
 
       setComments([...comments, ...data.comments]);
-      setCommentCount(data.commentCount);
 
     } catch (error) {
       setError(error)
@@ -37,8 +35,6 @@ export default function Comments() {
   async function handleAddComment(content) {
     const data = await createComment(id, content);
 
-    setCommentCount(commentCount + 1);
-  
     const updatedComments = [data.comment, ...comments];
     setComments(updatedComments);
   }
@@ -49,7 +45,6 @@ export default function Comments() {
     const remainingComments = comments.filter(comment => comment.id !== id);
 
     setComments(remainingComments);
-    setCommentCount(commentCount - 1);
   }
 
   const commentList = comments.map(comment => (
@@ -70,7 +65,7 @@ export default function Comments() {
       
       <Form handleAddComment={handleAddComment} />
 
-      {commentCount > 0 ? (
+      {commentList.length > 0 ? (
         <ul>
           {commentList}
         </ul>

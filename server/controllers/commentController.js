@@ -5,9 +5,13 @@ exports.find = async (req, res, next) => {
   try {
     const post = await Post.findById(req.params.id);
 
+    if (!post) {
+      const err = new Error("Post is not found");
+      err.status = 404;
+      throw err;
+    }
+
     const where = { post: post._id };
-    const limit = req.query.limit || 10;
-    const skip = req.query.skip || 0;
 
     const comments = await Comment
       .find(where)
@@ -16,8 +20,6 @@ exports.find = async (req, res, next) => {
         select: 'username avatar avatarUrl'
       })
       .sort({ createdAt: 'desc' })
-      .limit(limit)
-      .skip(skip)
 
     const commentCount = await Comment.count(where);
 
@@ -40,7 +42,7 @@ exports.create = async (req, res, next) => {
 
     const comment = new Comment({
       content: req.body.content,
-      post: req.params.id,
+      post: post._id,
       user: req.user._id
     })
 
@@ -68,8 +70,7 @@ exports.deleteOne = async (req, res, next) => {
       throw err;
     }
 
-    const userId = req.user._id;
-    const isMaster = userId.toString() === comment.user.toString();
+    const isMaster = req.user._id.toString() === comment.user.toString();
 
     if (!isMaster) {
       const err = new Error("Incorrect user");

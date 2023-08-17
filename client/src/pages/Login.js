@@ -2,7 +2,7 @@ import { useState, useContext, useEffect } from "react";
 import { Link, isRouteErrorResponse, useNavigate } from "react-router-dom";
 import AuthContext from "../auth/AuthContext";
 import { signIn } from "../service/api";
-import { isEmail, isValidPassword } from "../utils/validator";
+import { isEmail, isPassword } from "../utils/validator";
 
 export default function Login() {
 
@@ -87,7 +87,7 @@ export default function Login() {
       <button
         type="submit"
         className="bg-blue-500 text-sm text-white font-semibold rounded-lg px-4 py-2 w-full disabled:opacity-[0.5]"
-        disabled={!isEmail(email) || !isValidPassword(password)}
+        disabled={!isEmail(email) || !isPassword(password)}
       >
         Login
       </button>

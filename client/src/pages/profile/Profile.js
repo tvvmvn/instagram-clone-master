@@ -13,7 +13,6 @@ export default function Profile() {
   const { user, setUser } = useContext(AuthContext);
   const [profile, setProfile] = useState(null);
   const [posts, setPosts] = useState([]);
-  const [postCount, setPostCount] = useState(0);
   const [modalOpen, setModalOpen] = useState(false);
   const navigate = useNavigate();
 
@@ -34,7 +33,6 @@ export default function Profile() {
       
       setProfile(profileData.profile)
       setPosts(timelineData.posts);
-      setPostCount(timelineData.postCount)
 
     } catch {
       navigate('/notfound', { replace: true });
@@ -97,7 +95,7 @@ export default function Profile() {
         name={profile.name}
         avatarUrl={profile.avatarUrl}
         bio={profile.bio}
-        postCount={postCount}
+        postCount={profile.postCount}
         followerCount={profile.followerCount}
         followingCount={profile.followingCount}
         isFollowing={profile.isFollowing}
@@ -110,12 +108,12 @@ export default function Profile() {
       <div className="border-t my-4"></div>
 
       {/* Timeline */}
-      {postCount > 0 ? (
+      {postList.length > 0 ? (
         <ul className="grid grid-cols-3 gap-2 mb-2">
           {postList}
         </ul>
       ) : (
-        <p className="text-center">This user has no posts.</p>
+        <p className="text-center">{profile.username} has no posts.</p>
       )}
 
       {/* Modal button */}

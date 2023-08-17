@@ -4,7 +4,7 @@ const User = require('./models/User');
 const Post = require('./models/Post');
 
 if (!userArgs[0].startsWith('mongodb')) {
-  console.log('ERROR: You need to specify a valid mongodb URL as the first argument.');
+  console.log('ERROR: You need to specify a valid mongodb URL.');
   return;
 }
 

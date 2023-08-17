@@ -5,9 +5,7 @@ exports.update = async (req, res, next) => {
   try {
     const _user = req.user;
 
-    // return res.json(req.body)
-
-    if (req.file && req.file.length) {
+    if (req.file) {
       _user.avatar = req.file.filename;
     }
 
@@ -41,12 +39,16 @@ exports.update = async (req, res, next) => {
 exports.find = async (req, res, next) => {
   try {
     const where = {};
-    const limit = req.query.limit || 10;
-    const skip = req.query.skip || 0;
 
     if ('following' in req.query) {
       const user = await User
         .findOne({ username: req.query.following });
+
+      if (!user) {
+        const err = new Error("User is not found");
+        err.status = 404;
+        throw err;
+      }
 
       const followingUsers = await Following
         .find({ user: user._id })
@@ -60,6 +62,12 @@ exports.find = async (req, res, next) => {
     if ('followers' in req.query) {
       const user = await User
         .findOne({ username: req.query.followers });
+
+      if (!user) {
+        const err = new Error("User is not found");
+        err.status = 404;
+        throw err;
+      }
 
       const followers = await Following
         .find({ following: user._id })
@@ -83,8 +91,6 @@ exports.find = async (req, res, next) => {
         path: 'isFollowing',
         match: { user: req.user._id }
       })
-      .limit(limit)
-      .skip(skip)
     
     const profileCount = await User.count(where);
     
@@ -124,12 +130,9 @@ exports.findOne = async (req, res, next) => {
 
 exports.follow = async (req, res, next) => {
   try {
+    const profileFields = 'username name avatar avatarUrl bio';
     const profile = await User
-      .findOne({ username: req.params.username })
-      .populate({
-        path: 'isFollowing',
-        match: { user: req.user._id }
-      })
+      .findOne({ username: req.params.username }, profileFields)
 
     if (!profile) {
       const err = new Error('Profile is not found')
@@ -138,12 +141,15 @@ exports.follow = async (req, res, next) => {
     }
 
     if (req.user.username === req.params.username) {
-      const err = new Error('Cannot Follow yourself')
+      const err = new Error('Cannot follow yourself')
       err.status = 400;
       throw err;
     }
 
-    if (!profile.isFollowing) {
+    const isFollowing = await Following
+      .findOne({ user: req.user._id, following: profile._id });
+
+    if (!isFollowing) {
       const following = new Following({
         user: req.user._id,
         following: profile._id
@@ -161,12 +167,9 @@ exports.follow = async (req, res, next) => {
 
 exports.unfollow = async (req, res, next) => {
   try {
+    const profileFields = 'username name avatar avatarUrl bio';
     const profile = await User
-      .findOne({ username: req.params.username })
-      .populate({
-        path: 'isFollowing',
-        match: { user: req.user._id }
-      })
+      .findOne({ username: req.params.username }, profileFields)
 
     if (!profile) {
       const err = new Error('Profile is not found')
@@ -174,14 +177,11 @@ exports.unfollow = async (req, res, next) => {
       throw err;
     }
 
-    if (profile.isFollowing) {
-      const following = await Following
-        .findOne({ 
-          user: req.user._id, 
-          following: profile._id 
-        });
-  
-      await following.deleteOne();
+    const isFollowing = await Following
+      .findOne({ user: req.user._id, following: profile._id });
+
+    if (isFollowing) {  
+      await isFollowing.deleteOne();
     }
 
     res.json({ profile });

@@ -50,14 +50,6 @@ export default function PostCreate({ setModalOpen }) {
       className="fixed inset-0 bg-black/[0.2] z-10" 
       onClick={handleOverlay}
     >
-      {/* Modal close Button */}
-      <button
-        type="button"
-        className="float-right text-2xl px-4 py-2 text-white"
-        onClick={() => setModalOpen(false)}
-      >
-        &times;
-      </button>
 
       {/* Create Form */}
       <form

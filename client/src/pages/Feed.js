@@ -1,4 +1,5 @@
 import { useState, useEffect, useContext } from "react"
+import { Link } from "react-router-dom";
 import PostTemplate from "./shared/PostTemplate";
 import { getFeed, deletePost, likePost, unlikePost } from "../service/api";
 import Spinner from './shared/Spinner';
@@ -119,7 +120,7 @@ export default function Feed() {
     />
   ))
 
-  const doesMoreExists = postCount > limit && postCount > posts.length;
+  const doesMoreExists = postCount > posts.length;
 
   const moreButton =  (
     <div className="flex justify-center my-2">
@@ -134,9 +135,20 @@ export default function Feed() {
 
   return (
     <>
-      <ul>
-        {postList}
-      </ul>
+      {postList.length > 0 ? (
+        <ul>
+          {postList}
+        </ul>
+      ) : (
+        <div className="p-8 text-center">
+          <Link 
+            to="/explore" 
+            className="text-blue-500"
+          >
+            Explore Instagram
+          </Link>
+        </div>
+      )}
 
       {doesMoreExists && moreButton}
 

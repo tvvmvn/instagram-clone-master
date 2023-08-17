@@ -8,9 +8,8 @@ exports.feed = async (req, res, next) => {
     const followingUsers = await Following.find({ user: req.user._id });
     const followingIds = followingUsers
       .map(followingUser => followingUser.following);
-    const userId = req.user._id;
     
-    const where = { user: [...followingIds, userId] }
+    const where = { user: [...followingIds, req.user._id] }
     const limit = req.query.limit || 5;
     const skip = req.query.skip || 0;
 
@@ -40,11 +39,15 @@ exports.feed = async (req, res, next) => {
 exports.find = async (req, res, next) => {
   try {
     const where = {}
-    const limit = req.query.limit || 9
-    const skip = req.query.skip || 0
 
     if ('username' in req.query) {
       const user = await User.findOne({ username: req.query.username });
+
+      if (!user) {
+        const err = new Error("User is not found")
+        err.status = 404;
+        throw err;
+      }
       
       where.user = user._id;
     }
@@ -53,8 +56,6 @@ exports.find = async (req, res, next) => {
       .find(where)
       .populate('commentCount')
       .sort({ createdAt: 'desc' })
-      .limit(limit)
-      .skip(skip)
 
     const postCount = await Post.count(where);
     
@@ -95,7 +96,7 @@ exports.create = async (req, res, next) => {
   try {    
     const files = req.files;
 
-    if (!files || !files.length) {
+    if (!files || files.length < 1) {
       const err = new Error('File is required');
       err.status = 400;
       throw err;
@@ -128,8 +129,7 @@ exports.deleteOne = async (req, res, next) => {
       throw err;
     }
 
-    const userId = req.user._id;
-    const isMaster = userId.toString() === post.user.toString();
+    const isMaster = req.user._id.toString() === post.user.toString();
 
     if (!isMaster) {
       const err = new Error("Incorrect user");
@@ -149,10 +149,6 @@ exports.deleteOne = async (req, res, next) => {
 exports.like = async (req, res, next) => {
   try {
     const post = await Post.findById(req.params.id)
-      .populate({
-        path: 'liked',
-        match: { user: req.user._id }
-      })
 
     if (!post) {
       const err = new Error("Post is not found");
@@ -160,16 +156,18 @@ exports.like = async (req, res, next) => {
       throw err;
     }
 
-    if (!post.liked) {
+    const liked = await Likes
+      .findOne({ user: req.user._id, post: post._id });
+
+    if (!liked) {
       const likes = new Likes({
         user: req.user._id,
         post: post._id
       })
       
       await likes.save();
-  
-      post.likesCount++;
 
+      post.likesCount++;
       await post.save();
     }
 
@@ -183,10 +181,6 @@ exports.like = async (req, res, next) => {
 exports.unlike = async (req, res, next) => {
   try {
     const post = await Post.findById(req.params.id)
-      .populate({
-        path: 'liked',
-        match: { user: req.user._id }
-      })
 
     if (!post) {
       const err = new Error("Post is not found");
@@ -194,16 +188,13 @@ exports.unlike = async (req, res, next) => {
       throw err;
     }
 
-    if (post.liked) {
-      const likes = await Likes.findOne({ 
-        user: req.user._id, 
-        post: post._id 
-      });
+    const liked = await Likes
+      .findOne({ user: req.user._id, post: post._id });
 
-      await likes.deleteOne();
+    if (liked) {
+      await liked.deleteOne();
   
       post.likesCount--;
-
       await post.save();
     }
 

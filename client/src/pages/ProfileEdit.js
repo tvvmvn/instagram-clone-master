@@ -8,6 +8,8 @@ export default function ProfileEdit() {
   const [newName, setNewName] = useState(user.name);
   const [newBio, setNewBio] = useState(user.bio);
 
+  console.log(user) // key state
+
   const isEqual = {
     name: user.name === newName,
     bio: user.bio === newBio,

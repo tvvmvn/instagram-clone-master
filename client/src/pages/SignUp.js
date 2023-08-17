@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { createUser } from "../service/api";
-import { isEmail, isValidUsername, isValidPassword } from "../utils/validator";
+import { isEmail, isUsername, isPassword } from "../utils/validator";
 
 export default function SignUp() {
 
@@ -97,7 +97,7 @@ export default function SignUp() {
         <button
           type="submit"
           className="bg-blue-500 rounded-lg text-sm font-semibold px-4 py-2 text-white w-full disabled:opacity-[0.5]"
-          disabled={!isEmail(email) || !isValidUsername(username) || !isValidPassword(password)}
+          disabled={!isEmail(email) || !isUsername(username) || !isPassword(password)}
         >
           Sign Up
         </button>

@@ -10,7 +10,6 @@ export default function FollowingList() {
   const [error, setError] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [followingUsers, setFollowingUsers] = useState([]);
-  const [followingCount, setFollowingCount] = useState(0);
 
   // key state
   console.log(followingUsers)
@@ -23,7 +22,6 @@ export default function FollowingList() {
     try {
       const data = await getFollowingUsers(username);
       
-      setFollowingCount(data.profileCount);
       setFollowingUsers([...followingUsers, ...data.profiles]);
 
     } catch (error) {
@@ -87,9 +85,13 @@ export default function FollowingList() {
     <div className="px-2">
       <h3 className="text-lg my-4 font-semibold">{username}'s following</h3>
       
-      <ul>
-        {followingList}
-      </ul>
+      {followingList.length > 0 ? (
+        <ul>
+          {followingList}
+        </ul>
+      ) : (
+        <p>0 following</p>
+      )}
 
       {!isLoaded && <Spinner />}
 

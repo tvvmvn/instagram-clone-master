@@ -10,7 +10,6 @@ export default function FollowerList() {
   const [error, setError] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [followers, setFollowers] = useState([]);
-  const [followerCount, setFollowerCount] = useState(0);
 
   // key state
   console.log(followers)
@@ -23,12 +22,10 @@ export default function FollowerList() {
     try {
       const data = await getFollowers(username)
       
-      setFollowerCount(data.profileCount);
       setFollowers([...followers, ...data.profiles]);
 
     } catch (error) {
       setError(error)
-    
     } finally {
       setIsLoaded(true)
     }
@@ -88,9 +85,13 @@ export default function FollowerList() {
     <div className="px-2">
       <h3 className="text-lg my-4 font-semibold">{username}'s followers</h3>
       
-      <ul>
-        {followerList}
-      </ul>
+      {followerList.length > 0 ? (
+        <ul>
+          {followerList}
+        </ul>
+      ) : (
+        <p>0 followers</p>
+      )}
 
       {!isLoaded && <Spinner />}
       
