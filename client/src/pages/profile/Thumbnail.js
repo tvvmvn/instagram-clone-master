@@ -18,7 +18,7 @@ export default function Thumbnail({
         {/* Likes and comment count */}
         <div className="absolute inset-0 bg-black/[0.2] opacity-0 hover:opacity-100">
           <div className="flex flex-col justify-center h-full">
-            {/* Likes count */}
+            {/* Likes */}
             <div className="flex justify-center">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -30,7 +30,7 @@ export default function Thumbnail({
               <span className="ml-2 text-white">{likesCount}</span>
             </div>
 
-            {/* Comment count */}
+            {/* Comments */}
             <div className="flex justify-center">
               <svg
                 className="w-5 fill-white"

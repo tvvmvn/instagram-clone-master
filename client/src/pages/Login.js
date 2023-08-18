@@ -27,7 +27,7 @@ export default function Login() {
       
       setTimeout(() => {
         navigate('/');
-      }, 200);
+      }, 500);
       
     } catch (error) {
       setError(error);

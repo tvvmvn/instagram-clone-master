@@ -30,6 +30,7 @@ export default function Feed() {
       const data = await getFeed(limit, skip);
 
       const  updatedPosts = [...posts, ...data.posts];
+      
       setPosts(updatedPosts);
       setPostCount(data.postCount);
 

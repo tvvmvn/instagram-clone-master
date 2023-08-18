@@ -56,13 +56,11 @@ export default function PostCreate({ setModalOpen }) {
         className="bg-white max-w-xs mt-20 mx-auto rounded-2xl"
         onSubmit={handleSubmit}
       >
-        {/* Title */}
         <div className="p-4 border-b">
           <h3 className="text-lg font-semibold text-center">Create new post</h3>
         </div>
 
         <div className="p-4">
-          {/* Upload Button */}
           <label className="inline-block mb-2 font-semibold text-sm px-4 py-2 bg-gray-200 rounded-lg cursor-pointer">
             <input
               type="file"
@@ -81,7 +79,7 @@ export default function PostCreate({ setModalOpen }) {
             </ul>
           )}
 
-          {/* Caption writing area */}
+          {/* Caption area */}
           <div className="mb-2">
             <label
               htmlFor="caption"
