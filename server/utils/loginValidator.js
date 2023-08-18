@@ -16,7 +16,7 @@ module.exports = async (req, res, next) => {
       
     if (!emailResult.isEmpty()) {
       const err = new Error('E-mail validation failed');
-      err.status = 400;
+      err.status = 401;
       throw err;
     }
     
@@ -35,7 +35,7 @@ module.exports = async (req, res, next) => {
 
     if (!passwordResult.isEmpty()) {
       const err = new Error('Password validation failed');
-      err.status = 400;
+      err.status = 401;
       throw err;
     }
 
