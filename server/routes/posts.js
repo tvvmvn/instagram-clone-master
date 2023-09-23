@@ -10,7 +10,7 @@ const {
   unlike
 } = require("../controllers/postController");
 const commentController = require('../controllers/commentController');
-const upload = require("../utils/upload");
+const upload = require("../middleware/upload");
 
 // posts
 router.get('/feed', feed)

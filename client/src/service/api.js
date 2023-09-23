@@ -37,6 +37,39 @@ export async function signIn(email, password) {
   return await res.json();
 }
 
+export async function updateProfile(editedProfile) {
+  const res = await fetch(`${server}/users/user`, {
+    method: "PUT",
+    headers: { 
+      'Content-Type': 'application/json',
+      "Authorization": getBearerToken() 
+    },
+    body: JSON.stringify(editedProfile)
+  })
+
+  if (!res.ok) {
+    throw new Error(`${res.status} ${res.statusText}`);
+  }
+
+  return await res.json();
+}
+
+export async function updateAvatar(formData) {
+  const res = await fetch(`${server}/users/user`, {
+    method: "PUT",
+    headers: { 
+      "Authorization": getBearerToken() 
+    },
+    body: formData
+  })
+
+  if (!res.ok) {
+    throw new Error(`${res.status} ${res.statusText}`);
+  }
+
+  return await res.json();
+}
+
 /* POSTS */
 export async function getFeed(limit, skip) {
   const res = await fetch(`${server}/posts/feed?limit=${limit}&skip=${skip}`, {
@@ -177,39 +210,6 @@ export async function deleteComment(id) {
 }
 
 /* PROFILES */
-export async function updateProfile(editedProfile) {
-  const res = await fetch(`${server}/profiles`, {
-    method: "PUT",
-    headers: { 
-      'Content-Type': 'application/json',
-      "Authorization": getBearerToken() 
-    },
-    body: JSON.stringify(editedProfile)
-  })
-
-  if (!res.ok) {
-    throw new Error(`${res.status} ${res.statusText}`);
-  }
-
-  return await res.json();
-}
-
-export async function updateAvatar(formData) {
-  const res = await fetch(`${server}/profiles`, {
-    method: "PUT",
-    headers: { 
-      "Authorization": getBearerToken() 
-    },
-    body: formData
-  })
-
-  if (!res.ok) {
-    throw new Error(`${res.status} ${res.statusText}`);
-  }
-
-  return await res.json();
-}
-
 export async function getProfiles(username) {
   const res = await fetch(`${server}/profiles/?username=${username}`, {
     headers: { 

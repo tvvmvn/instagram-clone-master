@@ -1,5 +1,6 @@
 const User = require('../models/User');
 const { body } = require('express-validator');
+const createError = require('http-errors');
 
 module.exports = async (req, res, next) => {
   try {
@@ -9,15 +10,13 @@ module.exports = async (req, res, next) => {
         const user = await User.findOne({ email });
 
         if (!user) {
-          throw new Error('E-mail does not exists');
+          throw new createError.Unauthorized("E-mail does not exists");
         }
       })
       .run(req);
       
     if (!emailResult.isEmpty()) {
-      const err = new Error('E-mail validation failed');
-      err.status = 401;
-      throw err;
+      throw new createError.Unauthorized("E-mail validation failed");
     }
     
     const passwordResult = await body('password')
@@ -28,15 +27,14 @@ module.exports = async (req, res, next) => {
         const user = await User.findOne({ email });
         
         if (!user.checkPassword(password)) {
-          throw new Erorr('Password does not match');
+          throw new createError.Unauthorized("Password does not match");
         }
       })
       .run(req)
 
     if (!passwordResult.isEmpty()) {
-      const err = new Error('Password validation failed');
-      err.status = 401;
-      throw err;
+      // console.log(passwordResult.errors)
+      throw new createError.Unauthorized("Password validation failed");
     }
 
     next();

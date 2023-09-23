@@ -2,6 +2,8 @@ const mongoose = require('mongoose')
 const Schema = mongoose.Schema;
 const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
+const Post = require("./Post");
+const Following = require("./Following");
 
 const userSchema = new Schema({
   email: { type: String, minLength: 5 },

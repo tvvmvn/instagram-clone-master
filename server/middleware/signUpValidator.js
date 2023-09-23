@@ -1,5 +1,6 @@
 const User = require('../models/User');
 const { body } = require('express-validator');
+const createError = require('http-errors');
 
 module.exports = async (req, res, next) => {
   try {
@@ -9,15 +10,14 @@ module.exports = async (req, res, next) => {
         const user = await User.findOne({ email });
         
         if (user) {
-          throw new Error('E-mail is already in use');
+          throw new Error("E-mail is already in use");
         }
       })
-      .run(req)
+      .run(req);
 
     if (!emailResult.isEmpty()) {
-      const err = new Error('E-mail validation failed');
-      err.status = 400;
-      throw err;
+      // console.log(emailResult)
+      throw new createError.BadRequest("E-mail validataion failed");
     }
 
     const usernameResult = await body('username')
@@ -28,26 +28,22 @@ module.exports = async (req, res, next) => {
         const user = await User.findOne({ username });
       
         if (user) {
-          throw new Error('Username is already in use');
+          throw new Error("Username is already in use");
         }
       })
-      .run(req)
+      .run(req);
 
     if (!usernameResult.isEmpty()) {
-      const err = new Error('Username validation failed');
-      err.status = 400;
-      throw err;
+      throw new createError.BadRequest("Username validation failed");
     }
 
     const passwordError = await body('password')
       .trim()
       .isLength({ min: 5 })
-      .run(req)
+      .run(req);
 
     if (!passwordError.isEmpty()) {
-      const err = new Error('Password validation failed');
-      err.status = 400;
-      throw err;
+      throw new createError.BadRequest("Password validation failed");
     }
     
     next();

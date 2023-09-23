@@ -1,5 +1,6 @@
 const User = require('../models/User');
 const Following = require('../models/Following');
+const createError = require('http-errors');
 
 exports.find = async (req, res, next) => {
   try {
@@ -10,9 +11,7 @@ exports.find = async (req, res, next) => {
         .findOne({ username: req.query.following });
 
       if (!user) {
-        const err = new Error("User is not found");
-        err.status = 404;
-        throw err;
+        throw new createError.NotFound("Profile is not found")
       }
 
       const followingUsers = await Following
@@ -29,9 +28,7 @@ exports.find = async (req, res, next) => {
         .findOne({ username: req.query.followers });
 
       if (!user) {
-        const err = new Error("User is not found");
-        err.status = 404;
-        throw err;
+        throw new createError.NotFound("Profile is not found");
       }
 
       const followers = await Following
@@ -81,9 +78,7 @@ exports.findOne = async (req, res, next) => {
       })
 
     if (!profile) {
-      const err = new Error("Profile is not found");
-      err.status = 404;
-      throw err;
+      throw new createError.NotFound("Profile is not found");
     }
 
     res.json({ profile });
@@ -100,15 +95,11 @@ exports.follow = async (req, res, next) => {
       .findOne({ username: req.params.username }, profileFields)
 
     if (!profile) {
-      const err = new Error('Profile is not found')
-      err.status = 404;
-      throw err;
+      throw new createError.NotFound("Profile is not found");
     }
 
     if (req.user.username === req.params.username) {
-      const err = new Error('Cannot follow yourself')
-      err.status = 400;
-      throw err;
+      throw new createError.BadRequest("Cannot follow yourself");
     }
 
     const isFollowing = await Following
@@ -137,9 +128,7 @@ exports.unfollow = async (req, res, next) => {
       .findOne({ username: req.params.username }, profileFields)
 
     if (!profile) {
-      const err = new Error('Profile is not found')
-      err.status = 404;
-      throw err;
+      throw new createError.NotFound("Profile is not found");
     }
 
     const isFollowing = await Following

@@ -1,6 +1,6 @@
 const multer = require('multer');
 const path = require('path');
-
+const createError = require("http-errors");
 const opts = {}
 
 opts.storage = multer.diskStorage({
@@ -30,8 +30,8 @@ opts.fileFilter = (req, file, cb) => {
   }
 
   if (isError) {
-    const err = new TypeError('Unacceptable type of file');
-    err.status = 400;
+    const err = new createError.BadRequest("Unacceptable type of file");
+    
     return cb(err);
   }
 

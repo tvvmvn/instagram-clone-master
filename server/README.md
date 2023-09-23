@@ -4,7 +4,7 @@
 
 ---
 
-![A UML diagram showing the relation of database entities in this example repository](/server/public/images/diagram.png?raw=true)
+![A UML diagram showing the relation of database entities in this example repository](/server/diagram.png?raw=true)
 
 
 ## Quick Start

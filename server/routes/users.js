@@ -5,10 +5,10 @@ const {
   login,
   update
 } = require("../controllers/userController");
-const signUpValidator = require('../utils/signUpValidator');
-const loginValidator = require('../utils/loginValidator');
-const upload = require("../utils/upload");
-const auth = require("../auth/auth");
+const signUpValidator = require('../middleware/signUpValidator');
+const loginValidator = require('../middleware/loginValidator');
+const upload = require("../middleware/upload");
+const auth = require("../middleware/auth");
 
 router.post('/', signUpValidator, create);
 router.post('/login', loginValidator, login);

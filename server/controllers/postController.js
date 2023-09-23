@@ -2,6 +2,7 @@ const User = require('../models/User');
 const Following = require('../models/Following');
 const Post = require('../models/Post');
 const Likes = require('../models/Likes');
+const createError = require('http-errors');
 
 exports.feed = async (req, res, next) => {
   try {
@@ -43,10 +44,8 @@ exports.find = async (req, res, next) => {
     if ('username' in req.query) {
       const user = await User.findOne({ username: req.query.username });
 
-      if (!user) {
-        const err = new Error("User is not found")
-        err.status = 404;
-        throw err;
+      if (!user) { // Timeline
+        throw new createError.NotFound("User is not found");
       }
       
       where.user = user._id;
@@ -80,9 +79,7 @@ exports.findOne = async (req, res, next) => {
       })
 
     if (!post) {
-      const err = new Error("Post is not found");
-      err.status = 404;
-      throw err;
+      throw new createError.NotFound("Post is not found");
     }
 
     res.json({ post });
@@ -97,9 +94,7 @@ exports.create = async (req, res, next) => {
     const files = req.files;
 
     if (!files || files.length < 1) {
-      const err = new Error('File is required');
-      err.status = 400;
-      throw err;
+      throw new createError.BadRequest("File is required");
     }
 
     const photoNames = files.map(file => file.filename);
@@ -124,17 +119,13 @@ exports.deleteOne = async (req, res, next) => {
     const post = await Post.findById(req.params.id);
 
     if (!post) {
-      const err = new Error("Post is not found")
-      err.status = 404;
-      throw err;
+      throw new createError.NotFound("Post is not found");
     }
 
     const isMaster = req.user._id.toString() === post.user.toString();
 
     if (!isMaster) {
-      const err = new Error("Incorrect user");
-      err.staus = 400;
-      throw err;
+      throw new createError.BadRequest("Incorrect User");
     }
 
     await post.deleteOne();
@@ -151,9 +142,7 @@ exports.like = async (req, res, next) => {
     const post = await Post.findById(req.params.id)
 
     if (!post) {
-      const err = new Error("Post is not found");
-      err.status = 404;
-      throw err;
+      throw new createError.NotFound("Post is not found");
     }
 
     const liked = await Likes
@@ -183,9 +172,7 @@ exports.unlike = async (req, res, next) => {
     const post = await Post.findById(req.params.id)
 
     if (!post) {
-      const err = new Error("Post is not found");
-      err.status = 404;
-      throw err;
+      throw new createError.NotFound("Post is not found");
     }
 
     const liked = await Likes

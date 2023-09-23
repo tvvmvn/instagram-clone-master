@@ -3,7 +3,7 @@ const router = express.Router();
 const usersRouter = require("./users");
 const postsRouter = require("./posts");
 const profilesRouter = require("./profiles");
-const auth = require("../auth/auth");
+const auth = require("../middleware/auth");
 
 /* INDEX */
 router.get('/', (req, res) => {

@@ -36,13 +36,15 @@ app.use('/api', indexRouter);
 
 // Catch 404 and forward to error handler
 app.use((req, res, next) => {
-  next(createError(404));
+  const err = new createError.NotFound("Invalid URL");
+
+  next(err);
 })
 
 // Error handler
 app.use((err, req, res, next) => {
   console.error(err);
-  res.status(err.status || 500).json(err); 
+  res.status(err.status || 500).json(err.toString()); 
 })
 
 module.exports = app;

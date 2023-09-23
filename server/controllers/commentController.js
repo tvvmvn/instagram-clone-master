@@ -1,14 +1,13 @@
 const Post = require('../models/Post');
 const Comment = require('../models/Comment');
+const createError = require('http-errors');
 
 exports.find = async (req, res, next) => {
   try {
     const post = await Post.findById(req.params.id);
 
     if (!post) {
-      const err = new Error("Post is not found");
-      err.status = 404;
-      throw err;
+      throw new createError.NotFound("Post is not found");
     }
 
     const where = { post: post._id };
@@ -35,9 +34,7 @@ exports.create = async (req, res, next) => {
     const post = await Post.findById(req.params.id);
 
     if (!post) {
-      const err = new Error("Post is not found")
-      err.status = 404;
-      throw err;
+      throw new createError.NotFound("Post is not found");
     }
 
     const comment = new Comment({
@@ -65,17 +62,13 @@ exports.deleteOne = async (req, res, next) => {
     const comment = await Comment.findById(req.params.id);
 
     if (!comment) {
-      const err = new Error("Comment is not found")
-      err.status = 404;
-      throw err;
+      throw new createError.NotFound("Comment is not found");
     }
 
     const isMaster = req.user._id.toString() === comment.user.toString();
 
     if (!isMaster) {
-      const err = new Error("Incorrect user");
-      err.status = 400;
-      throw err;
+      throw new createError.BadRequest("Incorrect user");
     }
 
     await comment.deleteOne();
