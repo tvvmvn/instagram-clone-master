@@ -1,41 +1,44 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { getProfiles } from "../../service/api";
-import Form from "./Form";
 import Profile from "./Profile";
-import Spinner from '../shared/Spinner';
+import Spinner from "../shared/Spinner";
 
-export default function Search() {
+export default function Explore() {
   const [error, setError] = useState(null);
   const [isLoaded, setIsLoaded] = useState(true);
   const [profiles, setProfiles] = useState([]);
+  const inputEl = useRef(null);
+
+  useEffect(() => {
+    inputEl.current.focus();
+  })
 
   // tracking
   console.log(profiles)
 
   async function search(username) {
-    try {    
+    try {
       if (!username) {
         return setProfiles([]);
       }
-  
+
       setError(null);
       setIsLoaded(false);
-  
+
       const { profiles } = await getProfiles(username);
-      
+
       setProfiles(profiles);
-
-      setIsLoaded(true);
-
+      
     } catch (error) {
       setError(error)
+    } finally {
+      setIsLoaded(true);
     }
   }
 
   const profileList = profiles.map(profile => (
     <Profile 
-      key={profile.id}
-      id={profile.id}
+      key={profile.id}  
       username={profile.username}
       name={profile.name}
       avatarUrl={profile.avatarUrl}
@@ -47,14 +50,24 @@ export default function Search() {
     <div className="px-4">
       <h3 className="text-lg font-semibold my-4">Explore</h3>
 
-      <Form search={search} />
-      
-      <ul>
-        {profileList}
-      </ul>
+      <div className="mb-4">
+        <input
+          type="text"
+          className="border px-2 py-1 rounded w-full outline-none"
+          onChange={({ target }) => search(target.value)}
+          placeholder="Search"
+          ref={inputEl}
+        />
+      </div>
 
-      {!isLoaded && <Spinner />}
-      
+      {isLoaded ? (
+        <ul>
+          {profileList}
+        </ul>
+      ) : (
+        <Spinner />
+      )}
+
       {error && <p className="text-red-500">{error.message}</p>}
     </div>
   )

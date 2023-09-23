@@ -2,11 +2,12 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { createPost } from '../service/api';
 
-export default function PostCreate({ setModalOpen }) {
+export default function PostCreate() {
 
   const navigate = useNavigate();
   const [caption, setCaption] = useState("");
   const [files, setFiles] = useState([]);
+  const [modalOpen, setModalOpen] = useState(false);
 
   async function handleSubmit(e) {
     try {
@@ -45,13 +46,11 @@ export default function PostCreate({ setModalOpen }) {
     </li>
   ))
 
-  return (
+  const overlay = (
     <div 
       className="fixed inset-0 bg-black/[0.2] z-10" 
       onClick={handleOverlay}
     >
-
-      {/* Create Form */}
       <form
         className="bg-white max-w-xs mt-20 mx-auto rounded-2xl"
         onSubmit={handleSubmit}
@@ -61,6 +60,7 @@ export default function PostCreate({ setModalOpen }) {
         </div>
 
         <div className="p-4">
+          {/* Upload button */}
           <label className="inline-block mb-2 font-semibold text-sm px-4 py-2 bg-gray-200 rounded-lg cursor-pointer">
             <input
               type="file"
@@ -79,7 +79,7 @@ export default function PostCreate({ setModalOpen }) {
             </ul>
           )}
 
-          {/* Caption area */}
+          {/* Caption */}
           <div className="mb-2">
             <label
               htmlFor="caption"
@@ -106,5 +106,21 @@ export default function PostCreate({ setModalOpen }) {
         </div>
       </form>
     </div>
+  )
+
+  return (
+    <>
+      {/* Modal button */}
+      <svg
+        className="opacity-40 w-12 fixed right-8 bottom-8 hover:opacity-80 cursor-pointer z-10"
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 512 512"
+        onClick={() => setModalOpen(true)}
+      >
+        <path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM232 344V280H168c-13.3 0-24-10.7-24-24s10.7-24 24-24h64V168c0-13.3 10.7-24 24-24s24 10.7 24 24v64h64c13.3 0 24 10.7 24 24s-10.7 24-24 24H280v64c0 13.3-10.7 24-24 24s-24-10.7-24-24z" />
+      </svg>
+
+      {modalOpen && overlay}
+    </>  
   )
 }

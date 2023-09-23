@@ -1,11 +1,10 @@
 import { Link } from "react-router-dom"
 
-export default function Profile({ 
-  id, 
-  username, 
-  avatarUrl, 
-  name, 
-  isFollowing 
+export default function Profile({
+    username,
+    name,
+    avatarUrl,
+    isFollowing
 }) {
   return (
     <li className="flex items-center justify-between my-2">
