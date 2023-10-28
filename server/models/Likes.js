@@ -1,4 +1,4 @@
-const mongoose = require('mongoose')
+const mongoose = require("mongoose")
 const Schema = mongoose.Schema;
 
 const likesSchema = new Schema({
@@ -9,4 +9,4 @@ const likesSchema = new Schema({
   toObject: { virtuals: true }
 })
 
-module.exports = mongoose.model('Likes', likesSchema)
+module.exports = mongoose.model("Likes", likesSchema)

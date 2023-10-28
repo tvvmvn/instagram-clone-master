@@ -28,7 +28,7 @@ export default function ProfileEdit() {
       
       setUser(user);
 
-      alert('Done');
+      alert("Done");
 
     } catch (error) {
       alert(error);
@@ -55,7 +55,7 @@ export default function ProfileEdit() {
   }
 
   useEffect(() => {
-    document.title = 'Edit profile - Instagram';
+    document.title = "Edit profile - Instagram";
   }, [])
 
   return (

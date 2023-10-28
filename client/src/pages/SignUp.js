@@ -22,7 +22,7 @@ export default function SignUp() {
 
       alert(`Welcome ${name}!`);
 
-      navigate('/');
+      navigate("/");
 
     } catch (error) {
       setError(error)
@@ -30,7 +30,7 @@ export default function SignUp() {
   }
 
   useEffect(() => {
-    document.title = 'Sign Up - Instagram';
+    document.title = "Sign Up - Instagram";
   }, [])
 
   return (

@@ -1,15 +1,15 @@
-const JwtStrategy = require('passport-jwt').Strategy;
-const ExtractJwt = require('passport-jwt').ExtractJwt;
-const User = require('../models/User');
+const JwtStrategy = require("passport-jwt").Strategy;
+const ExtractJwt = require("passport-jwt").ExtractJwt;
+const User = require("../models/User");
 const passport = require("passport");
-require('dotenv').config();
+require("dotenv").config();
 
 const opts = {};
 
 opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
 opts.secretOrKey = process.env.SECRET;
-// opts.issuer = 'accounts.examplesoft.com';
-// opts.audience = 'yoursite.net';
+// opts.issuer = "accounts.examplesoft.com";
+// opts.audience = "yoursite.net";
 
 const jwtStrategy = new JwtStrategy(opts, async (payload, done) => {
   try {

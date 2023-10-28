@@ -2,7 +2,7 @@ import { useState, useEffect, useContext } from "react"
 import { Link } from "react-router-dom";
 import PostTemplate from "./shared/PostTemplate";
 import { getFeed, deletePost, likePost, unlikePost } from "../service/api";
-import Spinner from './shared/Spinner';
+import Spinner from "./shared/Spinner";
 import AuthContext from "../auth/AuthContext";
 
 export default function Feed() {

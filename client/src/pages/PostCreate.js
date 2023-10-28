@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { createPost } from '../service/api';
+import { createPost } from "../service/api";
 
 export default function PostCreate() {
 
@@ -16,14 +16,14 @@ export default function PostCreate() {
       const formData = new FormData();
 
       files.forEach(file => {
-        formData.append('photos', file);
+        formData.append("photos", file);
       })
 
-      formData.append('caption', caption);
+      formData.append("caption", caption);
 
       await createPost(formData);
 
-      navigate('/');
+      navigate("/");
 
     } catch (error) {
       alert(error);

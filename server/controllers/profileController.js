@@ -1,12 +1,12 @@
-const User = require('../models/User');
-const Following = require('../models/Following');
-const createError = require('http-errors');
+const User = require("../models/User");
+const Following = require("../models/Following");
+const createError = require("http-errors");
 
 exports.find = async (req, res, next) => {
   try {
     const where = {};
 
-    if ('following' in req.query) {
+    if ("following" in req.query) {
       const user = await User
         .findOne({ username: req.query.following });
 
@@ -23,7 +23,7 @@ exports.find = async (req, res, next) => {
       where._id = followingIds;
     }
 
-    if ('followers' in req.query) {
+    if ("followers" in req.query) {
       const user = await User
         .findOne({ username: req.query.followers });
 
@@ -39,18 +39,18 @@ exports.find = async (req, res, next) => {
       where._id = followerIds;
     }
 
-    if ('username' in req.query) {
-      const patt = new RegExp(req.query.username, 'i');
+    if ("username" in req.query) {
+      const patt = new RegExp(req.query.username, "i");
       
       where.username = patt;
     }
     
-    const profileFields = 'username name avatar avatarUrl bio';
+    const profileFields = "username name avatar avatarUrl bio";
     
     const profiles = await User
       .find(where, profileFields)
       .populate({ 
-        path: 'isFollowing',
+        path: "isFollowing",
         match: { user: req.user._id }
       })
     
@@ -65,15 +65,15 @@ exports.find = async (req, res, next) => {
 
 exports.findOne = async (req, res, next) => {
   try {
-    const profileFields = 'username name avatar avatarUrl bio';
+    const profileFields = "username name avatar avatarUrl bio";
 
     const profile = await User
       .findOne({ username: req.params.username }, profileFields)
-      .populate('postCount')
-      .populate('followerCount')
-      .populate('followingCount')
+      .populate("postCount")
+      .populate("followerCount")
+      .populate("followingCount")
       .populate({
-        path: 'isFollowing',
+        path: "isFollowing",
         match: { user: req.user._id }
       })
 
@@ -90,7 +90,7 @@ exports.findOne = async (req, res, next) => {
 
 exports.follow = async (req, res, next) => {
   try {
-    const profileFields = 'username name avatar avatarUrl bio';
+    const profileFields = "username name avatar avatarUrl bio";
     const profile = await User
       .findOne({ username: req.params.username }, profileFields)
 
@@ -123,7 +123,7 @@ exports.follow = async (req, res, next) => {
 
 exports.unfollow = async (req, res, next) => {
   try {
-    const profileFields = 'username name avatar avatarUrl bio';
+    const profileFields = "username name avatar avatarUrl bio";
     const profile = await User
       .findOne({ username: req.params.username }, profileFields)
 

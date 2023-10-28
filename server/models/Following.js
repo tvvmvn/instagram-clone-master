@@ -1,4 +1,4 @@
-const mongoose = require('mongoose')
+const mongoose = require("mongoose")
 const Schema = mongoose.Schema;
 
 const followingSchema = new Schema({
@@ -9,7 +9,7 @@ const followingSchema = new Schema({
   toObject: { virtuals: true }
 })
 
-module.exports = mongoose.model('Following', followingSchema);
+module.exports = mongoose.model("Following", followingSchema);
 
 
 

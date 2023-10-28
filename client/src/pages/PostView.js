@@ -25,7 +25,7 @@ export default function PostView() {
       setPost(data.post);
 
     } catch (error) {
-      navigate('/notfound', { replace: true });
+      navigate("/notfound", { replace: true });
     }
   }
 
@@ -68,7 +68,7 @@ export default function PostView() {
     try {
       await deletePost(id);
       
-      navigate('/', { replace: true });
+      navigate("/", { replace: true });
     
     } catch (error) {
       alert(error)

@@ -1,5 +1,5 @@
-import { useState, useEffect, useContext, useRef } from "react";
-import { useParams, useNavigate, Link } from "react-router-dom";
+import { useState, useEffect, useContext } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import AuthContext from "../../auth/AuthContext";
 import ProfileInfo from "./ProfileInfo";
 import Thumbnail from "./Thumbnail";
@@ -34,7 +34,7 @@ export default function Profile() {
       setPosts(timelineData.posts);
 
     } catch {
-      navigate('/notfound', { replace: true });
+      navigate("/notfound", { replace: true });
     }
   }
 
@@ -62,7 +62,7 @@ export default function Profile() {
 
 
   function handleSignOut() {
-    const confirmed = window.confirm('Are you sure to log out?');
+    const confirmed = window.confirm("Are you sure to log out?");
 
     if (confirmed) {
       setUser(null);

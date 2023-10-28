@@ -1,10 +1,10 @@
-const User = require('../models/User');
-const { body } = require('express-validator');
-const createError = require('http-errors');
+const User = require("../models/User");
+const { body } = require("express-validator");
+const createError = require("http-errors");
 
 module.exports = async (req, res, next) => {
   try {
-    const emailResult = await body('email')
+    const emailResult = await body("email")
       .isEmail()
       .custom(async (email) => {
         const user = await User.findOne({ email });
@@ -20,7 +20,7 @@ module.exports = async (req, res, next) => {
       throw new createError.BadRequest("E-mail validataion failed");
     }
 
-    const usernameResult = await body('username')
+    const usernameResult = await body("username")
       .trim()
       .isLength({ min: 5 })
       .isAlphanumeric()
@@ -37,7 +37,7 @@ module.exports = async (req, res, next) => {
       throw new createError.BadRequest("Username validation failed");
     }
 
-    const passwordError = await body('password')
+    const passwordError = await body("password")
       .trim()
       .isLength({ min: 5 })
       .run(req);

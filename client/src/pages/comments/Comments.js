@@ -2,8 +2,8 @@ import { useContext, useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import { getComments, createComment, deleteComment } from "../../service/api";
 import Form from "./Form";
-import Comment from './Comment';
-import Spinner from '../shared/Spinner';
+import Comment from "./Comment";
+import Spinner from "../shared/Spinner";
 
 export default function Comments() {
 
@@ -61,7 +61,7 @@ export default function Comments() {
 
   return (
     <div className="px-4">
-      <h3 className="text-lg font-semibold my-4">This post's comments</h3>
+      <h3 className="text-lg font-semibold my-4">This post"s comments</h3>
       
       <Form handleAddComment={handleAddComment} />
 

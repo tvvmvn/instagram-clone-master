@@ -1,4 +1,4 @@
-const mongoose = require('mongoose')
+const mongoose = require("mongoose")
 const Schema = mongoose.Schema;
 const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
@@ -11,7 +11,7 @@ const userSchema = new Schema({
   salt: { type: String },
   username: { type: String, minLength: 3, required: true },
   name: { type: String },
-  avatar: { type: String, default: 'default.png' },
+  avatar: { type: String, default: "default.png" },
   bio: { type: String }
 }, { 
   toJSON: { virtuals: true },
@@ -19,35 +19,35 @@ const userSchema = new Schema({
 }) 
 
 // Virtual field
-userSchema.virtual('avatarUrl').get(function () {
-  return process.env.FILE_URL + '/avatar/' + this.avatar
+userSchema.virtual("avatarUrl").get(function () {
+  return process.env.FILE_URL + "/avatar/" + this.avatar;
 })
 
-userSchema.virtual('postCount', {
-  ref: 'Post',
-  localField: '_id',
-  foreignField: 'user',
+userSchema.virtual("postCount", {
+  ref: "Post",
+  localField: "_id",
+  foreignField: "user",
   count: true
 })
 
-userSchema.virtual('followerCount', {
-  ref: 'Following',
-  localField: '_id',
-  foreignField: 'following',
+userSchema.virtual("followerCount", {
+  ref: "Following",
+  localField: "_id",
+  foreignField: "following",
   count: true
 })
 
-userSchema.virtual('followingCount', {
-  ref: 'Following',
-  localField: '_id',
-  foreignField: 'user',
+userSchema.virtual("followingCount", {
+  ref: "Following",
+  localField: "_id",
+  foreignField: "user",
   count: true
 })
 
-userSchema.virtual('isFollowing', {
-  ref: 'Following',
-  localField: '_id',
-  foreignField: 'following',
+userSchema.virtual("isFollowing", {
+  ref: "Following",
+  localField: "_id",
+  foreignField: "following",
   justOne: true
 })
 
@@ -79,4 +79,4 @@ userSchema.methods.generateJWT = function () {
   return jwt.sign(payload, secret);
 }
 
-module.exports = mongoose.model('User', userSchema);
+module.exports = mongoose.model("User", userSchema);

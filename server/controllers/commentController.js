@@ -1,6 +1,6 @@
-const Post = require('../models/Post');
-const Comment = require('../models/Comment');
-const createError = require('http-errors');
+const Post = require("../models/Post");
+const Comment = require("../models/Comment");
+const createError = require("http-errors");
 
 exports.find = async (req, res, next) => {
   try {
@@ -15,10 +15,10 @@ exports.find = async (req, res, next) => {
     const comments = await Comment
       .find(where)
       .populate({
-        path: 'user',
-        select: 'username avatar avatarUrl'
+        path: "user",
+        select: "username avatar avatarUrl"
       })
-      .sort({ createdAt: 'desc' })
+      .sort({ createdAt: "desc" })
 
     const commentCount = await Comment.count(where);
 
@@ -46,8 +46,8 @@ exports.create = async (req, res, next) => {
     await comment.save();
 
     await comment.populate({
-      path: 'user',
-      select: 'username avatar avatarUrl'
+      path: "user",
+      select: "username avatar avatarUrl"
     })
 
     res.json({ comment });

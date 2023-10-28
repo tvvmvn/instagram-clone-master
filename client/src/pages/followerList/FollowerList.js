@@ -1,8 +1,8 @@
-import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { getFollowers, follow, unfollow } from '../../service/api';
-import Follower from './Follower';
-import Spinner from '../shared/Spinner';
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { getFollowers, follow, unfollow } from "../../service/api";
+import Follower from "./Follower";
+import Spinner from "../shared/Spinner";
 
 export default function FollowerList() {
 

@@ -23,10 +23,10 @@ export default function Login() {
       
       setUser(user)
 
-      localStorage.setItem('email', email);
+      localStorage.setItem("email", email);
       
       setTimeout(() => {
-        navigate('/');
+        navigate("/");
       }, 500);
       
     } catch (error) {
@@ -44,7 +44,7 @@ export default function Login() {
       className="absolute right-0 h-full px-4 py-2 text-sm font-semibold"
       onClick={() => setShowPassword(!showPassword)}
     >
-      {showPassword ? 'Hide' : 'Show'}
+      {showPassword ? "Hide" : "Show"}
     </button>
   )
 

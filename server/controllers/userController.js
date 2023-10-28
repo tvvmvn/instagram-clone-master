@@ -1,4 +1,4 @@
-const User = require('../models/User');
+const User = require("../models/User");
 
 exports.create = async (req, res, next) => {
   try {
@@ -51,11 +51,11 @@ exports.update = async (req, res, next) => {
       _user.avatar = req.file.filename;
     }
 
-    if ('name' in req.body) {
+    if ("name" in req.body) {
       _user.name = req.body.name;
     }
 
-    if ('bio' in req.body) {
+    if ("bio" in req.body) {
       _user.bio = req.body.bio;
     }
 

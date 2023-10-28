@@ -1,8 +1,8 @@
-const User = require('../models/User');
-const Following = require('../models/Following');
-const Post = require('../models/Post');
-const Likes = require('../models/Likes');
-const createError = require('http-errors');
+const User = require("../models/User");
+const Following = require("../models/Following");
+const Post = require("../models/Post");
+const Likes = require("../models/Likes");
+const createError = require("http-errors");
 
 exports.feed = async (req, res, next) => {
   try {
@@ -16,15 +16,15 @@ exports.feed = async (req, res, next) => {
 
     const posts = await Post.find(where)
       .populate({
-        path: 'user',
-        select: 'username avatar avatarUrl'
+        path: "user",
+        select: "username avatar avatarUrl"
       })
-      .populate('commentCount')
+      .populate("commentCount")
       .populate({
-        path: 'liked',
+        path: "liked",
         match: { user: req.user._id }
       })
-      .sort({ createdAt: 'desc' })
+      .sort({ createdAt: "desc" })
       .skip(skip)
       .limit(limit)
     
@@ -41,7 +41,7 @@ exports.find = async (req, res, next) => {
   try {
     const where = {}
 
-    if ('username' in req.query) {
+    if ("username" in req.query) {
       const user = await User.findOne({ username: req.query.username });
 
       if (!user) { // Timeline
@@ -53,8 +53,8 @@ exports.find = async (req, res, next) => {
     
     const posts = await Post
       .find(where)
-      .populate('commentCount')
-      .sort({ createdAt: 'desc' })
+      .populate("commentCount")
+      .sort({ createdAt: "desc" })
 
     const postCount = await Post.count(where);
     
@@ -69,12 +69,12 @@ exports.findOne = async (req, res, next) => {
   try {
     const post = await Post.findById(req.params.id)
       .populate({
-        path: 'user',
-        select: 'username avatar avatarUrl'
+        path: "user",
+        select: "username avatar avatarUrl"
       })
-      .populate('commentCount')
+      .populate("commentCount")
       .populate({
-        path: 'liked',
+        path: "liked",
         match: { user: req.user._id }
       })
 

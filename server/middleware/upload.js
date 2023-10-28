@@ -1,5 +1,5 @@
-const multer = require('multer');
-const path = require('path');
+const multer = require("multer");
+const path = require("path");
 const createError = require("http-errors");
 const opts = {}
 
@@ -10,7 +10,7 @@ opts.storage = multer.diskStorage({
 
   filename: (req, file, cb) => {
     const extname = path.extname(file.originalname);
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9)
+    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9)
 
     cb(null, uniqueSuffix + extname);
   }
@@ -21,9 +21,9 @@ opts.fileFilter = (req, file, cb) => {
   let isError = false;
 
   switch (extname) {
-    case '.jpg':
-    case '.jpeg':
-    case '.png':
+    case ".jpg":
+    case ".jpeg":
+    case ".png":
       break;
     default:
       isError = true;

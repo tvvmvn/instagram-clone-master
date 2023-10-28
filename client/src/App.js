@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import AuthProvider from './auth/AuthProvider';
+import AuthProvider from "./auth/AuthProvider";
 import AuthRequired from "./auth/AuthRequired";
 import Layout from "./pages/Layout";
 import Feed from "./pages/Feed";
