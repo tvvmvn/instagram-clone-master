@@ -1,9 +1,9 @@
 const express = require("express")
 const router = express.Router();
-const usersRouter = require("./user");
-const postsRouter = require("./post");
-const commentsRouter = require("./comment");
-const profilesRouter = require("./profile");
+const userRouter = require("./user");
+const postRouter = require("./post");
+const commentRouter = require("./comment");
+const profileRouter = require("./profile");
 const auth = require("../middleware/auth");
 
 
@@ -41,17 +41,14 @@ router.get("/", (req, res) => {
 })
 
 
-/* User Router */
-router.use("/users", usersRouter)
-
-/* Post Router */
-router.use("/posts", auth, postsRouter)
-
-/* Comment Router */
-router.use("/posts", auth, commentsRouter);
-
-/* Profile Router */
-router.use("/profiles", auth, profilesRouter)
+// User Router 
+router.use("/users", userRouter)
+// Post Router 
+router.use("/posts", auth, postRouter)
+// Comment Router 
+router.use("/posts", auth, commentRouter);
+// Profile Router 
+router.use("/profiles", auth, profileRouter)
 
 
 module.exports = router;
