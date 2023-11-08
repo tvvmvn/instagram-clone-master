@@ -1,8 +1,9 @@
 const express = require("express")
 const router = express.Router();
-const usersRouter = require("./users");
-const postsRouter = require("./posts");
-const profilesRouter = require("./profiles");
+const usersRouter = require("./user");
+const postsRouter = require("./post");
+const commentsRouter = require("./comment");
+const profilesRouter = require("./profile");
 const auth = require("../middleware/auth");
 
 
@@ -23,6 +24,14 @@ const auth = require("../middleware/auth");
   Update data
   4) DELETE
   Delete data
+
+  3 Router hierachy of server
+
+  indexRouter 
+      usersRouter
+      postRotuer
+      commentsRouter
+      profilesRouter
 */
 
 
@@ -34,8 +43,13 @@ router.get("/", (req, res) => {
 
 /* User Router */
 router.use("/users", usersRouter)
+
 /* Post Router */
 router.use("/posts", auth, postsRouter)
+
+/* Comment Router */
+router.use("/posts", auth, commentsRouter);
+
 /* Profile Router */
 router.use("/profiles", auth, profilesRouter)
 
