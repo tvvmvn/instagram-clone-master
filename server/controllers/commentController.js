@@ -2,6 +2,7 @@ const Post = require("../models/Post");
 const Comment = require("../models/Comment");
 const createError = require("http-errors");
 
+
 exports.find = async (req, res, next) => {
   try {
     const post = await Post.findById(req.params.id);
@@ -28,6 +29,7 @@ exports.find = async (req, res, next) => {
     next(error)
   }
 }
+
 
 exports.create = async (req, res, next) => {
   try {
@@ -56,6 +58,7 @@ exports.create = async (req, res, next) => {
     next(error)
   }
 }
+
 
 exports.deleteOne = async (req, res, next) => {
   try {

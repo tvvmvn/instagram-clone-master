@@ -4,6 +4,8 @@ const { DateTime } = require("luxon");
 const Comment = require("./Comment");
 const Likes = require("./Likes");
 
+
+// Schema
 const postSchema = new Schema({
   photos: [{ type: String, required: true }],
   caption: { type: String },
@@ -14,6 +16,7 @@ const postSchema = new Schema({
   toJSON: { virtuals: true },
   toObject: { virtuals: true }
 })
+
 
 // Virtual field
 postSchema.virtual("displayDate").get(function () {
@@ -45,5 +48,6 @@ postSchema.virtual("liked", {
   foreignField: "post",
   justOne: true
 })
+
 
 module.exports = mongoose.model("Post", postSchema);

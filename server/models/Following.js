@@ -1,6 +1,8 @@
 const mongoose = require("mongoose")
 const Schema = mongoose.Schema;
 
+
+// Schema
 const followingSchema = new Schema({
   user: { type: Schema.ObjectId, required: true },
   following: { type: Schema.ObjectId, required: true }
@@ -8,6 +10,7 @@ const followingSchema = new Schema({
   toJSON: { virtuals: true },
   toObject: { virtuals: true }
 })
+
 
 module.exports = mongoose.model("Following", followingSchema);
 

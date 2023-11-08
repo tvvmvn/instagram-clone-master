@@ -4,6 +4,7 @@ const User = require("./models/User");
 const Post = require("./models/Post");
 const [directive, MONGODB_URI] = userArgs;
 
+
 if (!MONGODB_URI.startsWith("mongodb")) {
   console.log("ERROR: You need to specify a valid mongodb URL.");
   return;
@@ -16,6 +17,7 @@ if (directive === "run") {
 } else {
   return console.log("ERROR: Invalid command");
 }
+
 
 async function seedDatabase() {
   try {
@@ -97,6 +99,7 @@ async function seedDatabase() {
     mongoose.connection.close();
   }
 }
+
 
 async function dropDatabase() {
   try {

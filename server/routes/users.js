@@ -10,8 +10,10 @@ const loginValidator = require("../middleware/loginValidator");
 const upload = require("../middleware/upload");
 const auth = require("../middleware/auth");
 
+
 router.post("/", signUpValidator, create);
 router.post("/login", loginValidator, login);
 router.put("/user", auth, upload.single("avatar"), update);
+
 
 module.exports = router;

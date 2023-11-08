@@ -2,6 +2,8 @@ const mongoose = require("mongoose")
 const Schema = mongoose.Schema;
 const { DateTime } = require("luxon");
 
+
+// Schema
 const commentSchema = new Schema({
   content: { type: String },
   post: { type: Schema.ObjectId, required: true },
@@ -12,6 +14,7 @@ const commentSchema = new Schema({
   toObject: { virtuals: true }
 })
 
+
 // Virtual field
 commentSchema.virtual("displayDate").get(function () {
   const displayDate = DateTime
@@ -20,5 +23,6 @@ commentSchema.virtual("displayDate").get(function () {
 
   return displayDate;
 })
+
 
 module.exports = mongoose.model("Comment", commentSchema);

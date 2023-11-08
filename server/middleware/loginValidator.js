@@ -4,6 +4,7 @@ const createError = require("http-errors");
 
 module.exports = async (req, res, next) => {
   try {
+    // email check
     const emailResult = await body("email")
       .isEmail()
       .custom(async (email) => {
@@ -19,6 +20,8 @@ module.exports = async (req, res, next) => {
       throw new createError.Unauthorized("E-mail validation failed");
     }
     
+
+    // password check
     const passwordResult = await body("password")
       .trim()
       .notEmpty()
@@ -37,6 +40,7 @@ module.exports = async (req, res, next) => {
       throw new createError.Unauthorized("Password validation failed");
     }
 
+    // call for next middleware
     next();
 
   } catch (error) {

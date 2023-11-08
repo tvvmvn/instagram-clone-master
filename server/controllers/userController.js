@@ -1,5 +1,6 @@
 const User = require("../models/User");
 
+
 exports.create = async (req, res, next) => {
   try {
     const { email, name, username, password } = req.body;
@@ -19,6 +20,7 @@ exports.create = async (req, res, next) => {
     next(error)
   }
 }
+
 
 exports.login = async (req, res, next) => {
   try {
@@ -42,6 +44,7 @@ exports.login = async (req, res, next) => {
     next(error)
   }
 }
+
 
 exports.update = async (req, res, next) => {
   try {

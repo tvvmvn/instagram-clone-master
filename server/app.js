@@ -10,13 +10,25 @@ const compression = require("compression");
 const helmet = require("helmet");
 require("dotenv").config();
 
-// DATABASE Connection
+
+/* 
+DATABASE Connection
+*/
+
+
 mongoose.set("strictQuery", false);
 mongoose
   .connect(process.env.MONGODB_URI)
   .catch(err => console.log(err));
 
-// Middleware
+
+/*
+Middlewares 
+
+process many operations between request and server of server and client
+*/
+
+
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -27,21 +39,47 @@ app.use(helmet.crossOriginResourcePolicy({
 }));
 app.use(cors());
 
-// Set static path in this app.
+
+/* 
+set static path 
+
+1 files
+storage for files from client
+2 public
+other files in server
+*/
+
+
 app.use("/api/static", express.static("public"));
 app.use("/api/files", express.static("files"));
 
-// Router with prefix
+
+/* 
+  set index router with prefix(api)
+
+  * router
+  connect request with proper resources
+*/
+
+
 app.use("/api", indexRouter);
 
-// Catch 404 and forward to error handler
+
+/* 
+Error handler
+
+process error occured in server
+*/
+
+
+// handle 404 error
 app.use((req, res, next) => {
   const err = new createError.NotFound("Invalid URL");
 
   next(err);
 })
 
-// Error handler
+// handle error log/client message
 app.use((err, req, res, next) => {
   console.error(err);
   res.status(err.status || 500).json(err.message); 

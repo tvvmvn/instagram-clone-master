@@ -2,6 +2,7 @@ const User = require("../models/User");
 const Following = require("../models/Following");
 const createError = require("http-errors");
 
+
 exports.find = async (req, res, next) => {
   try {
     const where = {};
@@ -63,6 +64,7 @@ exports.find = async (req, res, next) => {
   }
 } 
 
+
 exports.findOne = async (req, res, next) => {
   try {
     const profileFields = "username name avatar avatarUrl bio";
@@ -87,6 +89,7 @@ exports.findOne = async (req, res, next) => {
     next(error)
   }
 }
+
 
 exports.follow = async (req, res, next) => {
   try {
@@ -120,6 +123,7 @@ exports.follow = async (req, res, next) => {
     next(error)
   }
 }
+
 
 exports.unfollow = async (req, res, next) => {
   try {

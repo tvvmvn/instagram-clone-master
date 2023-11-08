@@ -5,6 +5,17 @@ const crypto = require("crypto");
 const Post = require("./Post");
 const Following = require("./Following");
 
+
+/*
+Schema
+a structure of collection
+
+* collection 
+basis for sorting related data in NoSQL.
+table in RDB.
+*/
+
+
 const userSchema = new Schema({
   email: { type: String, minLength: 5 },
   password: { type: String, minLength: 5 },
@@ -16,9 +27,16 @@ const userSchema = new Schema({
 }, { 
   toJSON: { virtuals: true },
   toObject: { virtuals: true }
-}) 
+}); 
 
-// Virtual field
+
+/* 
+Virtual field
+can add virtual field to schema when if it's needed
+v-field does not exits on real database
+*/
+
+
 userSchema.virtual("avatarUrl").get(function () {
   return process.env.FILE_URL + "/avatar/" + this.avatar;
 })
@@ -51,7 +69,14 @@ userSchema.virtual("isFollowing", {
   justOne: true
 })
 
-// Operations
+
+/* 
+  Operations
+  
+  Process data about Schema
+*/
+
+
 userSchema.methods.setPassword = function (password) {
   this.salt = crypto
     .randomBytes(16).toString("hex");
@@ -78,5 +103,6 @@ userSchema.methods.generateJWT = function () {
 
   return jwt.sign(payload, secret);
 }
+
 
 module.exports = mongoose.model("User", userSchema);

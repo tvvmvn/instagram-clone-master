@@ -4,6 +4,7 @@ const Post = require("../models/Post");
 const Likes = require("../models/Likes");
 const createError = require("http-errors");
 
+
 exports.feed = async (req, res, next) => {
   try {
     const followingUsers = await Following.find({ user: req.user._id });
@@ -37,6 +38,7 @@ exports.feed = async (req, res, next) => {
   }
 }
 
+
 exports.find = async (req, res, next) => {
   try {
     const where = {}
@@ -65,6 +67,7 @@ exports.find = async (req, res, next) => {
   }
 }
 
+
 exports.findOne = async (req, res, next) => {
   try {
     const post = await Post.findById(req.params.id)
@@ -88,6 +91,7 @@ exports.findOne = async (req, res, next) => {
     next(error)
   }
 }
+
 
 exports.create = async (req, res, next) => {
   try {    
@@ -114,6 +118,7 @@ exports.create = async (req, res, next) => {
   }
 }
 
+
 exports.deleteOne = async (req, res, next) => {
   try {
     const post = await Post.findById(req.params.id);
@@ -136,6 +141,7 @@ exports.deleteOne = async (req, res, next) => {
     next(error)
   }
 }
+
 
 exports.like = async (req, res, next) => {
   try {
@@ -166,6 +172,7 @@ exports.like = async (req, res, next) => {
     next(error)
   }
 }
+
 
 exports.unlike = async (req, res, next) => {
   try {

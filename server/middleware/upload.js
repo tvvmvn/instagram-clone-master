@@ -3,6 +3,14 @@ const path = require("path");
 const createError = require("http-errors");
 const opts = {}
 
+
+/* 
+  Multer middleware
+  File handling from client
+*/
+
+
+// storage option
 opts.storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, `${__dirname}/../files/${file.fieldname}/`);
@@ -16,6 +24,8 @@ opts.storage = multer.diskStorage({
   }
 })
 
+
+// filter option
 opts.fileFilter = (req, file, cb) => {
   const extname = path.extname(file.originalname);
   let isError = false;
@@ -31,13 +41,15 @@ opts.fileFilter = (req, file, cb) => {
 
   if (isError) {
     const err = new createError.BadRequest("Unacceptable type of file");
-    
     return cb(err);
   }
 
   cb(null, true);
 },
 
+
+// limit option
 opts.limits = { fileSize: 1e7 }
+
 
 module.exports = multer(opts)
