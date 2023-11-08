@@ -15,7 +15,7 @@ export default function Feed() {
   const [skip, setSkip] = useState(0);
   const limit = 5;
   
-  // key state
+  // key state tracking
   console.log(posts)
 
   useEffect(() => {
@@ -123,13 +123,13 @@ export default function Feed() {
 
   const doesMoreExists = postCount > posts.length;
 
-  const moreButton =  (
+  const showMoreBtn =  (
     <div className="flex justify-center my-2">
       <button 
         className="p-1 text-blue-500 font-semibold" 
         onClick={() => setSkip(skip + limit)}
       >
-        More
+        Show more
       </button>
     </div>
   )
@@ -151,7 +151,7 @@ export default function Feed() {
         </div>
       )}
 
-      {doesMoreExists && moreButton}
+      {doesMoreExists && showMoreBtn}
 
       {!isLoaded && <Spinner />}
 

@@ -30,7 +30,7 @@ export default function Form({ handleAddComment }) {
         className="bg-blue-500 text-white text-sm font-semibold px-4 py-2 rounded-lg disabled:opacity-[0.2]"
         disabled={!content.trim()}
       >
-        Post
+        Add
       </button>
     </form>
   )

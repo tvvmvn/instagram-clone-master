@@ -7,13 +7,13 @@ export default function Explore() {
   const [error, setError] = useState(null);
   const [isLoaded, setIsLoaded] = useState(true);
   const [profiles, setProfiles] = useState([]);
-  const inputEl = useRef(null);
+  const inputRef = useRef(null);
 
   useEffect(() => {
-    inputEl.current.focus();
-  })
+    inputRef.current.focus();
+  }, [])
 
-  // tracking
+  // key state tracking
   console.log(profiles)
 
   async function search(username) {
@@ -50,13 +50,14 @@ export default function Explore() {
     <div className="px-4">
       <h3 className="text-lg font-semibold my-4">Explore</h3>
 
+      {/* Search form */}
       <div className="mb-4">
         <input
           type="text"
           className="border px-2 py-1 rounded w-full outline-none"
           onChange={({ target }) => search(target.value)}
           placeholder="Search"
-          ref={inputEl}
+          ref={inputRef}
         />
       </div>
 
@@ -68,7 +69,9 @@ export default function Explore() {
         <Spinner />
       )}
 
-      {error && <p className="text-red-500">{error.message}</p>}
+      {error && (
+        <p className="text-red-500">{error.message}</p>
+      )}
     </div>
   )
 }

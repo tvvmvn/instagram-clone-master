@@ -11,6 +11,7 @@ export default function SignUp() {
   const [name, setName] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const disabled = !isEmail(email) || !isUsername(username) || !isPassword(password);
 
   async function handleSubmit(e) {
     try {
@@ -92,17 +93,15 @@ export default function SignUp() {
         </label>
       </div>
 
-      {/* Submit button */}
-      <div className="mb-2">
-        <button
-          type="submit"
-          className="bg-blue-500 rounded-lg text-sm font-semibold px-4 py-2 text-white w-full disabled:opacity-[0.5]"
-          disabled={!isEmail(email) || !isUsername(username) || !isPassword(password)}
-        >
-          Sign Up
-        </button>
-        {error && <p className="text-red-500 text-center my-4">{error.message}</p>}
-      </div>
+      <button
+        type="submit"
+        className="bg-blue-500 rounded-lg text-sm font-semibold px-4 py-2 text-white w-full disabled:opacity-[0.5]"
+        disabled={disabled}
+      >
+        Sign Up
+      </button>
+    
+      {error && <p className="my-4 text-red-500 text-center">{error.message}</p>}
 
       {/* Login Link */}
       <p className="text-center mt-4">

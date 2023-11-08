@@ -7,13 +7,10 @@ export default function ProfileEdit() {
   const { user, setUser } = useContext(AuthContext);
   const [newName, setNewName] = useState(user.name);
   const [newBio, setNewBio] = useState(user.bio);
+  const disabled = user.name === newName && user.bio === newBio;
 
-  console.log(user) // key state
-
-  const isEqual = {
-    name: user.name === newName,
-    bio: user.bio === newBio,
-  }
+  // key state tracking
+  console.log(user) 
   
   async function handleSubmit(e) {
     try {
@@ -60,7 +57,7 @@ export default function ProfileEdit() {
 
   return (
     <div className="mt-8 px-4">
-      {/* Avatar image and update button */}
+      {/* Avatar form */}
       <div className="flex mb-4">
         <img
           src={user.avatarUrl}
@@ -82,7 +79,7 @@ export default function ProfileEdit() {
         </div>
       </div>
 
-      {/* Update form */}
+      {/* Info form */}
       <form onSubmit={handleSubmit}>
         <div className="mb-2">
           <label htmlFor="name" className="block font-semibold">Name</label>
@@ -112,7 +109,7 @@ export default function ProfileEdit() {
           <button
             type="submit"
             className="text-sm font-semibold bg-gray-200 rounded-lg px-4 py-2 disabled:opacity-[0.2]"
-            disabled={isEqual.name && isEqual.bio}
+            disabled={disabled}
           >
             Save
           </button>

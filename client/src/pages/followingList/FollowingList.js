@@ -11,7 +11,7 @@ export default function FollowingList() {
   const [isLoaded, setIsLoaded] = useState(false);
   const [followingUsers, setFollowingUsers] = useState([]);
 
-  // key state
+  // key state tracking
   console.log(followingUsers)
 
   useEffect(() => {
@@ -95,7 +95,9 @@ export default function FollowingList() {
 
       {!isLoaded && <Spinner />}
 
-      {error && <p className="text-red-500">{error.message}</p>}
+      {error && (
+        <p className="text-red-500">{error.message}</p>
+      )}
     </div>
   )
 }

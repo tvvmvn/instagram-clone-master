@@ -11,8 +11,8 @@ export default function FollowerList() {
   const [isLoaded, setIsLoaded] = useState(false);
   const [followers, setFollowers] = useState([]);
 
-  // key state
-  console.log(followers)
+  // key state tracking
+  console.log(followers);
 
   useEffect(() => {
     fetchData()
@@ -95,7 +95,9 @@ export default function FollowerList() {
 
       {!isLoaded && <Spinner />}
       
-      {error && <p className="text-red-500">{error.message}</p>}
+      {error && (
+        <p className="text-red-500">{error.message}</p>
+      )}
     </div>
   )
 }

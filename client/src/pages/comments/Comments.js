@@ -1,5 +1,5 @@
-import { useContext, useState, useEffect } from "react";
-import { Link, useParams } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import { getComments, createComment, deleteComment } from "../../service/api";
 import Form from "./Form";
 import Comment from "./Comment";
@@ -12,7 +12,7 @@ export default function Comments() {
   const [isLoaded, setIsLoaded] = useState(false);
   const [comments, setComments] = useState([]);
 
-  // key state
+  // key state tracking
   console.log(comments)
 
   useEffect(() => {
@@ -61,7 +61,7 @@ export default function Comments() {
 
   return (
     <div className="px-4">
-      <h3 className="text-lg font-semibold my-4">This post"s comments</h3>
+      <h3 className="text-lg font-semibold my-4">Comments</h3>
       
       <Form handleAddComment={handleAddComment} />
 
@@ -75,7 +75,9 @@ export default function Comments() {
 
       {!isLoaded && <Spinner />}
       
-      {error && <p className="text-red-500">{error.message}</p>}
+      {error && (
+        <p className="text-red-500">{error.message}</p>
+      )}
     </div>
   )
 }

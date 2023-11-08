@@ -1,5 +1,5 @@
 import { useState, useContext, useEffect } from "react";
-import { Link, isRouteErrorResponse, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import AuthContext from "../auth/AuthContext";
 import { signIn } from "../service/api";
 import { isEmail, isPassword } from "../utils/validator";
@@ -12,6 +12,7 @@ export default function Login() {
   const [email, setEmail] = useState(localStorage.getItem("email") || "");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const disabled = !isEmail(email) || !isPassword(password);
 
   async function handleSubmit(e) {
     try {
@@ -21,7 +22,7 @@ export default function Login() {
 
       const { user } = await signIn(email, password);
       
-      setUser(user)
+      setUser(user);
 
       localStorage.setItem("email", email);
       
@@ -35,7 +36,7 @@ export default function Login() {
   }
 
   useEffect(() => {
-    document.title = `Login - Instagram`
+    document.title = `Login - Instagram`;
   }, [])
 
   const passwordToggleButton = (
@@ -83,11 +84,10 @@ export default function Login() {
         </label>
       </div>
 
-      {/* Submit button */}
       <button
         type="submit"
         className="bg-blue-500 text-sm text-white font-semibold rounded-lg px-4 py-2 w-full disabled:opacity-[0.5]"
-        disabled={!isEmail(email) || !isPassword(password)}
+        disabled={disabled}
       >
         Login
       </button>

@@ -7,11 +7,10 @@ export default function Layout() {
   const { user } = useContext(AuthContext);
 
   return (
-    <div className="max-w-sm mx-auto pt-10">
+    <>
       {/* NavBar */}
       <nav className="fixed top-0 left-0 w-full border-b z-10 bg-white">
         <div className="max-w-sm mx-auto px-2 h-10 flex justify-between items-center">
-          
           {/* Logo */}
           <img className="w-24" src="/images/logo.png" />
 
@@ -66,7 +65,9 @@ export default function Layout() {
       </nav>
 
       {/* Main */}
-      <Outlet />
-    </div>
+      <main className="max-w-sm mx-auto pt-10">
+        <Outlet />
+      </main>
+    </>
   )
 }

@@ -48,6 +48,7 @@ export default function ProfileInfo({
     </button>
   )
 
+  // count for photos, followers, following
   const countAboutProfile = (
     <ul className="flex items-center">
       <li className="w-1/3">
@@ -89,11 +90,11 @@ export default function ProfileInfo({
           className="w-20 h-20 object-cover border rounded-full"
         />
 
+        {/* Profile info */}
         <div className="grow ml-4">
           <div className="flex items-center mb-4">
             <h3>{username}</h3>
 
-            {/* Edit and sign out button */}
             {isMaster && (
               <div className="flex ml-2">
                 <Link to="/accounts/edit" className="bg-gray-200 rounded-lg px-4 py-2 text-sm font-semibold">
@@ -104,27 +105,28 @@ export default function ProfileInfo({
               </div>
             )}
 
-            {/* Follow/Unfollow button */}
             {(!isMaster && !isFollowing) && followButton}
             {(!isMaster && isFollowing) && unfollowButton}
           </div>
 
-          {/* Post, follower, following count */}
           {countAboutProfile}
         </div>
       </div>
 
-      {name && (
-        <h3 className="text-sm font-semibold my-2">
-          {name}
-        </h3>
-      )}
+      {/* Name and bio */}
+      <div>
+        {name && (
+          <h3 className="text-sm font-semibold my-2">
+            {name}
+          </h3>
+        )}
 
-      {bio && (
-        <p className="text-sm my-2 whitespace-pre-line">
-          {bio}
-        </p>
-      )}
+        {bio && (
+          <p className="text-sm my-2 whitespace-pre-line">
+            {bio}
+          </p>
+        )}
+      </div>
     </div>
   )
 }

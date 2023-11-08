@@ -6,6 +6,7 @@ export default function Profile({
     avatarUrl,
     isFollowing
 }) {
+  
   return (
     <li className="flex items-center justify-between my-2">
       <Link

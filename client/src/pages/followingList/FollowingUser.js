@@ -1,4 +1,6 @@
+import { useContext } from "react";
 import { Link } from "react-router-dom"
+import AuthContext from "../../auth/AuthContext";
 
 export default function FollowingUser({ 
   username,
@@ -8,6 +10,9 @@ export default function FollowingUser({
   handleFollow, 
   handleUnfollow 
 }) {
+
+  const { user } = useContext(AuthContext);
+  const isMaster = username === user.username;
 
   const followButton = (
     <button
@@ -28,7 +33,8 @@ export default function FollowingUser({
   )
 
   return (
-    <div className="flex justify-between items-center mb-2">
+    <li className="flex justify-between items-center mb-2">
+      {/* Profile */}
       <Link
         to={`/profiles/${username}`}
         className="inline-flex items-center"
@@ -37,7 +43,6 @@ export default function FollowingUser({
           src={avatarUrl}
           className="w-12 h-12 object-cover rounded-full border"
         />
-        
         <div className="ml-2">
           <span className="block font-semibold">
             {username}
@@ -48,7 +53,9 @@ export default function FollowingUser({
         </div>
       </Link>
 
-      {isFollowing ? unfollowButton : followButton}
-    </div>
+      {!isMaster && (
+        isFollowing ? unfollowButton : followButton
+      )}
+    </li>
   )
 }

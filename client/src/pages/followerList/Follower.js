@@ -1,5 +1,6 @@
 import { useContext } from "react"
 import { Link } from "react-router-dom"
+import AuthContext from "../../auth/AuthContext";
 
 export default function Follower({
   username,
@@ -10,9 +11,12 @@ export default function Follower({
   handleUnfollow 
 }) {
 
+  const { user } = useContext(AuthContext);
+  const isMaster = username === user.username;
+
   const followButton = (
     <button
-      className="ml-2 bg-blue-500 text-white text-sm px-4 py-2 font-semibold p-2 rounded-lg"
+      className="bg-blue-500 text-white text-sm px-4 py-2 font-semibold p-2 rounded-lg"
       onClick={() => handleFollow(username)}
     >
       Follow
@@ -21,7 +25,7 @@ export default function Follower({
 
   const unfollowButton = (
     <button
-      className="ml-2 bg-gray-200 text-sm px-4 py-2 font-semibold p-2 rounded-lg"
+      className="bg-gray-200 text-sm px-4 py-2 font-semibold p-2 rounded-lg"
       onClick={() => handleUnfollow(username)}
     >
       Following
@@ -29,7 +33,8 @@ export default function Follower({
   )
 
   return (
-    <div className="flex justify-between items-center mb-2">
+    <li className="flex justify-between items-center mb-2">
+      {/* Profile */}
       <Link
         to={`/profiles/${username}`}
         className="inline-flex items-center"
@@ -48,7 +53,9 @@ export default function Follower({
         </div>
       </Link>
 
-      {isFollowing ? unfollowButton : followButton}
-    </div>
+      {!isMaster && (
+        isFollowing ? unfollowButton : followButton
+      )}
+    </li>
   )
 }

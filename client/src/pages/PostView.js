@@ -12,10 +12,11 @@ export default function PostView() {
   const navigate = useNavigate();
   const { user } = useContext(AuthContext)
 
+  // key state tracking
   console.log(post);
 
   useEffect(() => {
-    fetchData()
+    fetchData();
   }, [])
 
   async function fetchData() {
