@@ -1,5 +1,4 @@
 # Instagram-clone SERVER
-
 "Instagram Clone" API Server written in in Node/Express.
 
 
@@ -7,13 +6,7 @@
 > https://docs.google.com/presentation/d/e/2PACX-1vQrfhGQrcI_10dY7lCzYU-Q1XfNKI8bgoxGa59r3PiFKVLp_iLMLfBEeku_f7Cgu_Bbrs2S0ZAiDmBk/pub?start=false&loop=false&delayms=3000
 
 
-## Model Diagram
-
-![A UML diagram showing the relation of database entities in this example repository](/server/diagram.png?raw=true)
-
-
 ## Quick Start
-
 To get this project up and running locally on your computer:
 
 1. Set up a [Node.js](https://nodejs.org) development environment.
@@ -23,7 +16,6 @@ To get this project up and running locally on your computer:
    npm install
    npm run devstart  
    ```
-
 3. Send requests to <http://localhost:3000/> to test server.
 
 > **Note:** The app needs MongoDB URI and SECRET for JWT.

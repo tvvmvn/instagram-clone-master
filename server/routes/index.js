@@ -42,13 +42,13 @@ router.get("/", (req, res) => {
 
 
 // User Router 
-router.use("/users", userRouter)
+router.use("/users", userRouter);
 // Post Router 
-router.use("/posts", auth, postRouter)
+router.use("/posts", auth, postRouter);
 // Comment Router 
 router.use("/posts", auth, commentRouter);
 // Profile Router 
-router.use("/profiles", auth, profileRouter)
+router.use("/profiles", auth, profileRouter);
 
 
 module.exports = router;
