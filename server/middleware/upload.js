@@ -5,8 +5,7 @@ const opts = {}
 
 
 /* 
-  Multer middleware
-  File handling from client
+  middleware for file handling
 */
 
 

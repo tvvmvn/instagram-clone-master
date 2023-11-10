@@ -25,7 +25,8 @@ mongoose
 /*
 Middlewares 
 
-process many operations between request and server of server and client
+process many operations between request and server 
+of server and client
 */
 
 
@@ -41,7 +42,7 @@ app.use(cors());
 
 
 /* 
-set static path 
+static path 
 
 1 files
 storage for files from client
@@ -55,10 +56,7 @@ app.use("/api/files", express.static("files"));
 
 
 /* 
-  set index router with prefix(api)
-
-  * router
-  connect request with proper resources
+  set main router
 */
 
 
@@ -66,20 +64,17 @@ app.use("/api", indexRouter);
 
 
 /* 
-Error handler
-
-process error occured in server
+Error handling
 */
 
 
-// handle 404 error
 app.use((req, res, next) => {
   const err = new createError.NotFound("Invalid URL");
 
   next(err);
 })
 
-// handle error log/client message
+// error handler
 app.use((err, req, res, next) => {
   console.error(err);
   res.status(err.status || 500).json(err.message); 

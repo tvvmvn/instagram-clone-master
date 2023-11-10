@@ -28,10 +28,10 @@ const auth = require("../middleware/auth");
   3 Router hierachy of server
 
   indexRouter 
-      usersRouter
+      userRouter
       postRotuer
-      commentsRouter
-      profilesRouter
+      commentRouter
+      profileRouter
 */
 
 

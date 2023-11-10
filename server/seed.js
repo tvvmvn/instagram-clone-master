@@ -1,16 +1,19 @@
-const userArgs = process.argv.slice(2);
 const mongoose = require("mongoose");
 const User = require("./models/User");
 const Post = require("./models/Post");
+const userArgs = process.argv.slice(2);
 const [directive, MONGODB_URI] = userArgs;
 
 
+// Invalid MongoDB URL
 if (!MONGODB_URI.startsWith("mongodb")) {
   console.log("ERROR: You need to specify a valid mongodb URL.");
   return;
 }
 
-if (directive === "run") {
+
+// Check user's directive
+if (directive === "run") { 
   seedDatabase();
 } else if (directive === "revert") {
   dropDatabase()

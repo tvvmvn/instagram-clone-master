@@ -2,7 +2,12 @@
 
 "Instagram Clone" API Server written in in Node/Express.
 
----
+
+## Presentation
+> https://docs.google.com/presentation/d/e/2PACX-1vQrfhGQrcI_10dY7lCzYU-Q1XfNKI8bgoxGa59r3PiFKVLp_iLMLfBEeku_f7Cgu_Bbrs2S0ZAiDmBk/pub?start=false&loop=false&delayms=3000
+
+
+## Model Diagram
 
 ![A UML diagram showing the relation of database entities in this example repository](/server/diagram.png?raw=true)
 

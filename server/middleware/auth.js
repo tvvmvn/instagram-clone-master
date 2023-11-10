@@ -6,10 +6,17 @@ require("dotenv").config();
 
 
 /* 
-  options about JWT strategy
+  * Authorization & Authentication
+  
+  1 JSON Web Token
+  JSON formatted token(encrypted data)
+
+  2 passport 
+  auth module
 */
+ 
 
-
+// options about JWT processing strategy
 const opts = {};
 opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
 opts.secretOrKey = process.env.SECRET;
@@ -17,11 +24,7 @@ opts.secretOrKey = process.env.SECRET;
 // opts.audience = "yoursite.net";
 
 
-/* 
-Strategy(algorithms) for processing JWT 
-*/
-
-
+// Strategy(algorithms) for JWT processing
 const jwtStrategy = new JwtStrategy(opts, async (payload, done) => {
   try {
     const user = await User.findById(payload.sub);
