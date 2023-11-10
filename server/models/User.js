@@ -73,7 +73,7 @@ userSchema.virtual("isFollowing", {
 /* 
   * Operations
   
-  Process data about Schema
+  Process data of Model
 */
 
 
@@ -93,6 +93,12 @@ userSchema.methods.checkPassword = function (password) {
   
   return this.password === hashedPassword;
 }
+
+/* 
+  Login token 
+  
+  JWT (JSON Web Token)
+*/
 
 userSchema.methods.generateJWT = function () {
   const payload = { 

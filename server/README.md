@@ -14,7 +14,7 @@ To get this project up and running locally on your computer:
 
    ```
    npm install
-   npm run devstart  
+   npm run start:watch
    ```
 3. Send requests to <http://localhost:3000/> to test server.
 
