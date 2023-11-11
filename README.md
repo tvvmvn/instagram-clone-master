@@ -32,7 +32,7 @@
 
 ## Model Diagram
 1. Schema - A structure of Model
-2. Operation - A function that Model can do to process data about them
+2. Operation - Model's behavior to process data of itself
 3. Relationship - Interaction between Models.
 ---
 ![Diagram](/images/Diagram.png)
@@ -83,7 +83,7 @@
 ### Basic terms
 1. Collection - A basis for sorting related data in NoSQL.
 2. Document - Each data in collection
-3. Field - each property for document.
+3. Field - each property in document.
 ---
 ![Collection](/images/collection.png)
 
