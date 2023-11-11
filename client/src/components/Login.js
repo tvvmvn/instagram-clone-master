@@ -1,7 +1,7 @@
 import { useState, useContext, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import AuthContext from "../auth/AuthContext";
-import { signIn } from "../service/api";
+import AuthContext from "./auth/AuthContext";
+import { signIn } from "../service/user";
 import { isEmail, isPassword } from "../utils/validator";
 
 export default function Login() {
@@ -93,12 +93,16 @@ export default function Login() {
       </button>
 
       {/* Error Messages */}
-      {error && <p className="my-4 text-center text-red-500">{error.message}</p>}
+      {error && (
+        <p className="my-4 text-center text-red-500">{error.message}</p>
+      )}
 
       {/* Sign Up Link */}
       <p className="text-center my-4">
         Don't have an account ?  {" "}
-        <Link to="/accounts/signup" className="text-blue-500 font-semibold">Sign Up</Link>
+        <Link to="/accounts/signup" className="text-blue-500 font-semibold">
+          Sign Up
+        </Link>
       </p>
     </form>
   )

@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
-import { getProfiles } from "../../service/api";
+import { getProfiles } from "../../service/profile";
 import Profile from "./Profile";
-import Spinner from "../shared/Spinner";
+import Spinner from "../Spinner";
 
 export default function Explore() {
   const [error, setError] = useState(null);

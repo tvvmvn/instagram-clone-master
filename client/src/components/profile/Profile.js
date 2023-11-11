@@ -1,11 +1,11 @@
 import { useState, useEffect, useContext } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import AuthContext from "../../auth/AuthContext";
+import AuthContext from "../auth/AuthContext";
 import ProfileInfo from "./ProfileInfo";
 import Thumbnail from "./Thumbnail";
 import PostForm from "../PostForm";
-import { getProfile, getTimeline, follow, unfollow } from "../../service/api";
-import Spinner from "../shared/Spinner";
+import { getProfile, getTimeline, follow, unfollow } from "../../service/profile";
+import Spinner from "../Spinner";
 
 export default function Profile() {
 

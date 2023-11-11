@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { getComments, createComment, deleteComment } from "../../service/api";
+import { getComments, createComment, deleteComment } from "../../service/comment";
 import Form from "./Form";
 import Comment from "./Comment";
-import Spinner from "../shared/Spinner";
+import Spinner from "../Spinner";
 
 export default function Comments() {
 

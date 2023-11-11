@@ -1,18 +1,18 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import AuthProvider from "./auth/AuthProvider";
-import AuthRequired from "./auth/AuthRequired";
-import Layout from "./pages/Layout";
-import Feed from "./pages/Feed";
-import PostView from "./pages/PostView";
-import Comments from "./pages/comments/Comments";
-import Explore from "./pages/explore/Explore";
-import Login from "./pages/Login";
-import SignUp from "./pages/SignUp";
-import Profile from "./pages/profile/Profile";
-import FollowerList from "./pages/followerList/FollowerList";
-import FollowingList from "./pages/followingList/FollowingList";
-import ProfileEdit from "./pages/ProfileEdit";
-import NotFound from "./pages/NotFound";
+import AuthProvider from "./components/auth/AuthProvider";
+import AuthRequired from "./components/auth/AuthRequired";
+import Layout from "./components/Layout";
+import Feed from "./components/Feed";
+import PostView from "./components/PostView";
+import Comments from "./components/comments/Comments";
+import Explore from "./components/explore/Explore";
+import Login from "./components/Login";
+import SignUp from "./components/SignUp";
+import Profile from "./components/profile/Profile";
+import FollowerList from "./components/followerList/FollowerList";
+import FollowingList from "./components/followingList/FollowingList";
+import ProfileEdit from "./components/ProfileEdit";
+import NotFound from "./components/NotFound";
 
 export default function App() {
   return (

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { createUser } from "../service/api";
+import { createUser } from "../service/user";
 import { isEmail, isUsername, isPassword } from "../utils/validator";
 
 export default function SignUp() {

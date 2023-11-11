@@ -1,9 +1,9 @@
 import { useState, useEffect, useContext } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import PostTemplate from "./shared/PostTemplate";
-import { getPost, deletePost, likePost, unlikePost } from "../service/api";
-import Spinner from "./shared/Spinner";
-import AuthContext from "../auth/AuthContext";
+import PostTemplate from "./post-template/Template";
+import { getPost, deletePost, likePost, unlikePost } from "../service/post";
+import Spinner from "./Spinner";
+import AuthContext from "./auth/AuthContext";
 
 export default function PostView() {
 
