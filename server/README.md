@@ -1,11 +1,6 @@
 # Instagram-clone SERVER
 "Instagram Clone" API Server written in in Node/Express.
 
-
-## Presentation
-> https://docs.google.com/presentation/d/e/2PACX-1vQrfhGQrcI_10dY7lCzYU-Q1XfNKI8bgoxGa59r3PiFKVLp_iLMLfBEeku_f7Cgu_Bbrs2S0ZAiDmBk/pub?start=false&loop=false&delayms=3000
-
-
 ## Quick Start
 To get this project up and running locally on your computer:
 
