@@ -32,27 +32,30 @@ export default function Follower({
     </button>
   )
 
+  const profile = (
+    <Link
+      to={`/profiles/${username}`}
+      className="inline-flex items-center"
+    >
+      <img
+        src={avatarUrl}
+        className="w-12 h-12 object-cover rounded-full border"
+      />
+      <div className="ml-2">
+        <span className="block font-semibold">
+          {username}
+        </span>
+        <span className="block text-gray-400 text-sm">
+          {name}
+        </span>
+      </div>
+    </Link>
+  )
+
   return (
     <li className="flex justify-between items-center mb-2">
-      {/* Profile */}
-      <Link
-        to={`/profiles/${username}`}
-        className="inline-flex items-center"
-      >
-        <img
-          src={avatarUrl}
-          className="w-12 h-12 object-cover rounded-full border"
-        />
-        <div className="ml-2">
-          <span className="block font-semibold">
-            {username}
-          </span>
-          <span className="block text-gray-400 text-sm">
-            {name}
-          </span>
-        </div>
-      </Link>
-
+      {profile}
+      
       {!isMaster && (
         isFollowing ? unfollowButton : followButton
       )}

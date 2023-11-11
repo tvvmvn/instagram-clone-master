@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getFollowingUsers, follow, unfollow } from "../../service/profile";
-import FollowingUser from "./FollowingUser";
+import Profile from "./Profile";
 import Spinner from "../Spinner";
 
-export default function FollowingList() {
+export default function Following() {
 
   const { username } = useParams();
   const [error, setError] = useState(null);
@@ -70,7 +70,7 @@ export default function FollowingList() {
   }
 
   const followingList = followingUsers.map(followingUser => (
-    <FollowingUser 
+    <Profile 
       key={followingUser.id}
       username={followingUser.username}
       name={followingUser.name}

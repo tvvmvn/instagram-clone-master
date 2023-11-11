@@ -1,20 +1,43 @@
-# Instagram-clone CLIENT
- 
-"Instagram Clone" Client is written in REACT
+# Instagram-clone Client
 
 
-## Quick Start
+### Components
 
-To get this project up and running locally on your computer:
+1. Auth
+- AuthContext
+- AuthProvider
 
-1. Set up a [Node.js](https://nodejs.org) development environment.
-2. Once you have node setup, enter the following commands in the root of your clone of this repo:
+2. Comments
+- Comments
+- Comment
 
-   ```
-   npm install
-   npm start
-   ```
+3. Explore
+- Explore
+- Profile
 
-3. Open a browser to <http://localhost:3000/> to open the web site.
+4. FollowerList
+- Follower
+- FollowerList
 
-> **Note:** The app needs server URL.
+5. FlollowingList
+- FollowingList
+- FollowingUser
+
+6. Post template
+- Template
+- Carousel
+
+7. Profile
+- Profile
+- ProfileInfo
+- Thumbnail
+
+8. Feed
+9. Layout
+10. Login
+11. NotFound
+12. PostForm
+13. PostView
+14. ProfileEdit
+15. SignUp
+16. Spinner

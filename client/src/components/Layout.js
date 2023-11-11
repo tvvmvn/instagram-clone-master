@@ -8,15 +8,13 @@ export default function Layout() {
 
   return (
     <>
-      {/* NavBar */}
-      <nav className="fixed top-0 left-0 w-full border-b z-10 bg-white">
+      <header className="fixed top-0 left-0 w-full border-b z-10 bg-white">
         <div className="max-w-sm mx-auto px-2 h-10 flex justify-between items-center">
           {/* Logo */}
           <img className="w-24" src="/images/logo.png" />
 
           {/* Menu */}
           <ul className="flex items-center">
-            {/* Home */}
             <li>
               <Link to="/" className="block">
                 <svg 
@@ -34,8 +32,6 @@ export default function Layout() {
                 </svg>
               </Link>
             </li>
-
-            {/* Explore */}
             <li className="ml-2">
               <Link to="/explore" className="block">
                 <svg 
@@ -50,8 +46,6 @@ export default function Layout() {
                 </svg>
               </Link>
             </li>
-
-            {/* My profile */}
             <li className="ml-2">
               <Link to={`/profiles/${user.username}`}>
                 <img
@@ -62,7 +56,7 @@ export default function Layout() {
             </li>
           </ul>
         </div>
-      </nav>
+      </header>
 
       {/* Main */}
       <main className="max-w-sm mx-auto pt-10">

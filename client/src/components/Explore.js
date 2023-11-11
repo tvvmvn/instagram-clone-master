@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
-import { getProfiles } from "../../service/profile";
-import Profile from "./Profile";
-import Spinner from "../Spinner";
+import { Link } from "react-router-dom";
+import { getProfiles } from "../service/profile";
+import Spinner from "./Spinner";
 
 export default function Explore() {
   const [error, setError] = useState(null);
@@ -37,20 +37,38 @@ export default function Explore() {
   }
 
   const profileList = profiles.map(profile => (
-    <Profile 
-      key={profile.id}  
-      username={profile.username}
-      name={profile.name}
-      avatarUrl={profile.avatarUrl}
-      isFollowing={profile.isFollowing}
-    />
+    <li className="flex items-center justify-between my-2">
+      <Link
+        to={`/profiles/${profile.username}`}
+        className="flex items-center"
+      >
+        <img
+          src={profile.avatarUrl}
+          className="w-10 h-10 object-cover rounded-full"
+        />
+        <div className="ml-2">
+          <h3 className="block font-semibold">
+            {profile.username}
+          </h3>
+          <span className="block text-gray-400 text-sm">
+            {profile.name}
+          </span>
+        </div>
+      </Link>
+
+      {profile.isFollowing && (
+        <div className="ml-2 text-sm text-blue-500 font-semibold">
+          following
+        </div>
+      )}
+    </li>
   ))
 
   return (
     <div className="px-4">
       <h3 className="text-lg font-semibold my-4">Explore</h3>
 
-      {/* Search form */}
+      {/* Search Input */}
       <div className="mb-4">
         <input
           type="text"
