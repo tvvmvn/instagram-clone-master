@@ -5,6 +5,11 @@ const userArgs = process.argv.slice(2);
 const [directive, MONGODB_URI] = userArgs;
 
 
+/* 
+  Seed data for app
+*/
+
+
 // Invalid MongoDB URL
 if (!MONGODB_URI.startsWith("mongodb")) {
   console.log("ERROR: You need to specify a valid mongodb URL.");

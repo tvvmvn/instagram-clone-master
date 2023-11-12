@@ -1,29 +1,41 @@
 # Client for *Instagram-clone*
 
 
-## Components
+### Source files
+1. components
+2. service - server request library
+- index.js
+- user.js
+- post.js
+- comment.js
+- profile.js
 
-### Auth
-> Authentication
+3. utils - utility functions
+- validator.js
+
+
+### Components in this app
+
+1. Auth (Authentication)
 - AuthContext
 - AuthProvider
 - AuthRequred
 
-### Comments
+2. Comments
 - Comments
 - Comment
 - Form
 
-### Post template
+3. Post template (used by Feed and PostView)
 - Template
 - Carousel
 
-### Profile
+4. Profile
 - Profile
 - ProfileInfo
 - Thumbnail
 
-### Others
+5. Others
 - Avatar
 - Explore
 - Followers

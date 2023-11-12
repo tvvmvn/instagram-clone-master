@@ -24,9 +24,6 @@ mongoose
 
 /*
 Middlewares 
-
-process many operations between request and server 
-of server and client
 */
 
 
@@ -56,7 +53,7 @@ app.use("/api/files", express.static("files"));
 
 
 /* 
-  set main router
+  Set index router
 */
 
 

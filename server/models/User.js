@@ -8,11 +8,7 @@ const Following = require("./Following");
 
 /*
 * Schema
-a structure of collection
-
-* collection 
-basis for sorting related data in NoSQL.
-table in RDB.
+a structure of Model
 */
 
 
@@ -73,7 +69,7 @@ userSchema.virtual("isFollowing", {
 /* 
   * Operations
   
-  Process data of Model
+  Model's behavior to process data about itself
 */
 
 
@@ -93,12 +89,6 @@ userSchema.methods.checkPassword = function (password) {
   
   return this.password === hashedPassword;
 }
-
-/* 
-  Login token 
-  
-  JWT (JSON Web Token)
-*/
 
 userSchema.methods.generateJWT = function () {
   const payload = { 

@@ -13,19 +13,8 @@ const auth = require("../middleware/auth");
 
   1 how to route
   router.httpRequestMethod(url, controller)
-  
-  2 HTTP Request Methods
-  
-  1) GET
-  Read data
-  2) POST
-  Create data
-  3) PUT
-  Update data
-  4) DELETE
-  Delete data
 
-  3 Router hierachy of server
+  2 Router hierachy of server
 
   indexRouter 
       userRouter
