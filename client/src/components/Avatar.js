@@ -1,6 +1,6 @@
 import { useContext } from "react"
 import { Link } from "react-router-dom"
-import AuthContext from "../auth/AuthContext";
+import AuthContext from "./auth/AuthContext";
 
 export default function Follower({
   username,
@@ -42,9 +42,9 @@ export default function Follower({
         className="w-12 h-12 object-cover rounded-full border"
       />
       <div className="ml-2">
-        <span className="block font-semibold">
+        <h3 className="block font-semibold">
           {username}
-        </span>
+        </h3>
         <span className="block text-gray-400 text-sm">
           {name}
         </span>

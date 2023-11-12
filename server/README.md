@@ -1,16 +1,62 @@
-# Instagram-clone SERVER
-"Instagram Clone" API Server written in in Node/Express.
+# Server for *Instagram-clone*
 
-## Quick Start
-To get this project up and running locally on your computer:
 
-1. Set up a [Node.js](https://nodejs.org) development environment.
-2. Once you have node setup, enter the following commands in the root of your clone of this repo:
 
-   ```
-   npm install
-   npm run start:watch
-   ```
-3. Send requests to <http://localhost:3000/> to test server.
+## Directories
 
-> **Note:** The app needs MongoDB URI and SECRET for JWT.
+### bin
+> Execution files for running the server
+- www
+
+### models
+> Models of app
+- User.js
+- Following.js
+- Post.js
+- Comment.js
+- Likes.js
+
+### controllers
+> Controllers of app
+- userController.js
+- postController.js
+- commentController.js
+- profileController.js
+
+### routes
+> Routes of app
+
+- index.js
+- user.js
+- post.js
+- comment.js
+- profile.js
+
+### middleware
+> Middlewares of app
+- auth.js
+- loginValidator.js
+- signUpValidator.js
+- upload.js
+
+### files
+> File server for client's upload
+- avatar/
+- photos/
+
+### public
+> static files directory
+
+
+
+## Files
+
+### .env
+> enviroment variables for the apps
+
+### app.js
+> The entry point of app
+
+### seed.js
+> to generating seed data 
+

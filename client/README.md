@@ -1,43 +1,39 @@
-# Instagram-clone Client
+# Client for *Instagram-clone*
 
 
-### Components
+## Components
 
-1. Auth
+### Auth
+> Authentication
 - AuthContext
 - AuthProvider
+- AuthRequred
 
-2. Comments
+### Comments
 - Comments
 - Comment
+- Form
 
-3. Explore
-- Explore
-- Profile
-
-4. FollowerList
-- Follower
-- FollowerList
-
-5. FlollowingList
-- FollowingList
-- FollowingUser
-
-6. Post template
+### Post template
 - Template
 - Carousel
 
-7. Profile
+### Profile
 - Profile
 - ProfileInfo
 - Thumbnail
 
-8. Feed
-9. Layout
-10. Login
-11. NotFound
-12. PostForm
-13. PostView
-14. ProfileEdit
-15. SignUp
-16. Spinner
+### Others
+- Avatar
+- Explore
+- Followers
+- Following
+- Feed
+- Layout
+- Login
+- NotFound
+- PostForm
+- PostView
+- ProfileEdit
+- SignUp
+- Spinner

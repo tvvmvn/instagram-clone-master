@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { getFollowers, follow, unfollow } from "../../service/profile";
-import Profile from "./Profile";
-import Spinner from "../Spinner";
+import { getFollowers, follow, unfollow } from "../service/profile";
+import Avatar from "./Avatar";
+import Spinner from "./Spinner";
 
 export default function Followers() {
 
@@ -70,7 +70,7 @@ export default function Followers() {
   }
 
   const followerList = followers.map(follower => (
-    <Profile 
+    <Avatar 
       key={follower.id}
       username={follower.username}
       name={follower.name}

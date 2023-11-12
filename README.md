@@ -1,6 +1,7 @@
 # A GUIDE for *Instagram Clone*
 
 
+
 ## Development Map
 1. Brower (Client)
 2. Server 
@@ -8,7 +9,8 @@
 - Processing data
 3. DataBase
 ---
-![flow](/images/dev_flow.png)
+![Flow](/images/dev_flow.png)
+
 
 
 ## Development Stack
@@ -21,13 +23,15 @@
 ![MERN](/images/MERN.png)
 
 
+
 ## MVC Pattern
 > Software architercture design pattern
 1. M (Model) - Data Access Layer
 2. V (View) - Presentation Layer
-3. C (Controller) - Login Layer
+3. C (Controller) - Logic Layer
 ---
 ![MVC](/images/mvc.jpeg)
+
 
 
 ## Model Diagram
@@ -36,6 +40,8 @@
 3. Relationship - Interaction between Models.
 ---
 ![Diagram](/images/Diagram.png)
+
+
 
 ## HTTP Request & Response
 ![HTTP](/images/http.png)
@@ -60,8 +66,8 @@
 - 500 Internal Server Error
 
 
-## Middleware
 
+## Middleware
 ![Middleware](/images/middleware.png)
 
 
@@ -78,12 +84,13 @@
 ![JWT](/images/jwt.jpeg)
 
 
+
 ## NoSQL Guide
 
 ### Basic terms
 1. Collection - A basis for sorting related data in NoSQL.
 2. Document - Each data in collection
-3. Field - each property in document.
+3. Field - each property of document.
 ---
 ![Collection](/images/collection.png)
 

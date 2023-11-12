@@ -1,6 +1,6 @@
 import { useState, useEffect, useContext } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import PostTemplate from "./post-template/Template";
+import PostTemplate from "./post-template/PostTemplate";
 import { getPost, deletePost, likePost, unlikePost } from "../service/post";
 import Spinner from "./Spinner";
 import AuthContext from "./auth/AuthContext";
