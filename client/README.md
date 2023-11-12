@@ -3,14 +3,14 @@
 
 ### Source files
 1. components
-2. service - server request library
+2. service: server request library
 - index.js
 - user.js
 - post.js
 - comment.js
 - profile.js
 
-3. utils - utility functions
+3. utils: utility functions
 - validator.js
 
 
