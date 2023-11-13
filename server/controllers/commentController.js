@@ -3,6 +3,15 @@ const Comment = require("../models/Comment");
 const createError = require("http-errors");
 
 
+/* 
+  Comment controller
+
+  1 find
+  2 create
+  3 deleteOne
+*/
+
+
 exports.find = async (req, res, next) => {
   try {
     const post = await Post.findById(req.params.id);

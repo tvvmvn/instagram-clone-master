@@ -1,6 +1,15 @@
 const User = require("../models/User");
 
 
+/* 
+  User controller
+
+  1 create
+  2 login
+  3 update
+*/
+
+
 exports.create = async (req, res, next) => {
   try {
     const { email, name, username, password } = req.body;

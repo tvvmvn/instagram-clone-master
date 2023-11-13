@@ -5,6 +5,19 @@ const Likes = require("../models/Likes");
 const createError = require("http-errors");
 
 
+/* 
+  Post controller
+
+  1 feed
+  2 find
+  3 findOne
+  4 create
+  5 deleteOne
+  6 like
+  7 unlike
+*/
+
+
 exports.feed = async (req, res, next) => {
   try {
     const followingUsers = await Following.find({ user: req.user._id });

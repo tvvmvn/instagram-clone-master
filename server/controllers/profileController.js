@@ -3,6 +3,16 @@ const Following = require("../models/Following");
 const createError = require("http-errors");
 
 
+/*
+  Profile controller
+
+  1 find
+  2 findOne
+  3 follow
+  4 unfollow
+*/
+
+
 exports.find = async (req, res, next) => {
   try {
     const where = {};
