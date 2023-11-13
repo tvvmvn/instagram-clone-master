@@ -34,15 +34,6 @@
 
 
 
-## Model Diagram
-1. Schema - A structure of Model
-2. Operation - Model's behavior to process data of itself
-3. Relationship - Interaction between Models.
----
-![Diagram](/images/Diagram.png)
-
-
-
 ## HTTP Request & Response
 ![HTTP](/images/http.png)
 

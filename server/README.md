@@ -1,6 +1,12 @@
 # Server for *Instagram-clone*
 
 
+### Model Diagram
+1. Schema - A structure of Model
+2. Operation - Model's behavior to process data of itself
+3. Relationship - Interaction between Models.
+---
+![Diagram](/server/public/images/Diagram.png)
 
 ### Structure of express project
 
