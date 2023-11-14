@@ -33,6 +33,11 @@
 ![MVC](/images/mvc.jpeg)
 
 
+## Module Integration 
+> Bottom-Up Approach
+---
+![Integration](images/bottom-up.webp)
+
 
 ## HTTP Request & Response
 ![HTTP](/images/http.png)
