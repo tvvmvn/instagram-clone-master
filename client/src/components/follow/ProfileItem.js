@@ -1,14 +1,14 @@
-import { useContext } from "react"
-import { Link } from "react-router-dom"
-import AuthContext from "./auth/AuthContext";
+import { useContext } from "react";
+import { Link } from "react-router-dom";
+import AuthContext from "../auth/AuthContext";
 
-export default function Follower({
+export default function ProfileItem({
   username,
-  name,
   avatarUrl,
+  name,
   isFollowing,
-  handleFollow, 
-  handleUnfollow 
+  handleFollow,
+  handleUnfollow
 }) {
 
   const { user } = useContext(AuthContext);
@@ -32,30 +32,26 @@ export default function Follower({
     </button>
   )
 
-  const profile = (
-    <Link
-      to={`/profiles/${username}`}
-      className="inline-flex items-center"
-    >
-      <img
-        src={avatarUrl}
-        className="w-12 h-12 object-cover rounded-full border"
-      />
-      <div className="ml-2">
-        <h3 className="block font-semibold">
-          {username}
-        </h3>
-        <span className="block text-gray-400 text-sm">
-          {name}
-        </span>
-      </div>
-    </Link>
-  )
-
   return (
     <li className="flex justify-between items-center mb-2">
-      {profile}
-      
+      <Link
+        to={`/profiles/${username}`}
+        className="inline-flex items-center"
+      >
+        <img
+          src={avatarUrl}
+          className="w-12 h-12 object-cover rounded-full border"
+        />
+        <div className="ml-2">
+          <h3 className="block font-semibold">
+            {username}
+          </h3>
+          <span className="block text-gray-400 text-sm">
+            {name}
+          </span>
+        </div>
+      </Link>
+
       {!isMaster && (
         isFollowing ? unfollowButton : followButton
       )}

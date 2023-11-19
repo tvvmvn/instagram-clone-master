@@ -1,4 +1,4 @@
-import { server, getBearerToken } from ".";
+import { server, getBearerToken } from "./header";
 
 export async function getComments(id) {
   const res = await fetch(`${server}/posts/${id}/comments`, {
@@ -15,7 +15,6 @@ export async function getComments(id) {
 }
 
 export async function createComment(id, content) {
-
   const res = await fetch(`${server}/posts/${id}/comments`, {
     method: "POST",
     headers: {

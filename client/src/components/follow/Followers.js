@@ -1,33 +1,33 @@
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { getFollowers, follow, unfollow } from "../service/profile";
-import Avatar from "./Avatar";
-import Spinner from "./Spinner";
+import { getFollowers, follow, unfollow } from "../../service/profile";
+import ProfileItem from "./ProfileItem";
+import Spinner from "../Spinner";
 
 export default function Followers() {
 
   const { username } = useParams();
   const [error, setError] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
-  const [followers, setFollowers] = useState([]);
+  const [profiles, setProfiles] = useState([]);
 
   // key state tracking
-  console.log(followers);
+  console.log(profiles)
 
   useEffect(() => {
-    fetchData()
+    fetchData();
   }, [])
 
   async function fetchData() {
     try {
-      const data = await getFollowers(username)
+      const data = await getFollowers(username);
       
-      setFollowers([...followers, ...data.profiles]);
+      setProfiles([...profiles, ...data.profiles]);
 
     } catch (error) {
-      setError(error)
+      setError(error);
     } finally {
-      setIsLoaded(true)
+      setIsLoaded(true) 
     }
   }
 
@@ -35,15 +35,15 @@ export default function Followers() {
     try {
       await follow(username)
 
-      const updatedFollowers = followers.map(follower => {
-        if (follower.username === username) {
-          return { ...follower, isFollowing: true }
+      const updatedProfiles = profiles.map(profile => {
+        if (profile.username === username) {
+          return { ...profile, isFollowing: true }
         }
 
-        return follower;
+        return profile;
       })
 
-      setFollowers(updatedFollowers);
+      setProfiles(updatedProfiles);
 
     } catch (error) {
       alert(error)
@@ -54,32 +54,32 @@ export default function Followers() {
     try {
       await unfollow(username)
 
-      const updatedFollowers = followers.map(follower => {
-        if (follower.username === username) {
-          return { ...follower, isFollowing: false }
+      const updatedProfiles = profiles.map(profile => {
+        if (profile.username === username) {
+          return { ...profile, isFollowing: false }
         }
 
-        return follower;
+        return profile;
       })
 
-      setFollowers(updatedFollowers);
+      setProfiles(updatedProfiles);
 
     } catch (error) {
       alert(error)
     }
   }
 
-  const followerList = followers.map(follower => (
-    <Avatar 
-      key={follower.id}
-      username={follower.username}
-      name={follower.name}
-      avatarUrl={follower.avatarUrl}
-      isFollowing={follower.isFollowing}
+  const followerList = profiles.map(profile => (
+    <ProfileItem 
+      key={profile.id}
+      username={profile.username}
+      name={profile.name}
+      avatarUrl={profile.avatarUrl}
+      isFollowing={profile.isFollowing}
       handleFollow={handleFollow}
       handleUnfollow={handleUnfollow}
     />
-  ))
+  ))  
 
   return (
     <div className="px-2">
@@ -94,7 +94,7 @@ export default function Followers() {
       )}
 
       {!isLoaded && <Spinner />}
-      
+
       {error && (
         <p className="text-red-500">{error.message}</p>
       )}

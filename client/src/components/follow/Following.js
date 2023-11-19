@@ -1,28 +1,28 @@
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { getFollowingUsers, follow, unfollow } from "../service/profile";
-import Avatar from "./Avatar";
-import Spinner from "./Spinner";
+import { getFollowingUsers, follow, unfollow } from "../../service/profile";
+import ProfileItem from "./ProfileItem";
+import Spinner from "../Spinner";
 
 export default function Following() {
 
   const { username } = useParams();
   const [error, setError] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
-  const [followingUsers, setFollowingUsers] = useState([]);
+  const [profiles, setProfiles] = useState([]);
 
   // key state tracking
-  console.log(followingUsers)
+  console.log(profiles)
 
   useEffect(() => {
-    fetchData()
+    fetchData();
   }, [])
 
   async function fetchData() {
     try {
       const data = await getFollowingUsers(username);
       
-      setFollowingUsers([...followingUsers, ...data.profiles]);
+      setProfiles([...profiles, ...data.profiles]);
 
     } catch (error) {
       setError(error);
@@ -35,15 +35,15 @@ export default function Following() {
     try {
       await follow(username)
 
-      const updatedFollowingUsers = followingUsers.map(followingUser => {
-        if (followingUser.username === username) {
-          return { ...followingUser, isFollowing: true }
+      const updatedProfiles = profiles.map(profile => {
+        if (profile.username === username) {
+          return { ...profile, isFollowing: true }
         }
 
-        return followingUser;
+        return profile;
       })
 
-      setFollowingUsers(updatedFollowingUsers);
+      setProfiles(updatedProfiles);
 
     } catch (error) {
       alert(error)
@@ -54,32 +54,32 @@ export default function Following() {
     try {
       await unfollow(username)
 
-      const updatedFollowingUsers = followingUsers.map(followingUser => {
-        if (followingUser.username === username) {
-          return { ...followingUser, isFollowing: false }
+      const updatedProfiles = profiles.map(profile => {
+        if (profile.username === username) {
+          return { ...profile, isFollowing: false }
         }
 
-        return followingUser;
+        return profile;
       })
 
-      setFollowingUsers(updatedFollowingUsers);
+      setProfiles(updatedProfiles);
 
     } catch (error) {
       alert(error)
     }
   }
 
-  const followingList = followingUsers.map(followingUser => (
-    <Avatar 
-      key={followingUser.id}
-      username={followingUser.username}
-      name={followingUser.name}
-      avatarUrl={followingUser.avatarUrl}
-      isFollowing={followingUser.isFollowing}
+  const followingList = profiles.map(profile => (
+    <ProfileItem 
+      key={profile.id}
+      username={profile.username}
+      name={profile.name}
+      avatarUrl={profile.avatarUrl}
+      isFollowing={profile.isFollowing}
       handleFollow={handleFollow}
       handleUnfollow={handleUnfollow}
     />
-  ))
+  ))  
 
   return (
     <div className="px-2">

@@ -1,4 +1,4 @@
-import { server, getBearerToken } from ".";
+import { server, getBearerToken } from "./header";
 
 export async function getFeed(limit, skip) {
   const res = await fetch(`${server}/posts/feed?limit=${limit}&skip=${skip}`, {

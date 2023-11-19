@@ -1,4 +1,4 @@
-import { server, getBearerToken } from ".";
+import { server, getBearerToken } from "./header";
 
 export async function getProfiles(username) {
   const res = await fetch(`${server}/profiles/?username=${username}`, {

@@ -1,4 +1,4 @@
-import { server, getBearerToken } from ".";
+import { server, getBearerToken } from "./header";
 
 export async function createUser(newUser) {
   const res = await fetch(`${server}/users`, {

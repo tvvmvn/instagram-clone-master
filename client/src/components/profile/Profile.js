@@ -2,7 +2,7 @@ import { useState, useEffect, useContext } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import AuthContext from "../auth/AuthContext";
 import ProfileInfo from "./ProfileInfo";
-import Thumbnail from "./Thumbnail";
+import PostItem from "./PostItem";
 import PostForm from "../PostForm";
 import { getProfile, getTimeline, follow, unfollow } from "../../service/profile";
 import Spinner from "../Spinner";
@@ -73,8 +73,8 @@ export default function Profile() {
     document.title = `${username} - Instagram`;
   }, [])
 
-  const postList = posts.map(post => (
-    <Thumbnail 
+  const timeline = posts.map(post => (
+    <PostItem 
       key={post.id}
       id={post.id}
       thumbnailUrl={post.photoUrls[0]}
@@ -120,9 +120,9 @@ export default function Profile() {
       <div className="border-t my-4"></div>
 
       {/* Timeline */}
-      {postList.length > 0 ? (
+      {timeline.length > 0 ? (
         <ul className="grid grid-cols-3 gap-2 mb-2">
-          {postList}
+          {timeline}
         </ul>
       ) : (
         <p className="text-center">{profile.username} has no posts.</p>

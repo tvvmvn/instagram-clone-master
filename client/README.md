@@ -2,50 +2,68 @@
 
 
 ### Source files
+
 1. components
-2. service: server request library
-- index.js
+
+2. service - server request library
+- header.js
 - user.js
 - post.js
 - comment.js
 - profile.js
 
-3. utils: utility functions
+3. utils - utility functions
 - validator.js
 
 
-### Components in this app
+### Dependencies
+
+1. react-router-dom
+2. tailwindcss  
+
+
+### Components 
 
 1. Auth (Authentication)
 - AuthContext
 - AuthProvider
 - AuthRequred
 
-2. Comments
+2. Layout
+
+3. Feed
+
+4. Explore
+
+5. PostView
+
+6. PostTemplate 
+- PostTemplate
+- Carousel
+
+7. PostForm
+
+8. Comments
 - Comments
 - Comment
 - Form
 
-3. Post template (used by Feed and PostView)
-- Template
-- Carousel
-
-4. Profile
+9. Profile
 - Profile
 - ProfileInfo
-- Thumbnail
+- PostItem
 
-5. Others
-- Avatar
-- Explore
+10. ProfileEdit
+
+11. Follow
 - Followers
 - Following
-- Feed
-- Layout
-- Login
-- NotFound
-- PostForm
-- PostView
-- ProfileEdit
-- SignUp
-- Spinner
+- ProfileItem
+
+12. Login
+
+13. SignUp
+
+14. NotFound
+
+15. Spinner
