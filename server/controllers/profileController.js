@@ -65,7 +65,7 @@ exports.find = async (req, res, next) => {
         match: { user: req.user._id }
       })
     
-    const profileCount = await User.count(where);
+    const profileCount = await User.countDocuments(where);
     
     res.json({ profiles, profileCount });
 

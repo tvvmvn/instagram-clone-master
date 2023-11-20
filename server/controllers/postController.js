@@ -42,7 +42,7 @@ exports.feed = async (req, res, next) => {
       .skip(skip)
       .limit(limit)
     
-    const postCount = await Post.count(where);
+    const postCount = await Post.countDocuments(where);
 
     res.json({ posts, postCount });
 
@@ -71,7 +71,7 @@ exports.find = async (req, res, next) => {
       .populate("commentCount")
       .sort({ createdAt: "desc" })
 
-    const postCount = await Post.count(where);
+    const postCount = await Post.countDocuments(where);
     
     res.json({ posts, postCount });
 

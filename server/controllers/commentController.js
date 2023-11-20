@@ -30,7 +30,7 @@ exports.find = async (req, res, next) => {
       })
       .sort({ createdAt: "desc" })
 
-    const commentCount = await Comment.count(where);
+    const commentCount = await Comment.countDocuments(where);
 
     res.json({ comments, commentCount });
 
