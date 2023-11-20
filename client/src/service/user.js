@@ -1,5 +1,14 @@
 import { server, getBearerToken } from "./header";
 
+/*
+  user 
+
+  1 createUser
+  2 signIn
+  3 updateProfile
+  4 updateAvatar
+*/
+
 export async function createUser(newUser) {
   const res = await fetch(`${server}/users`, {
     method: "POST",
