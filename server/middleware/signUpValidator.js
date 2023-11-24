@@ -23,8 +23,7 @@ module.exports = async (req, res, next) => {
       .run(req);
 
     if (!emailResult.isEmpty()) {
-      // console.log(emailResult)
-      throw new createError.BadRequest("E-mail validataion failed");
+      throw new createError.BadRequest(emailResult.errors);
     }
 
     
@@ -43,7 +42,7 @@ module.exports = async (req, res, next) => {
       .run(req);
 
     if (!usernameResult.isEmpty()) {
-      throw new createError.BadRequest("Username validation failed");
+      throw new createError.BadRequest(usernameResult.errors);
     }
 
 
@@ -54,7 +53,7 @@ module.exports = async (req, res, next) => {
       .run(req);
 
     if (!passwordError.isEmpty()) {
-      throw new createError.BadRequest("Password validation failed");
+      throw new createError.BadRequest(passwordError.errors);
     }
     
     

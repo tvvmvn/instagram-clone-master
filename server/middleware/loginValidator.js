@@ -23,7 +23,7 @@ module.exports = async (req, res, next) => {
       .run(req);
       
     if (!emailResult.isEmpty()) {
-      throw new createError.Unauthorized("E-mail validation failed");
+      throw new createError.Unauthorized(emailResult.errors);
     }
     
 
@@ -42,8 +42,7 @@ module.exports = async (req, res, next) => {
       .run(req)
 
     if (!passwordResult.isEmpty()) {
-      // console.log(passwordResult.errors)
-      throw new createError.Unauthorized("Password validation failed");
+      throw new createError.Unauthorized(passwordResult.errors);
     }
 
     // call for next middleware
