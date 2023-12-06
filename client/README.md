@@ -18,8 +18,8 @@
 
 ### Dependencies
 
-1. react-router-dom
-2. tailwindcss  
+1. Router - react-router-dom
+2. Style - tailwindcss  
 
 
 ### Components 

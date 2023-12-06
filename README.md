@@ -33,6 +33,12 @@
 ![MVC](/images/mvc.jpeg)
 
 
+## Router
+> It connects request with proper resource
+---
+![Router](/images/router.png)
+
+
 ## Module Integration 
 > Bottom-Up Approach
 ---
@@ -64,6 +70,8 @@
 
 
 ## Middleware
+> They process many tasks between client and server
+---
 ![Middleware](/images/middleware.png)
 
 
@@ -71,7 +79,7 @@
 ## Authentication & Authorization 
 > Based on JWT (JSON Web Token)
 
-### Process
+### Process 
 ![Auth](/images/auth_process.png)
 
 ### JWT (JSON Web Token) Structure

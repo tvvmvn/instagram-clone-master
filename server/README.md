@@ -1,6 +1,12 @@
 # Server for *Instagram-clone*
 
 
+### App modules
+> app architecture
+---
+![Modules](/images/modules.png)
+
+
 ### Model Diagram
 1. Schema - A structure of Model
 2. Operation - Model's behavior to process data of itself
@@ -8,45 +14,34 @@
 ---
 ![Diagram](/server/public/images/Diagram.png)
 
-### Structure of express project
+### Router hierarchy
+![Routers](/server/public/images/routers.png)
 
-1. bin: Execution files for running the server
-- www
+### Rest API specification
+1. Users
+- POST /users - Create an user
+- POST /users/login - Login
+- PUT /users/user - Update an user
 
-2. models: Models of app
-- User.js
-- Following.js
-- Post.js
-- Comment.js
-- Likes.js
+2. Profiles
+- GET /profiles - Get profiles
+- GET /profiles/:username - Get a profile
+- POST /profiles/:username/follow - Follow a profile
+- DELETE /profiles/:username/unfollow - Unfollow a profile
 
-3. controllers: Controllers of app
-- userController.js
-- postController.js
-- commentController.js
-- profileController.js
+3. Posts
+- GET /posts/feed - Get feed
+- GET /posts - Get posts
+- POST /posts - Create a post
+- GET /posts/:id - Get a post
+- DELETE /posts/:id - Delete a post
+- POST /posts/:id/like - Like a post
+- DELETE /posts/:id/unlike - Unlike a post
 
-4. routes: Routes of app
-- index.js
-- user.js
-- post.js
-- comment.js
-- profile.js
+4. Comments
+- GET /posts/:id/comments - Get comments
+- POST /posts/:id/comment - Create a comment
+- DELETE /posts/comments/:id - Delete a comment
 
-5. middleware: Middlewares of app
-- auth.js
-- loginValidator.js
-- signUpValidator.js
-- upload.js
 
-6. files: A file server for client's upload
-- avatar/
-- photos/
-
-7. public: static files directory
-
-8. root directory
-- app.js: The entry point of app
-- seed.js: to generating seed data 
-- env: enviroment variables for the apps
 
