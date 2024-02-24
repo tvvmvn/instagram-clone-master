@@ -1,8 +1,6 @@
 # Client for *Instagram-clone*
 
-
 ### Source files
-
 1. components
 
 2. service - server request library
@@ -17,13 +15,11 @@
 
 
 ### Dependencies
-
 1. Router - react-router-dom
 2. Style - tailwindcss  
 
 
 ### Components 
-
 1. Auth (Authentication)
 - AuthContext
 - AuthProvider

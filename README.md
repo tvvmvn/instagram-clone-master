@@ -1,51 +1,62 @@
-# A GUIDE for *Instagram Clone*
+# Prerequisites for App
 
 
+## Index
+1. Development Map
+2. Dev Stack
+3. MVC Pattern
+4. Router
+5. Module Integration Apporach
+6. HTTP Request & Response
+7. Middleware
+8. Authentication & Authorization
+9. NoSQL Guide
 
-## Development Map
+
+## 1. Development Map
 1. Brower (Client)
 2. Server 
 - Authentication
 - Processing data
 3. DataBase
----
+
 ![Flow](/images/dev_flow.png)
 
 
 
-## Development Stack
+## 2. Development Stack
 > MERN Stack
 1. M (MongoDB) - DataBase
 2. E (Express) - Server Framework
 3. R (React) - Client Framework
 4. N (NodeJS) - Server dev language
----
+
 ![MERN](/images/MERN.png)
 
 
 
-## MVC Pattern
+## 3. MVC Pattern
 > Software architercture design pattern
 1. M (Model) - Data Access Layer
 2. V (View) - Presentation Layer
 3. C (Controller) - Logic Layer
----
+
 ![MVC](/images/mvc.jpeg)
 
 
-## Router
+## 4. Router
 > It connects request with proper resource
----
+
 ![Router](/images/router.png)
 
 
-## Module Integration 
+## 5. Module Integration 
 > Bottom-Up Approach
----
+
 ![Integration](images/bottom-up.webp)
 
 
-## HTTP Request & Response
+## 6. HTTP Request & Response
 ![HTTP](/images/http.png)
 
 ### HTTP Request Method
@@ -69,36 +80,35 @@
 
 
 
-## Middleware
+## 7. Middleware
 > They process many tasks between client and server
----
+
 ![Middleware](/images/middleware.png)
 
 
 
-## Authentication & Authorization 
+## 8. Authentication & Authorization 
 > Based on JWT (JSON Web Token)
 
 ### Process 
 ![Auth](/images/auth_process.png)
 
 ### JWT (JSON Web Token) Structure
-
---- 
 ![JWT](/images/jwt.jpeg)
 
 
 
-## NoSQL Guide
+## 9. NoSQL Guide
 
 ### Basic terms
 1. Collection - A basis for sorting related data in NoSQL.
 2. Document - Each data in collection
 3. Field - each property of document.
----
+
 ![Collection](/images/collection.png)
 
 ### Collection Join
 > Collection can be joined to make abundant data
 ---
 ![Join](/images/join.png)
+

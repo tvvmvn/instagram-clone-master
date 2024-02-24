@@ -22,7 +22,7 @@ export default function Followers() {
     try {
       const data = await getFollowers(username);
       
-      setProfiles([...profiles, ...data.profiles]);
+      setProfiles(data.profiles);
 
     } catch (error) {
       setError(error);

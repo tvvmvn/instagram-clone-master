@@ -23,7 +23,7 @@ export default function Comments() {
     try {
       const data = await getComments(id);
 
-      setComments([...comments, ...data.comments]);
+      setComments(data.comments);
 
     } catch (error) {
       setError(error)
