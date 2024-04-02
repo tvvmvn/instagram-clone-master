@@ -5,12 +5,13 @@
 1. Development Map
 2. Dev Stack
 3. MVC Pattern
-4. Router
+4. Router (+ URL structure, path, query & params..)
 5. Module Integration Apporach
 6. HTTP Request & Response
 7. Middleware
 8. Authentication & Authorization
 9. NoSQL Guide
+
 
 
 ## 1. Development Map

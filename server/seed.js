@@ -2,35 +2,21 @@ const mongoose = require("mongoose");
 const User = require("./models/User");
 const Post = require("./models/Post");
 const userArgs = process.argv.slice(2);
-const [directive, MONGODB_URI] = userArgs;
-
-
-/* 
-  Seed data for app
-*/
+const MONGODB_URL = userArgs[0];
 
 
 // Invalid MongoDB URL
-if (!MONGODB_URI.startsWith("mongodb")) {
-  console.log("ERROR: You need to specify a valid mongodb URL.");
+if (!MONGODB_URL.startsWith("mongodb")) {
+  console.log("Error: You need to specify a valid MongoDB URL.");
   return;
 }
 
-
-// Check user's directive
-if (directive === "run") { 
-  seedDatabase();
-} else if (directive === "revert") {
-  dropDatabase()
-} else {
-  return console.log("ERROR: Invalid command");
-}
-
+seedDatabase();
 
 async function seedDatabase() {
   try {
     
-    await mongoose.connect(MONGODB_URI);
+    await mongoose.connect(MONGODB_URL);
 
     const users = [
       {
@@ -99,23 +85,7 @@ async function seedDatabase() {
       console.log(post);
     }
 
-    console.log("seed database has completed")
-
-  } catch (error) {
-    console.error(error);
-  } finally {
-    mongoose.connection.close();
-  }
-}
-
-
-async function dropDatabase() {
-  try {
-    await mongoose.connect(MONGODB_URI);
-
-    await mongoose.connection.dropDatabase();
-
-    console.log("drop database has completed")
+    console.log("Seed database has been completed")
 
   } catch (error) {
     console.error(error);
