@@ -12,6 +12,11 @@ const {
 const upload = require("../middleware/upload");
 
 
+/*
+  Post Router
+*/
+
+
 router.get("/feed", feed)
 router.get("/", find)
 router.post("/", upload.array("photos", 10), create)

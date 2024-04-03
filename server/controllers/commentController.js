@@ -7,8 +7,13 @@ const createError = require("http-errors");
   Comment controller
 
   1 find
+  Find comments
+
   2 create
+  Create a comment
+
   3 deleteOne
+  Delete a comment
 */
 
 

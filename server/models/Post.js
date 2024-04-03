@@ -18,7 +18,7 @@ const postSchema = new Schema({
 })
 
 
-// Virtual field
+// Virtual fields
 postSchema.virtual("displayDate").get(function () {
    const displayDate = DateTime
     .fromJSDate(this.createdAt)

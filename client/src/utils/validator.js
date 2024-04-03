@@ -1,3 +1,17 @@
+/*
+  Validation for form data
+
+  1 isEmail
+  check email
+  
+  2 isUsername
+  check username
+  
+  3 isPassword
+  check password
+*/
+
+
 export function isEmail(email) {
   const patt = /[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,}$/
   

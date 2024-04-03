@@ -7,9 +7,16 @@ const createError = require("http-errors");
   Profile controller
 
   1 find
+  Find users
+  
   2 findOne
+  Find a user
+
   3 follow
+  Follow profile
+
   4 unfollow
+  Unfollow profile
 */
 
 

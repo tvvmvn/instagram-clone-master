@@ -85,7 +85,7 @@ async function seedDatabase() {
       console.log(post);
     }
 
-    console.log("Seed database has been completed")
+    console.log("Seed database has been completed");
 
   } catch (error) {
     console.error(error);

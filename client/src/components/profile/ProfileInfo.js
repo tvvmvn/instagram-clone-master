@@ -116,15 +116,21 @@ export default function ProfileInfo({
       {/* Name and bio */}
       <div>
         {name && (
-          <h3 className="text-sm font-semibold my-2">
+          <h3 className="font-semibold my-2">
             {name}
           </h3>
         )}
 
         {bio && (
-          <p className="text-sm my-2 whitespace-pre-line">
+          <p className="my-2 whitespace-pre-line">
             {bio}
           </p>
+        )}
+
+        {isMaster && (
+          <Link to="/create" className="inline-block mb-4 text-sm font-semibold text-gray-400">
+            Write new post 
+          </Link>
         )}
       </div>
     </div>

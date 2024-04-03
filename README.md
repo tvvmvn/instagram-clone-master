@@ -1,7 +1,7 @@
 # Prerequisites for App
 
 
-## Index
+## Table Of Contents
 1. Development Map
 2. Dev Stack
 3. MVC Pattern
@@ -11,7 +11,6 @@
 7. Middleware
 8. Authentication & Authorization
 9. NoSQL Guide
-
 
 
 ## 1. Development Map
@@ -24,7 +23,6 @@
 ![Flow](/images/dev_flow.png)
 
 
-
 ## 2. Development Stack
 > MERN Stack
 1. M (MongoDB) - DataBase
@@ -33,7 +31,6 @@
 4. N (NodeJS) - Server dev language
 
 ![MERN](/images/MERN.png)
-
 
 
 ## 3. MVC Pattern

@@ -1,65 +1,71 @@
 # Client for *Instagram-clone*
 
-### Source files
-1. components
 
-2. service - server request library
-- header.js
-- user.js
-- post.js
-- comment.js
-- profile.js
+## Components 
+1. Authentication process \
+AuthContext, AuthProvider, AuthRequred
 
-3. utils - utility functions
-- validator.js
+2. Layout \
+Layout
+
+3. Feed page \
+Feed
+
+4. Explore page \
+Explore
+
+5. Post view page \
+PostView
+
+6. Post template \
+PostTemplate, Carousel
+
+7. Post form \
+PostForm
+
+8. Comments page \
+Form, Comments, Comment
+
+9. Profile page \
+Profile, ProfileInfo, PostItem
+
+10. Profile edit page \
+ProfileEdit
+
+11. Follower list page \
+Followers, ProfileItem
+
+11. Following list page \
+Following, ProfileItem
+
+12. Login page \
+Login
+
+13. Sign up page \
+SignUp
+
+14. 404 (NotFound) page \
+NotFound
+
+15. Spinner for loading state \
+Spinner
 
 
-### Dependencies
-1. Router - react-router-dom
-2. Style - tailwindcss  
+## Service
+> Server request library
+
+1. User requests
+2. Post requests
+3. Comment requests
+4. Profile requests
 
 
-### Components 
-1. Auth (Authentication)
-- AuthContext
-- AuthProvider
-- AuthRequred
+## Utilities
+> utility functions for the app
 
-2. Layout
+1. Form validation \
+It implements validation for login and sign up form.
 
-3. Feed
 
-4. Explore
 
-5. PostView
 
-6. PostTemplate 
-- PostTemplate
-- Carousel
-
-7. PostForm
-
-8. Comments
-- Comments
-- Comment
-- Form
-
-9. Profile
-- Profile
-- ProfileInfo
-- PostItem
-
-10. ProfileEdit
-
-11. Follow
-- Followers
-- Following
-- ProfileItem
-
-12. Login
-
-13. SignUp
-
-14. NotFound
-
-15. Spinner

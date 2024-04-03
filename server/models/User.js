@@ -7,8 +7,9 @@ const Following = require("./Following");
 
 
 /*
-* Schema
-a structure of Model
+  Schema 
+
+  a structure of Model
 */
 
 
@@ -27,9 +28,10 @@ const userSchema = new Schema({
 
 
 /* 
-* Virtual field
-can add virtual field to schema when if it's needed
-v-field does not exits on real database
+  Virtual field
+
+  can add virtual field to schema when if it's needed.
+  virtual fields do not exist on database.
 */
 
 
@@ -67,9 +69,9 @@ userSchema.virtual("isFollowing", {
 
 
 /* 
-  * Operations
+  Operations
   
-  Model's behavior to process data about itself
+  Model's behavior to process data about itself.
 */
 
 

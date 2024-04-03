@@ -9,12 +9,24 @@ const createError = require("http-errors");
   Post controller
 
   1 feed
+
   2 find
+  Find posts
+
   3 findOne
+  Find a post
+
   4 create
+  Create a post
+
   5 deleteOne
+  Delete a post
+
   6 like
+  Like a post
+
   7 unlike
+  Unlike a post
 */
 
 

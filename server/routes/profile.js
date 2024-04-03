@@ -8,6 +8,11 @@ const {
 } = require("../controllers/profileController");
 
 
+/*
+  Profile Router
+*/
+
+
 router.get("/", find);
 router.get("/:username", findOne)
 router.post("/:username/follow", follow)

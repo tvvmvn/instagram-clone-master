@@ -1,15 +1,28 @@
 import { server, getBearerToken } from "./header";
 
+
 /*
-  post
+  Post requests
 
   1 getFeed
+  get feed
+
   2 getPost
+  get a post
+
   3 createPost
+  creates a post
+
   4 deletePost
+  delete a post
+
   5 likePost
+  like a post
+
   6 unlikePost
+  unlike a post
 */
+
 
 export async function getFeed(limit, skip) {
   const res = await fetch(`${server}/posts/feed?limit=${limit}&skip=${skip}`, {

@@ -7,6 +7,11 @@ const {
 } = require("../controllers/commentController");
 
 
+/*
+  Comment Router
+*/
+
+
 router.get("/:id/comments", find)
 router.post("/:id/comments", create)
 router.delete("/comments/:id", deleteOne)

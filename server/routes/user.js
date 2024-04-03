@@ -11,6 +11,11 @@ const upload = require("../middleware/upload");
 const auth = require("../middleware/auth");
 
 
+/*
+  User Router
+*/
+
+
 router.post("/", signUpValidator, create);
 router.post("/login", loginValidator, login);
 router.put("/user", auth, upload.single("avatar"), update);

@@ -1,9 +1,21 @@
 # Server for *Instagram-clone*
 
-### Server Modules
-![Modules](/images/modules.png)
 
-### Rest API specification
+## Model Diagram
+
+1. Schema \
+Structure of Model
+
+2. Operation \
+Model's behavior to process data of itself
+
+3. Relationship \
+Interaction between Models.
+
+![Diagram](/server/public/images/Diagram.png)
+
+
+## Rest API specification
 > localhost:3000/api
 
 1. Users
@@ -31,12 +43,6 @@
 - POST /posts/:id/comment - Create a comment
 - DELETE /posts/comments/:id - Delete a comment
 
-### Model Diagram
-1. Schema - A structure of Model
-2. Operation - Model's behavior to process data of itself
-3. Relationship - Interaction between Models.
-
-![Diagram](/server/public/images/Diagram.png)
 
 
 

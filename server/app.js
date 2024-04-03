@@ -12,18 +12,18 @@ require("dotenv").config();
 
 
 /* 
-DATABASE Connection
+  DATABASE Connection
 */
 
 
 mongoose.set("strictQuery", false);
 mongoose
-  .connect(process.env.MONGODB_URI)
+  .connect(process.env.MONGODB_URL)
   .catch(err => console.log(err));
 
 
 /*
-Middlewares 
+  Middlewares 
 */
 
 
@@ -39,21 +39,15 @@ app.use(cors());
 
 
 /* 
-static path 
-
-1 files
-storage for files from client
-2 public
-other files in server
+  file server URL
 */
 
 
-app.use("/api/static", express.static("public"));
 app.use("/api/files", express.static("files"));
 
 
 /* 
-  Set index router
+  index router
 */
 
 
@@ -61,10 +55,11 @@ app.use("/api", indexRouter);
 
 
 /* 
-Error handling
+  Error handler
 */
 
 
+// handling 404 error
 app.use((req, res, next) => {
   const err = new createError.NotFound("Invalid URL");
 
@@ -74,6 +69,7 @@ app.use((req, res, next) => {
 // error handler
 app.use((err, req, res, next) => {
   console.error(err);
+  
   res.status(err.status || 500).json(err.message); 
 })
 

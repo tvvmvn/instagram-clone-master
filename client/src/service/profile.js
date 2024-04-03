@@ -1,16 +1,31 @@
 import { server, getBearerToken } from "./header";
 
+
 /*
-  profile 
+  Profile requests
 
   1 getProfiles
+  get profiles
+
   2 getProfile
+  get a profile
+
   3 getTimeline
+  get timeline
+
   4 getFollowers
+  get followers
+
   5 getFollowingUsers
+  get following users
+
   6 follow
+  follow a profile
+
   7 unfollow
+  unfollow a profile
 */
+
 
 export async function getProfiles(username) {
   const res = await fetch(`${server}/profiles/?username=${username}`, {

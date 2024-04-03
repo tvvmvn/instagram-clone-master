@@ -8,35 +8,32 @@ const auth = require("../middleware/auth");
 
 
 /* 
-  Routing
-  connecting url with proper resource
+  Router
 
-  1 how to route
-  router.httpRequestMethod(url, controller)
+  It connects request with proper resources
 
-  2 Router hierachy of server
-
-  indexRouter 
-      userRouter
-      postRotuer
-      commentRouter
-      profileRouter
+  1 User router
+  2 Post router
+  3 Comment router
+  4 Profile router
 */
 
 
 // index page
 router.get("/", (req, res) => {
-  res.json({ message: "hello client" });
+  res.json({ message: "Hello Client!" });
 })
 
-
-// User Router 
+// User router 
 router.use("/users", userRouter);
-// Post Router 
+
+// Post router 
 router.use("/posts", auth, postRouter);
-// Comment Router 
+
+// Comment router 
 router.use("/posts", auth, commentRouter);
-// Profile Router 
+
+// Profile router 
 router.use("/profiles", auth, profileRouter);
 
 

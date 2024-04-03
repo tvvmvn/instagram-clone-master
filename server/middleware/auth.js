@@ -6,21 +6,18 @@ require("dotenv").config();
 
 
 /*
-  Authentication & Authorization
+  Authentication
 
-  JWT Strategy
+  A Server processes authentication based on JWT.
 */
- 
 
-// options for JWT strategy
+
 const opts = {};
 opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
 opts.secretOrKey = process.env.SECRET;
 // opts.issuer = "accounts.examplesoft.com";
 // opts.audience = "yoursite.net";
 
-
-// JWT Strategy(algorithms)
 const jwtStrategy = new JwtStrategy(opts, async (payload, done) => {
   try {
     const user = await User.findById(payload.sub);
@@ -36,7 +33,7 @@ const jwtStrategy = new JwtStrategy(opts, async (payload, done) => {
   }
 })
 
-
 passport.use(jwtStrategy);
+
 
 module.exports = passport.authenticate("jwt", { session: false });

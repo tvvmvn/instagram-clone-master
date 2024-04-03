@@ -5,8 +5,12 @@ const User = require("../models/User");
   User controller
 
   1 create
-  2 login
-  3 update
+  Create a user
+  
+  2 update
+  Update a user
+  
+  3 login
 */
 
 
@@ -24,30 +28,6 @@ exports.create = async (req, res, next) => {
     await user.save();
 
     res.json({ user });
-
-  } catch (error) {
-    next(error)
-  }
-}
-
-
-exports.login = async (req, res, next) => {
-  try {
-    const { email } = req.body;
-
-    const _user = await User.findOne({ email });
-
-    const access_token = _user.generateJWT();
-
-    const user = {
-      username: _user.username,
-      name: _user.name,
-      avatarUrl: _user.avatarUrl,
-      bio: _user.bio,
-      access_token
-    }
-
-    res.json({ user })
 
   } catch (error) {
     next(error)
@@ -89,3 +69,28 @@ exports.update = async (req, res, next) => {
     next(error)
   }
 }
+
+
+exports.login = async (req, res, next) => {
+  try {
+    const { email } = req.body;
+
+    const _user = await User.findOne({ email });
+
+    const access_token = _user.generateJWT();
+
+    const user = {
+      username: _user.username,
+      name: _user.name,
+      avatarUrl: _user.avatarUrl,
+      bio: _user.bio,
+      access_token
+    }
+
+    res.json({ user })
+
+  } catch (error) {
+    next(error)
+  }
+}
+

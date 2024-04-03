@@ -1,13 +1,22 @@
 import { server, getBearerToken } from "./header";
 
+
 /*
-  user 
+  User requests
 
   1 createUser
+  create a user
+
   2 signIn
+  sign in
+
   3 updateProfile
+  update a profile info
+
   4 updateAvatar
+  update a avatar 
 */
+
 
 export async function createUser(newUser) {
   const res = await fetch(`${server}/users`, {

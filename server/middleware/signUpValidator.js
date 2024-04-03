@@ -4,7 +4,11 @@ const createError = require("http-errors");
 
 
 /* 
-  sign up form-data validation check
+  validation for sign-up form data
+
+  1 email check
+  2 username check
+  3 password check
 */
 
 
@@ -26,7 +30,6 @@ module.exports = async (req, res, next) => {
       throw new createError.BadRequest(emailResult.errors);
     }
 
-    
     // username check
     const usernameResult = await body("username")
       .trim()
@@ -45,7 +48,6 @@ module.exports = async (req, res, next) => {
       throw new createError.BadRequest(usernameResult.errors);
     }
 
-
     // password check
     const passwordError = await body("password")
       .trim()
@@ -56,8 +58,7 @@ module.exports = async (req, res, next) => {
       throw new createError.BadRequest(passwordError.errors);
     }
     
-    
-    // call for next middleware
+    // calling next middleware
     next();
   
   } catch (error) {

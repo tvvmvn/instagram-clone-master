@@ -2,7 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import AuthProvider from "./components/auth/AuthProvider";
 import AuthRequired from "./components/auth/AuthRequired";
 import Layout from "./components/Layout";
-import Feed from "./components/Feed";
+import Feed from "./components/Feed"; 
 import PostView from "./components/PostView";
 import Comments from "./components/comments/Comments";
 import Explore from "./components/Explore";
@@ -12,6 +12,7 @@ import Profile from "./components/profile/Profile";
 import Followers from "./components/follow/Followers";
 import Following from "./components/follow/Following";
 import ProfileEdit from "./components/ProfileEdit";
+import PostForm from "./components/PostForm";
 import NotFound from "./components/NotFound";
 
 export default function App() {
@@ -19,6 +20,7 @@ export default function App() {
     <Router>
       <AuthProvider>
         <Routes>
+          {/* Auth required */}
           <Route path="/" element={
             <AuthRequired>
               <Layout />
@@ -36,7 +38,10 @@ export default function App() {
               <Route path="following" element={<Following />} />
             </Route>
             <Route path="accounts/edit" element={<ProfileEdit />} />
+            <Route path="create" element={<PostForm />} />
           </Route>
+          
+          {/* Auth not required */}
           <Route path="accounts/login" element={<Login />} />
           <Route path="accounts/signup" element={<SignUp />} />
           <Route path="*" element={<NotFound />} />

@@ -1,11 +1,16 @@
 import { server, getBearerToken } from "./header";
 
 /*
-  comment
+  Comment requests
 
   1 getComments
+  get comments 
+
   2 createComment
+  create a comment
+
   3 deleteComment
+  delete a comment
 */
 
 export async function getComments(id) {
