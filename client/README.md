@@ -27,7 +27,7 @@ PostForm
 Form, Comments, Comment
 
 9. Profile page \
-Profile, ProfileInfo, PostItem
+Profile, PostItem
 
 10. Profile edit page \
 ProfileEdit

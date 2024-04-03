@@ -90,7 +90,7 @@ export default function Following() {
           {followingList}
         </ul>
       ) : (
-        <p>0 following</p>
+        <p>no following profiles.</p>
       )}
 
       {!isLoaded && <Spinner />}

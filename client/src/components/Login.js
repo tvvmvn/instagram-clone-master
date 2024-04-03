@@ -12,7 +12,6 @@ export default function Login() {
   const [email, setEmail] = useState(localStorage.getItem("email") || "");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const disabled = !isEmail(email) || !isPassword(password);
 
   async function handleSubmit(e) {
     try {
@@ -53,7 +52,7 @@ export default function Login() {
     <form onSubmit={handleSubmit} className="max-w-xs p-4 mt-16 mx-auto">
       {/* Logo image */}
       <div className="mt-4 mb-4 flex justify-center">
-        <img src="/images/logo.png" className="w-36" />
+        <img src="/logo.png" className="w-36" />
       </div>
 
       {/* Email input */}
@@ -84,17 +83,20 @@ export default function Login() {
         </label>
       </div>
 
+      {/* Submit button */}
       <button
         type="submit"
         className="bg-blue-500 text-sm text-white font-semibold rounded-lg px-4 py-2 w-full disabled:opacity-[0.5]"
-        disabled={disabled}
+        disabled={!isEmail(email) || !isPassword(password)}
       >
         Login
       </button>
 
       {/* Error Messages */}
       {error && (
-        <p className="my-4 text-center text-red-500">{error.message}</p>
+        <p className="my-4 text-center text-red-500">
+          {error.message}
+        </p>
       )}
 
       {/* Sign Up Link */}

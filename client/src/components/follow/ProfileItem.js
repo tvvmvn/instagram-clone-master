@@ -14,26 +14,9 @@ export default function ProfileItem({
   const { user } = useContext(AuthContext);
   const isMaster = username === user.username;
 
-  const followButton = (
-    <button
-      className="bg-blue-500 text-white text-sm px-4 py-2 font-semibold p-2 rounded-lg"
-      onClick={() => handleFollow(username)}
-    >
-      Follow
-    </button>
-  )
-
-  const unfollowButton = (
-    <button
-      className="bg-gray-200 text-sm px-4 py-2 font-semibold p-2 rounded-lg"
-      onClick={() => handleUnfollow(username)}
-    >
-      Following
-    </button>
-  )
-
   return (
     <li className="flex justify-between items-center mb-2">
+      {/* Profile */}
       <Link
         to={`/profiles/${username}`}
         className="inline-flex items-center"
@@ -52,8 +35,23 @@ export default function ProfileItem({
         </div>
       </Link>
 
+      {/* Follow / Unfollow button */}
       {!isMaster && (
-        isFollowing ? unfollowButton : followButton
+        isFollowing ? (
+          <button
+            className="bg-gray-200 text-sm px-4 py-2 font-semibold p-2 rounded-lg"
+            onClick={() => handleUnfollow(username)}
+          >
+            Following
+          </button>
+        ) : (
+          <button
+            className="bg-blue-500 text-white text-sm px-4 py-2 font-semibold p-2 rounded-lg"
+            onClick={() => handleFollow(username)}
+          >
+            Follow
+          </button>
+        )
       )}
     </li>
   )

@@ -16,7 +16,7 @@ export default function Feed() {
   const limit = 5;
   
   // key state tracking
-  console.log(posts)
+  console.log(posts);
 
   useEffect(() => {
     fetchData()
@@ -121,19 +121,6 @@ export default function Feed() {
     />
   ))
 
-  const doesMoreExists = postCount > posts.length;
-
-  const showMoreBtn =  (
-    <div className="flex justify-center my-2">
-      <button 
-        className="p-1 text-blue-500 font-semibold" 
-        onClick={() => setSkip(skip + limit)}
-      >
-        Show more
-      </button>
-    </div>
-  )
-
   return (
     <>
       {postList.length > 0 ? (
@@ -142,16 +129,23 @@ export default function Feed() {
         </ul>
       ) : (
         <div className="p-8 text-center">
-          <Link 
-            to="/explore" 
-            className="text-blue-500"
-          >
+          <Link to="/explore" className="text-blue-500">
             Explore Instagram
           </Link>
         </div>
       )}
 
-      {doesMoreExists && showMoreBtn}
+      {/* Show more button */}
+      {postCount > posts.length && (
+        <div className="flex justify-center my-2">
+          <button
+            className="p-1 text-blue-500 font-semibold"
+            onClick={() => setSkip(skip + limit)}
+          >
+            Show more
+          </button>
+        </div>  
+      )}
 
       {!isLoaded && <Spinner />}
 

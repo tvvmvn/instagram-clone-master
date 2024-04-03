@@ -108,7 +108,7 @@ export default function ProfileEdit() {
         <div className="flex">
           <button
             type="submit"
-            className="text-sm font-semibold bg-gray-200 rounded-lg px-4 py-2 disabled:opacity-[0.2]"
+            className="text-sm font-semibold bg-blue-500 text-white rounded-lg px-4 py-2 disabled:opacity-[0.2]"
             disabled={disabled}
           >
             Save
@@ -116,7 +116,7 @@ export default function ProfileEdit() {
 
           <Link
             to={`/profiles/${user.username}`}
-            className="text-sm font-semibold bg-gray-200 rounded-lg px-4 py-2 ml-2"
+            className="text-sm font-semibold rounded-lg px-4 py-2 ml-2"
           >
             Cancel
           </Link>

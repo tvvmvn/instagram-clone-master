@@ -11,7 +11,6 @@ export default function SignUp() {
   const [name, setName] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const disabled = !isEmail(email) || !isUsername(username) || !isPassword(password);
 
   async function handleSubmit(e) {
     try {
@@ -36,8 +35,9 @@ export default function SignUp() {
 
   return (
     <form onSubmit={handleSubmit} className="max-w-xs mx-auto p-4 mt-16">
+      {/* Logo */}
       <div className="mt-4 mb-4 flex justify-center">
-        <img src="/images/logo.png" className="w-36" />
+        <img src="/logo.png" className="w-36" />
       </div>
 
       {/* Email input */}
@@ -93,15 +93,21 @@ export default function SignUp() {
         </label>
       </div>
 
+      {/* Submit button */}
       <button
         type="submit"
         className="bg-blue-500 rounded-lg text-sm font-semibold px-4 py-2 text-white w-full disabled:opacity-[0.5]"
-        disabled={disabled}
+        disabled={!isEmail(email) || !isUsername(username) || !isPassword(password)}
       >
         Sign Up
       </button>
     
-      {error && <p className="my-4 text-red-500 text-center">{error.message}</p>}
+      {/* Error message */}
+      {error && (
+        <p className="my-4 text-red-500 text-center">
+          {error.message}
+        </p>  
+      )}
 
       {/* Login Link */}
       <p className="text-center mt-4">

@@ -90,7 +90,7 @@ export default function Followers() {
           {followerList}
         </ul>
       ) : (
-        <p>0 followers</p>
+        <p>no followers.</p>
       )}
 
       {!isLoaded && <Spinner />}
