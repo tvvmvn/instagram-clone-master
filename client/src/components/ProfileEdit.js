@@ -64,7 +64,7 @@ export default function ProfileEdit() {
           className="w-16 h-16 object-cover rounded-full border"
         />
 
-        <div className="flex flex-col grow items-start ml-4">
+        <div className="flex flex-col grow justify-center ml-4">
           <h3>{user.username}</h3>
 
           <label className="text-sm font-semibold text-blue-500 cursor-pointer">
@@ -82,7 +82,7 @@ export default function ProfileEdit() {
       {/* Info form */}
       <form onSubmit={handleSubmit}>
         <div className="mb-2">
-          <label htmlFor="name" className="block font-semibold">Name</label>
+          <label htmlFor="name" className="block">Name</label>
           <input
             type="text"
             id="name"
@@ -94,7 +94,7 @@ export default function ProfileEdit() {
         </div>
 
         <div className="mb-2">
-          <label htmlFor="bio" className="block font-semibold">Bio</label>
+          <label htmlFor="bio" className="block">Bio</label>
           <textarea
             id="bio"
             rows="3"
@@ -116,7 +116,7 @@ export default function ProfileEdit() {
 
           <Link
             to={`/profiles/${user.username}`}
-            className="text-sm font-semibold rounded-lg px-4 py-2 ml-2"
+            className="text-sm font-semibold rounded-lg px-4 py-2"
           >
             Cancel
           </Link>

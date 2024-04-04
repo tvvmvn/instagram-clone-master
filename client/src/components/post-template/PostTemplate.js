@@ -34,7 +34,7 @@ export default function PostTemplate({
       <ul className="bg-white w-60 rounded-lg">
         <li className="border-b">
           <button
-            className="w-full px-4 py-2 text-sm font-semibold text-red-500"
+            className="w-full px-4 py-2 text-sm text-red-500"
             onClick={() => handleDelete(id)}
           >
             Delete
@@ -42,7 +42,7 @@ export default function PostTemplate({
         </li>
         <li>
           <button
-            className="w-full px-4 py-2 text-sm font-semibold"
+            className="w-full px-4 py-2 text-sm"
             onClick={() => setModalOpen(false)}
           >
             Close

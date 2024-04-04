@@ -34,10 +34,10 @@ export default function Comment({
       className="fixed inset-0 flex justify-center items-center bg-black/[0.2] z-10" 
       onClick={handleOverlay}
     >
-      <ul className="bg-white w-60 rounded-xl">
+      <ul className="bg-white w-60 rounded-lg">
         <li className="border-b">
           <button
-            className="w-full px-4 py-2 text-sm font-semibold text-red-500"
+            className="w-full px-4 py-2 text-sm text-red-500"
             onClick={handleDeleteClick}
           >
             Delete
@@ -45,7 +45,7 @@ export default function Comment({
         </li>
         <li>
           <button
-            className="text-sm font-semibold w-full px-4 py-2"
+            className="text-sm w-full px-4 py-2"
             onClick={() => setModalOpen(false)}
           >
             Close

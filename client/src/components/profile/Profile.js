@@ -178,11 +178,11 @@ export default function Profile() {
         )}
       </div>
 
-      <div className="border-t my-6"></div>
+      <div className="border-t mt-4 mb-8"></div>
 
       {/* Timeline */}
       {timeline.length > 0 ? (
-        <ul className="grid grid-cols-3 gap-1 px-4">
+        <ul className="grid grid-cols-3 gap-1">
           {timeline}
         </ul>
       ) : (

@@ -32,7 +32,7 @@ export default function PostForm() {
   const photoPreviewList = files.map(file => (
     <img
       key={file.name}
-      className="w-24 h-24 object-cover"
+      className="w-12 h-12 object-cover"
       src={URL.createObjectURL(file)}
       alt={file.name}
     />
@@ -71,21 +71,14 @@ export default function PostForm() {
       )}
 
       {/* Caption */}
-      <div className="mb-2">
-        <label
-          htmlFor="caption"
-          className="block font-semibold"
-        >
-          Caption
-        </label>
-        <textarea
-          rows="2"
-          id="caption"
-          className="mb-4 block w-full px-2 py-1 rounded border resize-none"
-          onChange={({ target }) => setCaption(target.value)}
-          value={caption}
-        />
-      </div>
+      <textarea
+        rows="2"
+        id="caption"
+        className="mb-4 block w-full px-2 py-1 rounded border resize-none"
+        placeholder="Write a caption..."
+        onChange={({ target }) => setCaption(target.value)}
+        value={caption}
+      />
 
       {/* Submit button */}
       <button
