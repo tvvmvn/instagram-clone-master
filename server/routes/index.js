@@ -1,21 +1,19 @@
 const express = require("express")
 const router = express.Router();
-const userRouter = require("./user");
-const postRouter = require("./post");
-const commentRouter = require("./comment");
-const profileRouter = require("./profile");
 const auth = require("../middleware/auth");
+const loginValidator = require("../middleware/loginValidator");
+const signUpValidator = require("../middleware/signUpValidator");
+const upload = require("../middleware/upload");
+const userController = require("../controllers/userController");
+const postController = require("../controllers/postController");
+const commentController = require("../controllers/commentController");
+const profileController = require("../controllers/profileController");
 
 
 /* 
   Router
 
   It connects request with proper resources
-
-  1 User router
-  2 Post router
-  3 Comment router
-  4 Profile router
 */
 
 
@@ -25,16 +23,29 @@ router.get("/", (req, res) => {
 })
 
 // User router 
-router.use("/users", userRouter);
+router.post("/users", signUpValidator, userController.create);
+router.post("/users/login", loginValidator, userController.login);
+router.put("/users/user", auth, upload.single("avatar"), userController.update);
 
 // Post router 
-router.use("/posts", auth, postRouter);
+router.get("/posts/feed", auth, postController.feed)
+router.get("/posts", auth, postController.find)
+router.post("/posts", auth, upload.array("photos", 10), postController.create)
+router.get("/posts/:id", auth, postController.findOne)
+router.delete("/posts/:id", auth, postController.deleteOne)
+router.post("/posts/:id/like", auth, postController.like)
+router.delete("/posts/:id/unlike", auth, postController.unlike)
 
 // Comment router 
-router.use("/posts", auth, commentRouter);
+router.get("/posts/:id/comments", auth, commentController.find)
+router.post("/posts/:id/comments", auth, commentController.create)
+router.delete("/posts/comments/:id", auth, commentController.deleteOne)
 
 // Profile router 
-router.use("/profiles", auth, profileRouter);
+router.get("/profiles", auth, profileController.find);
+router.get("/profiles/:username", auth, profileController.findOne)
+router.post("/profiles/:username/follow", auth, profileController.follow)
+router.delete("/profiles/:username/unfollow", auth, profileController.unfollow)
 
 
 module.exports = router;
