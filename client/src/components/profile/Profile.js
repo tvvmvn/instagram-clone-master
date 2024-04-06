@@ -173,12 +173,12 @@ export default function Profile() {
 
         {isMaster && (
           <Link to="/create" className="inline-block text-sm font-semibold text-gray-400">
-            Write new post
+            Write new post :)
           </Link>
         )}
       </div>
 
-      <div className="border-t mt-4 mb-8"></div>
+      <div className="border-t mt-4 mb-4"></div>
 
       {/* Timeline */}
       {timeline.length > 0 ? (

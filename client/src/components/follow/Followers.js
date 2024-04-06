@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
-import { getFollowers, follow, unfollow } from "../../service/profile";
-import ProfileItem from "./ProfileItem";
+import { useParams, Link } from "react-router-dom";
+import { getFollowers } from "../../service/profile";
 import Spinner from "../Spinner";
 
 export default function Followers() {
@@ -31,54 +30,27 @@ export default function Followers() {
     }
   }
 
-  async function handleFollow(username) {
-    try {
-      await follow(username)
-
-      const updatedProfiles = profiles.map(profile => {
-        if (profile.username === username) {
-          return { ...profile, isFollowing: true }
-        }
-
-        return profile;
-      })
-
-      setProfiles(updatedProfiles);
-
-    } catch (error) {
-      alert(error)
-    }
-  }
-
-  async function handleUnfollow(username) {
-    try {
-      await unfollow(username)
-
-      const updatedProfiles = profiles.map(profile => {
-        if (profile.username === username) {
-          return { ...profile, isFollowing: false }
-        }
-
-        return profile;
-      })
-
-      setProfiles(updatedProfiles);
-
-    } catch (error) {
-      alert(error)
-    }
-  }
-
   const followerList = profiles.map(profile => (
-    <ProfileItem 
-      key={profile.id}
-      username={profile.username}
-      name={profile.name}
-      avatarUrl={profile.avatarUrl}
-      isFollowing={profile.isFollowing}
-      handleFollow={handleFollow}
-      handleUnfollow={handleUnfollow}
-    />
+    <li className="flex justify-between items-center mb-2">
+      {/* Profile */}
+      <Link
+        to={`/profiles/${profile.username}`}
+        className="inline-flex items-center"
+      >
+        <img
+          src={profile.avatarUrl}
+          className="w-12 h-12 object-cover rounded-full border"
+        />
+        <div className="ml-2">
+          <h3 className="block font-semibold">
+            {profile.username}
+          </h3>
+          <span className="block text-gray-400 text-sm">
+            {profile.name}
+          </span>
+        </div>
+      </Link>
+    </li>
   ))  
 
   return (

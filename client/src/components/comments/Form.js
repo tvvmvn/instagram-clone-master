@@ -22,6 +22,7 @@ export default function Form({ handleAddComment }) {
       <textarea
         rows="2"
         className="border w-full px-2 py-1 rounded resize-none"
+        placeholder="Add a comment..."
         value={content}
         onChange={({ target }) => setContent(target.value)}
       />

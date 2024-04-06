@@ -56,7 +56,9 @@ export default function ProfileEdit() {
   }, [])
 
   return (
-    <div className="mt-8 px-4">
+    <div className="px-4">
+      <h3 className="my-4 text-lg font-semibold">Edit Profile</h3>
+
       {/* Avatar form */}
       <div className="flex mb-4">
         <img
@@ -82,7 +84,7 @@ export default function ProfileEdit() {
       {/* Info form */}
       <form onSubmit={handleSubmit}>
         <div className="mb-2">
-          <label htmlFor="name" className="block">Name</label>
+          <label htmlFor="name" className="block font-semibold">Name</label>
           <input
             type="text"
             id="name"
@@ -94,7 +96,7 @@ export default function ProfileEdit() {
         </div>
 
         <div className="mb-2">
-          <label htmlFor="bio" className="block">Bio</label>
+          <label htmlFor="bio" className="block font-semibold">Bio</label>
           <textarea
             id="bio"
             rows="3"
@@ -116,7 +118,7 @@ export default function ProfileEdit() {
 
           <Link
             to={`/profiles/${user.username}`}
-            className="text-sm font-semibold rounded-lg px-4 py-2"
+            className="ml-2  px-4 py-2 text-sm font-semibold bg-gray-200 rounded-lg"
           >
             Cancel
           </Link>

@@ -24,6 +24,7 @@ exports.find = async (req, res, next) => {
   try {
     const where = {};
 
+    //  profiles who user is following
     if ("following" in req.query) {
       const user = await User
         .findOne({ username: req.query.following });
@@ -41,6 +42,7 @@ exports.find = async (req, res, next) => {
       where._id = followingIds;
     }
 
+    // followers of user
     if ("followers" in req.query) {
       const user = await User
         .findOne({ username: req.query.followers });
@@ -57,6 +59,7 @@ exports.find = async (req, res, next) => {
       where._id = followerIds;
     }
 
+    // profiles including a specific character in username
     if ("username" in req.query) {
       const patt = new RegExp(req.query.username, "i");
       

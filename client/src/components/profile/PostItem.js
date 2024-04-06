@@ -7,17 +7,17 @@ export default function PostItem({
   commentCount
 }) {
 
-  const thumbnail = (
-    <Link to={`/p/${id}`} className="block h-40 relative">
-      {/* Image */}
-      <img
-        src={thumbnailUrl}
-        className="w-full h-full object-cover"
-      />
+  return (
+    <li>
+      <Link to={`/p/${id}`} className="block h-40 relative">
+        {/* Image */}
+        <img
+          src={thumbnailUrl}
+          className="w-full h-full object-cover"
+        />
 
-      {/* Overlay on hover */}
-      <div className="absolute inset-0 bg-black/[0.2] opacity-0 hover:opacity-100">
-        <div className="flex flex-col justify-center h-full">
+        {/* Overlay on hover */}
+        <div className="absolute inset-0 bg-black/[0.2] flex flex-col justify-center opacity-0 hover:opacity-100">
           {/* Likes count */}
           <div className="flex justify-center">
             <svg
@@ -42,9 +42,7 @@ export default function PostItem({
             <span className="ml-2 text-white">{commentCount}</span>
           </div>
         </div>
-      </div>
-    </Link>
+      </Link>
+    </li>
   )
-
-  return <li>{thumbnail}</li>
 }
