@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
-import { getFollowers } from "../../service/profile";
-import Spinner from "../Spinner";
+import { getFollowingUsers } from "../service/profile";
+import Spinner from "./Spinner";
 
-export default function Followers() {
+export default function Following() {
 
   const { username } = useParams();
   const [error, setError] = useState(null);
@@ -19,7 +19,7 @@ export default function Followers() {
 
   async function fetchData() {
     try {
-      const data = await getFollowers(username);
+      const data = await getFollowingUsers(username);
       
       setProfiles(data.profiles);
 
@@ -30,7 +30,7 @@ export default function Followers() {
     }
   }
 
-  const followerList = profiles.map(profile => (
+  const followingList = profiles.map(profile => (
     <li className="flex justify-between items-center mb-2">
       {/* Profile */}
       <Link
@@ -55,14 +55,14 @@ export default function Followers() {
 
   return (
     <div className="px-2">
-      <h3 className="text-lg my-4 font-semibold">{username}'s followers</h3>
+      <h3 className="text-lg my-4 font-semibold">{username}'s following</h3>
       
-      {followerList.length > 0 ? (
+      {followingList.length > 0 ? (
         <ul>
-          {followerList}
+          {followingList}
         </ul>
       ) : (
-        <p>no followers.</p>
+        <p>no following profiles.</p>
       )}
 
       {!isLoaded && <Spinner />}

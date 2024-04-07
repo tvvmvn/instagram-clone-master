@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { FaMinus } from "react-icons/fa6";
 
 export default function Comment({ 
   id,
@@ -33,14 +34,7 @@ export default function Comment({
       </div>
 
       {/* Delete button */}
-      <svg 
-        className="h-2 cursor-pointer"
-        onClick={() => handleDelete(id)}
-        xmlns="http://www.w3.org/2000/svg" 
-        viewBox="0 0 448 512"
-      >
-        <path d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z"/>
-      </svg>
+      <FaMinus size="8" onClick={() => handleDelete(id)}/>
     </li>
   )
 }

@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import { Link, Outlet } from "react-router-dom";
 import AuthContext from "./auth/AuthContext";
+import { FaInstagram, FaRegCompass } from "react-icons/fa6";
 
 export default function Layout() {
 
@@ -17,33 +18,12 @@ export default function Layout() {
           <ul className="flex items-center">
             <li>
               <Link to="/" className="block">
-                <svg 
-                  className="w-6"
-                  viewBox="0 0 24 24" 
-                >
-                  <path 
-                    d="M9.005 16.545a2.997 2.997 0 0 1 2.997-2.997A2.997 2.997 0 0 1 15 16.545V22h7V11.543L12 2 2 11.543V22h7.005Z" 
-                    fill="none" 
-                    stroke="currentColor" 
-                    strokeLinejoin="round" 
-                    strokeWidth="2"
-                  >
-                  </path>
-                </svg>
+                <FaInstagram size="28" />
               </Link>
             </li>
             <li className="ml-2">
               <Link to="/explore" className="block">
-                <svg 
-                  className="w-6"
-                  viewBox="0 0 24 24" 
-                >
-                  <path 
-                    d="M19 10.5A8.5 8.5 0 1 1 10.5 2a8.5 8.5 0 0 1 8.5 8.5Z" 
-                    fill="none" 
-                    stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path>
-                  <line fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" x1="16.511" x2="22" y1="16.511" y2="22"></line>
-                </svg>
+                <FaRegCompass size="24" />
               </Link>
             </li>
             <li className="ml-2">

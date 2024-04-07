@@ -128,10 +128,16 @@ export default function Feed() {
           {postList}
         </ul>
       ) : (
-        <div className="p-8 text-center">
-          <Link to="/explore" className="text-blue-500">
-            Explore Instagram
-          </Link>
+          <div className="mt-12 h-[500px] flex justify-center items-center border-2 border-black">
+            <Link to="/explore">
+              <span className="text-2xl">
+                Explore
+              </span>
+              <img 
+                className="inline-block w-24 ml-2" 
+                src="/logo.png" 
+              />
+            </Link>
         </div>
       )}
 
