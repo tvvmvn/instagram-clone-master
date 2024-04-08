@@ -38,9 +38,8 @@ export default function Carousel({ photoUrls }) {
 
       {/* Prev button */}
       {!isFirstPhoto && (
-        <div className="absolute top-0 left-0 h-full flex items-center">
+        <div className="absolute top-0 left-4 h-full flex items-center">
           <FaCircleChevronLeft
-            className="ml-3"
             size="18" 
             color="white" 
             onClick={() => setPhotoIndex(photoIndex - 1)}
@@ -50,9 +49,8 @@ export default function Carousel({ photoUrls }) {
 
       {/* Next button */}
       {!isLastPhoto && (
-        <div className="absolute top-0 right-0 h-full flex items-center">
+        <div className="absolute top-0 right-4 h-full flex items-center">
           <FaCircleChevronRight
-            className="mr-3"
             size="18" 
             color="white" 
             onClick={() => setPhotoIndex(photoIndex + 1)}

@@ -51,7 +51,7 @@ export default function PostForm() {
           multiple={true}
           accept="image/png, image/jpg, image/jpeg, image/webp"
         />
-        <span className="px-4 py-2 font-semibold text-sm border-2 border-black rounded-lg">
+        <span className="px-4 py-2 font-semibold text-sm border border-black rounded-lg">
           Select Photos
         </span>
       </label>

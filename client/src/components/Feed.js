@@ -128,7 +128,7 @@ export default function Feed() {
           {postList}
         </ul>
       ) : (
-          <div className="mt-12 h-[500px] flex justify-center items-center border-2 border-black">
+          <div className="mt-12 h-[500px] flex justify-center items-center border border-black">
             <Link to="/explore">
               <span className="text-2xl">
                 Explore

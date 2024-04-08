@@ -5,12 +5,11 @@
 1. Development Map
 2. Dev Stack
 3. MVC Pattern
-4. Router (+ URL structure, path, query & params..)
-5. Module Integration Apporach
-6. HTTP Request & Response
-7. Middleware
-8. Authentication & Authorization
-9. NoSQL Guide
+4. Router 
+5. HTTP Request & Response
+6. Middleware
+7. Authentication & Authorization
+8. NoSQL Guide
 
 
 ## 1. Development Map
@@ -20,7 +19,7 @@
 - Processing data
 3. DataBase
 
-![Flow](/images/dev_flow.png)
+![Flow](/images/map.png)
 
 
 ## 2. Development Stack
@@ -34,28 +33,23 @@
 
 
 ## 3. MVC Pattern
-> Software architercture design pattern
+> Software Architercture Pattern
+
 1. M (Model) - Data Access Layer
 2. V (View) - Presentation Layer
 3. C (Controller) - Logic Layer
 
-![MVC](/images/mvc.jpeg)
+![MVC](/images/mvc.png)
 
 
 ## 4. Router
-> It connects request with proper resource
+> It connects client's request with proper resources
 
 ![Router](/images/router.png)
 
 
-## 5. Module Integration 
-> Bottom-Up Approach
-
-![Integration](images/bottom-up.webp)
-
-
-## 6. HTTP Request & Response
-![HTTP](/images/http.png)
+## 5. HTTP Request & Response
+![HTTP](/images/client-server.png)
 
 ### HTTP Request Method
 1. GET - Read Data
@@ -78,32 +72,26 @@
 
 
 
-## 7. Middleware
-> They process many tasks between client and server
+## 6. Middleware
+> They process many tasks between requests and response
 
 ![Middleware](/images/middleware.png)
 
 
-
-## 8. Authentication & Authorization 
+## 7. Authentication & Authorization 
 > Based on JWT (JSON Web Token)
 
-### Process 
 ![Auth](/images/auth_process.png)
 
-### JWT (JSON Web Token) Structure
-![JWT](/images/jwt.jpeg)
 
-
-
-## 9. NoSQL Guide
+## 8. NoSQL Guide
 
 ### Basic terms
 1. Collection - A basis for sorting related data in NoSQL.
 2. Document - Each data in collection
 3. Field - each property of document.
 
-![Collection](/images/collection.png)
+![Collection](/images/no-sql.png)
 
 ### Collection Join
 > Collection can be joined to make abundant data
