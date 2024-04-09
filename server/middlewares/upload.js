@@ -6,6 +6,10 @@ const opts = {}
 
 /* 
   File handler
+
+  1 storage option
+  2 filter option
+  3 limit option
 */
 
 

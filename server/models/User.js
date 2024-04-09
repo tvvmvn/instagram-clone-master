@@ -30,8 +30,9 @@ const userSchema = new Schema({
 /* 
   Virtual field
 
-  can add virtual field to schema when if it's needed.
-  virtual fields do not exist on database.
+  You can create virtual fields through joining collections.
+  It makes data abundant.
+  Virtual fields do not exist on database.
 */
 
 

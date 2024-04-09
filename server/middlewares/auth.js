@@ -8,7 +8,7 @@ require("dotenv").config();
 /*
   Authentication
 
-  A Server processes authentication based on JWT.
+  based on JWT
 */
 
 
