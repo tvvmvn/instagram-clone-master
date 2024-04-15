@@ -32,11 +32,12 @@ const createError = require("http-errors");
 
 exports.feed = async (req, res, next) => {
   try {
-    const followingUsers = await Following.find({ user: req.user._id });
-    const followingIds = followingUsers
-      .map(followingUser => followingUser.following);
+    const followingDocs = await Following.find({ user: req.user._id });
+
+    const followings = followingDocs
+      .map(followingDoc => followingDoc.following);
     
-    const where = { user: [...followingIds, req.user._id] }
+    const where = { user: [...followings, req.user._id] };
     const limit = req.query.limit || 5;
     const skip = req.query.skip || 0;
 
@@ -68,10 +69,11 @@ exports.find = async (req, res, next) => {
   try {
     const where = {}
 
+    // timeline
     if ("username" in req.query) {
       const user = await User.findOne({ username: req.query.username });
 
-      if (!user) { // Timeline
+      if (!user) { 
         throw new createError.NotFound("User is not found");
       }
       

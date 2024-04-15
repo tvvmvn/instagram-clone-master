@@ -7,16 +7,16 @@ const createError = require("http-errors");
   Profile controller
 
   1 find
-  Find users
+  Find profiles
   
   2 findOne
-  Find a user
+  Find a profile
 
   3 follow
-  Follow profile
+  Follow a profile
 
   4 unfollow
-  Unfollow profile
+  Unfollow a profile
 */
 
 
@@ -24,25 +24,25 @@ exports.find = async (req, res, next) => {
   try {
     const where = {};
 
-    //  profiles who user is following
+    //  profiles who a user is following
     if ("following" in req.query) {
       const user = await User
         .findOne({ username: req.query.following });
 
       if (!user) {
-        throw new createError.NotFound("Profile is not found")
+        throw new createError.NotFound("Profile is not found");
       }
 
-      const followingUsers = await Following
+      const followingDocs = await Following
         .find({ user: user._id })
 
-      const followingIds = followingUsers
-        .map(followingUser => followingUser.following);
+      const followings = followingDocs
+        .map(followingDoc => followingDoc.following);
 
-      where._id = followingIds;
+      where._id = followings;
     }
 
-    // followers of user
+    // followers of a user
     if ("followers" in req.query) {
       const user = await User
         .findOne({ username: req.query.followers });
@@ -51,19 +51,17 @@ exports.find = async (req, res, next) => {
         throw new createError.NotFound("Profile is not found");
       }
 
-      const followers = await Following
+      const followerDocs = await Following
         .find({ following: user._id })
 
-      const followerIds = followers.map(follower => follower.user);
+      const followers = followerDocs.map(followerDoc => followerDoc.user);
 
-      where._id = followerIds;
+      where._id = followers;
     }
 
-    // profiles including a specific character in username
-    if ("username" in req.query) {
-      const patt = new RegExp(req.query.username, "i");
-      
-      where.username = patt;
+    // profiles including specific characters in username
+    if ("username" in req.query) {      
+      where.username = new RegExp(req.query.username, "i");
     }
     
     const profileFields = "username name avatar avatarUrl bio";
@@ -114,6 +112,7 @@ exports.findOne = async (req, res, next) => {
 exports.follow = async (req, res, next) => {
   try {
     const profileFields = "username name avatar avatarUrl bio";
+
     const profile = await User
       .findOne({ username: req.params.username }, profileFields)
 
@@ -148,6 +147,7 @@ exports.follow = async (req, res, next) => {
 exports.unfollow = async (req, res, next) => {
   try {
     const profileFields = "username name avatar avatarUrl bio";
+    
     const profile = await User
       .findOne({ username: req.params.username }, profileFields)
 
