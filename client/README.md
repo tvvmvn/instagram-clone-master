@@ -5,17 +5,17 @@
 ![Prototype](/client/public/prototype.png)
 
 
-## Libraries for the app
+## Service
+Library for request to server
 
-1. Service \
-It handles requests to server
+1. User requests
+2. Post requests
+3. Comment requests
+4. Profile requests
 
-- User requests
-- Post requests
-- Comment requests
-- Profile requests
 
-2. Validator \
+## Utilities 
+1. validator \
 It implements form validation in client side
 
 
