@@ -55,7 +55,7 @@ export default function Followers() {
   ))  
 
   return (
-    <div className="px-2">
+    <div className="px-4">
       <h3 className="text-lg my-4 font-semibold">{username}'s followers</h3>
       
       {followerList.length > 0 ? (

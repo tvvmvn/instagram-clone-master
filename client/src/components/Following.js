@@ -55,7 +55,7 @@ export default function Following() {
   ))  
 
   return (
-    <div className="px-2">
+    <div className="px-4">
       <h3 className="text-lg my-4 font-semibold">{username}'s following</h3>
       
       {followingList.length > 0 ? (

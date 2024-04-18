@@ -23,7 +23,7 @@ export default function PostTemplate({
   const [modalOpen, setModalOpen] = useState(false);
 
   return (
-    <div className="mt-4 bg-white">
+    <div className="mt-4">
       {/* Author area */}
       <div className="px-2 mb-2 flex justify-between items-center">
         <Link
@@ -55,53 +55,53 @@ export default function PostTemplate({
       {/* Carousel */}
       <Carousel photoUrls={photoUrls} />
 
-      <div className="mt-2 px-2">
-        {/* Likes/Unlikes and Comment button */}
-        <div className="flex">
-          {liked ? (
-            <FaHeart 
-              size="24"
-              className="fill-red-500" 
-              onClick={() => handleUnlike(id)} 
-            />
-          ) : (
-            <FaRegHeart 
-              size="24"
-              onClick={() => handleLike(id)} 
-            />
-          )}
-
-          <Link to={`/p/${id}/comments`} className="ml-2">
-            <FaRegComment size="24" />
-          </Link>
-        </div>
-
-        {/* Likes count */}
-        <p className="text-sm my-2">{likesCount} likes</p>
-
-        {/* Photo caption */}
-        {caption && (
-          <p className="my-4">
-            <Link to={`/profiles/${username}`} className="font-semibold">
-              {username}
-            </Link>
-            {" "}
-            {caption}
-          </p>
+      {/* Likes/Unlikes and Comment button */}
+      <div className="mt-2 px-2 flex">
+        {liked ? (
+          <FaHeart 
+            size="24"
+            className="fill-red-500" 
+            onClick={() => handleUnlike(id)} 
+          />
+        ) : (
+          <FaRegHeart 
+            size="24"
+            onClick={() => handleLike(id)} 
+          />
         )}
 
-        {/* Comment link */}
-        {commentCount > 0 && (
-          <p className="text-gray-400 text-sm my-2">
-            <Link to={`/p/${id}/comments`}> 
-              View all {commentCount} Comments
-            </Link>
-          </p>
-        )}
-
-        {/* Post date */}
-        <p className="text-gray-400 text-xs">{displayDate}</p>
+        <Link to={`/p/${id}/comments`} className="ml-2">
+          <FaRegComment size="24" />
+        </Link>
       </div>
+
+      {/* Likes count */}
+      <p className="text-sm mt-2 px-2">{likesCount} likes</p>
+
+      {/* Photo caption */}
+      {caption && (
+        <p className="mt-4 px-2">
+          <Link to={`/profiles/${username}`} className="font-semibold">
+            {username}
+          </Link>
+          {" "}
+          {caption}
+        </p>
+      )}
+
+      {/* Comment link */}
+      {commentCount > 0 && (
+        <p className="mt-2 px-2 text-gray-400 text-sm">
+          <Link to={`/p/${id}/comments`}> 
+            View all {commentCount} Comments
+          </Link>
+        </p>
+      )}
+
+      {/* Post date */}
+      <p className="mt-2 px-2 text-gray-400 text-xs">
+        {displayDate}
+      </p>
     </div>
   )
 }
