@@ -61,7 +61,7 @@ export default function PostTemplate({
           {liked ? (
             <FaHeart 
               size="24"
-              color="red" 
+              className="fill-red-500" 
               onClick={() => handleUnlike(id)} 
             />
           ) : (

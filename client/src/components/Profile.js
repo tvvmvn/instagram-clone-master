@@ -2,8 +2,7 @@ import { useState, useEffect, useContext } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import AuthContext from "./auth/AuthContext";
 import { getProfile, getTimeline, follow, unfollow } from "../service/profile";
-import Spinner from "./Spinner";
-import { FaArrowRightFromBracket, FaHeart, FaComment } from "react-icons/fa6";
+import { FaCircleNotch, FaArrowRightFromBracket, FaHeart, FaComment } from "react-icons/fa6";
 
 export default function Profile() {
 
@@ -80,11 +79,11 @@ export default function Profile() {
         {/* Overlay on hover */}
         <div className="absolute inset-0 bg-black/[0.2] flex flex-col justify-center opacity-0 hover:opacity-100">
           <div className="flex justify-center">
-            <FaHeart color="white" size="20" />
+            <FaHeart className="fill-white" size="20" />
             <span className="ml-2 text-white">{post.likesCount}</span>
           </div>
           <div className="flex justify-center">
-            <FaComment color="white" size="20" />
+            <FaComment className="fill-white" size="20" />
             <span className="ml-2 text-white">{post.commentCount}</span>
           </div>
         </div>
@@ -93,7 +92,14 @@ export default function Profile() {
   ))
 
   if (!profile) {
-    return <Spinner />
+    return (
+      <div className="flex justify-center my-4">
+        <FaCircleNotch
+          size="32"
+          className="animate-spin fill-blue-400"
+        />
+      </div>
+    )
   }
 
   return (

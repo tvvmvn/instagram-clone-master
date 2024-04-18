@@ -15,27 +15,15 @@
 export function isEmail(email) {
   const patt = /[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,}$/
   
-  if (email.match(patt)) {
-    return true;
-  } 
-  
-  return false;   
+  return patt.test(email);  
 }
 
 export function isUsername(username) {
   const patt = /^[a-zA-Z0-9]{5,}$/
-  
-  if (username.match(patt)) {
-    return true;
-  }
-  
-  return false;
+
+  return patt.test(username);
 }
 
 export function isPassword(password) {
-  if (password.trim().length >= 5) {
-    return true;
-  }
-  
-  return false;
+  return password.trim().length >= 5;
 }

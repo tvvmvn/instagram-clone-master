@@ -5,7 +5,7 @@ export default function AuthProvider({ children }) {
   const initialUser = JSON.parse(localStorage.getItem("authUser"));
   const [user, setUser] = useState(initialUser);
 
-  // user state listener
+  // synchronize localStorage
   useEffect(() => {
     if (user) {
       localStorage.setItem("authUser", JSON.stringify(user));

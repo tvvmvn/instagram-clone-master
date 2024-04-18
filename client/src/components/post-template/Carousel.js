@@ -41,7 +41,7 @@ export default function Carousel({ photoUrls }) {
         <div className="absolute top-0 left-4 h-full flex items-center">
           <FaCircleChevronLeft
             size="18" 
-            color="white" 
+            className="fill-white/80"
             onClick={() => setPhotoIndex(photoIndex - 1)}
           />
         </div>
@@ -52,7 +52,7 @@ export default function Carousel({ photoUrls }) {
         <div className="absolute top-0 right-4 h-full flex items-center">
           <FaCircleChevronRight
             size="18" 
-            color="white" 
+            className="fill-white/80"
             onClick={() => setPhotoIndex(photoIndex + 1)}
           />
         </div>
@@ -60,7 +60,7 @@ export default function Carousel({ photoUrls }) {
 
       {/* Indicator */}
       {photoUrls.length > 1 && (
-        <ul className="absolute bottom-0 w-full pb-4 flex justify-center gap-2">
+        <ul className="absolute bottom-4 w-full flex justify-center gap-2">
           {dots}
         </ul>
       )}

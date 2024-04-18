@@ -1,9 +1,10 @@
 import { useState, useEffect, useContext } from "react"
 import { Link } from "react-router-dom";
-import PostTemplate from "./post-template/PostTemplate";
 import { getFeed, deletePost, likePost, unlikePost } from "../service/post";
-import Spinner from "./Spinner";
 import AuthContext from "./auth/AuthContext";
+import PostTemplate from "./post-template/PostTemplate";
+import { FaCircleNotch } from "react-icons/fa6";
+
 
 export default function Feed() {
   
@@ -153,7 +154,14 @@ export default function Feed() {
         </div>  
       )}
 
-      {!isLoaded && <Spinner />}
+      {!isLoaded && (
+        <div className="flex justify-center my-4">
+          <FaCircleNotch
+            size="32"
+            className="animate-spin fill-blue-400"
+          />
+        </div>
+      )}
 
       {error && <p className="text-red-500">{error.message}</p>}
     </>  

@@ -1,8 +1,8 @@
 import { useState, useContext, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import AuthContext from "./auth/AuthContext";
 import { signIn } from "../service/user";
 import { isEmail, isPassword } from "../utils/validator";
+import AuthContext from "./auth/AuthContext";
 
 export default function Login() {
 

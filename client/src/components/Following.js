@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { getFollowingUsers } from "../service/profile";
-import Spinner from "./Spinner";
+import { FaCircleNotch } from "react-icons/fa6";
+
 
 export default function Following() {
 
@@ -65,7 +66,14 @@ export default function Following() {
         <p>no following profiles.</p>
       )}
 
-      {!isLoaded && <Spinner />}
+      {!isLoaded && (
+        <div className="flex justify-center my-4">
+          <FaCircleNotch
+            size="32"
+            className="animate-spin fill-blue-400"
+          />
+        </div>
+      )}
 
       {error && (
         <p className="text-red-500">{error.message}</p>

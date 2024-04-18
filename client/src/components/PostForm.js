@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { createPost } from "../service/post";
+import { FaCamera } from "react-icons/fa6";
 
 export default function PostForm() {
 
@@ -52,7 +53,7 @@ export default function PostForm() {
           accept="image/png, image/jpg, image/jpeg, image/webp"
         />
         <span className="px-4 py-2 font-semibold text-sm border border-black rounded-lg">
-          Select Photos
+          Select Photos :P
         </span>
       </label>
 
