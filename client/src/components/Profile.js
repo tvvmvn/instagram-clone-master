@@ -104,72 +104,40 @@ export default function Profile() {
 
   return (
     <div className="mt-8">
+      {/* Profile Avatar & Info */}
       <div className="flex px-4">
-        {/* Avatar */}
         <img
           src={profile.avatarUrl}
           className="w-20 h-20 object-cover border rounded-full"
         />
 
-        {/* Next to avatar */}
-        <div className="grow ml-8">
-          <div className="flex mb-4">
-            <h3 className="flex items-center">{profile.username}</h3>
-            
-            {isMaster && (
-              <div className="flex ml-4">
-                <Link to="/accounts/edit" className="bg-gray-200 rounded-lg px-4 py-2 text-sm font-semibold">
-                  Edit profile
-                </Link>
-
-                <button
-                  className="ml-2 px-4 py-2 text-sm bg-gray-200 font-semibold rounded-lg"
-                  onClick={handleSignOut}
-                >
-                  <FaArrowRightFromBracket />
-                </button>
-              </div>
-            )}
-
-            {!isMaster && (
-              profile.isFollowing ? (
-                <button
-                  className="ml-2 bg-gray-200 text-sm px-4 py-2 font-semibold p-2 rounded-lg"
-                  onClick={handleUnfollow}
-                >
-                  Following
-                </button>
-              ) : (
-                <button
-                  className="ml-2 bg-blue-500 text-white text-sm px-4 py-2 font-semibold p-2 rounded-lg"
-                  onClick={handleFollow}
-                >
-                  Follow
-                </button>
-              )
-            )}
-          </div>
-
-          <ul className="flex">
-            <li className="text-sm">
-              {profile.postCount} photos
-            </li>
-            <li className="ml-4 text-sm">
-              <Link to={`/profiles/${username}/followers`}>
-                {profile.followerCount} followers
-              </Link>
-            </li>
-            <li className="ml-4 text-sm">
-              <Link to={`/profiles/${username}/following`}>
-                {profile.followingCount} following
-              </Link>
-            </li>
-          </ul>
-        </div>
+        <ul className="ml-2 grow grid grid-cols-3">
+          <li className="flex flex-col justify-center items-center">
+            <span className="font-semibold">{profile.postCount}</span>
+            <span>Posts</span>
+          </li>
+          <li className="flex flex-col justify-center items-center">
+            <Link
+              to={`/profiles/${username}/followers`}
+              className="font-semibold"
+            >
+              {profile.followerCount}
+            </Link>
+            <span>Followers</span>
+          </li>
+          <li className="flex flex-col justify-center items-center">
+            <Link
+              to={`/profiles/${username}/following`}
+              className="font-semibold"
+            >
+              {profile.followingCount}
+            </Link>
+            <span>Following</span>
+          </li>
+        </ul>
       </div>
 
-
-      {/* Name & bio, New post button */}
+      {/* Name & bio */}
       <div className="mt-4 px-4">
         {profile.name && (
           <h3 className="font-semibold mb-2">
@@ -182,23 +150,67 @@ export default function Profile() {
             {profile.bio}
           </p>
         )}
-
-        {isMaster && (
-          <Link to="/create" className="inline-block text-sm font-semibold text-gray-400">
-            Write new post
-          </Link>
-        )}
       </div>
 
-      <div className="border-t mt-4 mb-4"></div>
+      {/* Buttons about accounts */}
+      {isMaster && (
+        <div className="mt-8 flex px-4">
+          <div className="grow grid grid-cols-2 gap-2">
+            <Link
+              to="/create"
+              className="bg-gray-200 rounded-lg px-4 py-2 text-sm text-center font-semibold"
+            >
+              New post
+            </Link>
+
+            <Link
+              to="/accounts/edit"
+              className="bg-gray-200 rounded-lg px-4 py-2 text-sm text-center font-semibold"
+            >
+              Edit profile
+            </Link>
+          </div>
+
+          <button
+            className="ml-2 px-4 py-2 text-sm bg-gray-200 font-semibold rounded-lg"
+            onClick={handleSignOut}
+          >
+            <FaArrowRightFromBracket />
+          </button>
+        </div>
+      )}
+
+      {/* Follow & Unfollow button */}
+      {!isMaster && (
+        <div className="mt-8 grid grid-cols-2 gap-2 px-4">
+          {profile.isFollowing ? (
+            <button
+              className="bg-gray-200 text-sm px-4 py-2 font-semibold p-2 rounded-lg"
+              onClick={handleUnfollow}
+            >
+              Following
+            </button>
+          ) : (
+            <button
+              className="bg-blue-500 text-white text-sm px-4 py-2 font-semibold p-2 rounded-lg"
+              onClick={handleFollow}
+            >
+              Follow
+            </button>
+          )}
+          <button className="bg-gray-200 text-sm px-4 py-2 font-semibold p-2 rounded-lg">
+            Message
+          </button>
+        </div>
+      )}
 
       {/* Timeline */}
       {timeline.length > 0 ? (
-        <ul className="grid grid-cols-3 gap-1">
+        <ul className="mt-8 grid grid-cols-3 gap-1">
           {timeline}
         </ul>
       ) : (
-        <p className="text-center">{profile.username} has no posts.</p>
+        <p className="mt-8 text-center">{profile.username} has no posts.</p>
       )}
     </div>
   )

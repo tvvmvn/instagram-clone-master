@@ -32,22 +32,22 @@ export default function ProfileEdit() {
     }
   }
 
-  async function handleFile(e) {
-    try {
-      const file = e.target.files[0];
+  async function handleFile(file) {
+    if (file) {
+      try {
+        const formData = new FormData();
 
-      const formData = new FormData();
+        formData.append("avatar", file);
 
-      formData.append("avatar", file);
+        const { user } = await updateAvatar(formData);
 
-      const { user } = await updateAvatar(formData);
+        setUser(user);
 
-      setUser(user);
-
-      alert("Done");
-
-    } catch (error) {
-      alert(error)
+        alert("Done");
+        
+      } catch (error) {
+        alert(error)
+      }
     }
   }
 
@@ -66,15 +66,15 @@ export default function ProfileEdit() {
           className="w-16 h-16 object-cover rounded-full border"
         />
 
-        <div className="flex flex-col grow justify-center ml-4">
+        <div className="grow ml-4">
           <h3>{user.username}</h3>
 
           <label className="text-sm font-semibold text-blue-500 cursor-pointer">
             <input
               type="file"
               className="hidden"
-              onChange={handleFile}
-              accept="image/png, image/jpg, image/jpeg"
+              onChange={({ target }) => handleFile(target.files[0])}
+              accept="image/png, image/jpg, image/jpeg, image/webp"
             />
             Change Photo
           </label>

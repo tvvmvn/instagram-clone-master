@@ -9,6 +9,8 @@ export default function PostForm() {
   const [caption, setCaption] = useState("");
   const navigate = useNavigate();
 
+  // console.log(files);
+
   async function handleSubmit(e) {
     try {
       e.preventDefault();
