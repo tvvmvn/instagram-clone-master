@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import Carousel from "./Carousel";
 import Modal from "./Modal";
@@ -23,7 +23,7 @@ export default function PostTemplate({
   const [modalOpen, setModalOpen] = useState(false);
 
   return (
-    <div className="mt-4">
+    <div className="my-4">
       {/* Author area */}
       <div className="px-2 mb-2 flex justify-between items-center">
         <Link
@@ -55,7 +55,7 @@ export default function PostTemplate({
       {/* Carousel */}
       <Carousel photoUrls={photoUrls} />
 
-      {/* Likes/Unlikes and Comment button */}
+      {/* Likes/Unlikes, Comment button */}
       <div className="mt-2 px-2 flex">
         {liked ? (
           <FaHeart 
@@ -99,9 +99,9 @@ export default function PostTemplate({
       )}
 
       {/* Post date */}
-      <p className="mt-2 px-2 text-gray-400 text-xs">
+      <small className="block mt-2 px-2 text-gray-400 text-xs">
         {displayDate}
-      </p>
+      </small>
     </div>
   )
 }

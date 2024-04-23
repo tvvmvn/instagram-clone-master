@@ -37,14 +37,14 @@ export default function Explore() {
   }
 
   const profileList = profiles.map(profile => (
-    <li className="flex items-center justify-between my-2">
+    <li className="flex justify-between mb-2">
       <Link
         to={`/profiles/${profile.username}`}
-        className="flex items-center"
+        className="flex"
       >
         <img
           src={profile.avatarUrl}
-          className="w-10 h-10 object-cover rounded-full"
+          className="w-10 h-10 object-cover rounded-full border"
         />
         <div className="ml-2">
           <h3 className="block font-semibold">
@@ -57,8 +57,10 @@ export default function Explore() {
       </Link>
 
       {profile.isFollowing && (
-        <div className="ml-2 text-sm text-blue-500 font-semibold">
-          following
+        <div className="flex items-center">
+          <span className="text-sm text-blue-500 font-semibold">
+            following
+          </span>
         </div>
       )}
     </li>
@@ -91,8 +93,6 @@ export default function Explore() {
           />
         </div>
       )}
-
-
 
       {error && (
         <p className="text-red-500">{error.message}</p>

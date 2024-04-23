@@ -11,9 +11,9 @@ export default function Comment({
 }) {
   
   return (
-    <li className="py-4 flex border-b">
+    <li className="py-4 flex">
       {/* User avatar */}
-      <div className="shrink-0">
+      <div className="flex-none">
         <Link to={`/profiles/${username}`}>
           <img
             src={avatarUrl}
@@ -24,17 +24,25 @@ export default function Comment({
 
       {/* Comment Content */}
       <div className="grow ml-4">
-        <Link to={`/profiles/${username}`} className="font-semibold">
-          {username} {" "}
-        </Link>
-        {content}
         <p>
-          <small className="font-xs text-gray-400">{displayDate}</small>
+          <Link to={`/profiles/${username}`} className="font-semibold">
+            {username} {" "}
+          </Link>
+          <span>
+            {content}
+          </span>
         </p>
+        <small className="mt-2 block font-xs text-gray-400">
+          {displayDate}
+        </small>
       </div>
 
       {/* Delete button */}
-      <FaMinus size="8" onClick={() => handleDelete(id)}/>
+      <FaMinus 
+        size="8" 
+        className="flex-none cursor-pointer"
+        onClick={() => handleDelete(id)}
+      />
     </li>
   )
 }

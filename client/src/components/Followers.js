@@ -32,8 +32,7 @@ export default function Followers() {
   }
 
   const followerList = profiles.map(profile => (
-    <li className="flex justify-between items-center mb-2">
-      {/* Profile */}
+    <li className="mb-2">
       <Link
         to={`/profiles/${profile.username}`}
         className="inline-flex items-center"
@@ -43,7 +42,7 @@ export default function Followers() {
           className="w-12 h-12 object-cover rounded-full border"
         />
         <div className="ml-2">
-          <h3 className="block font-semibold">
+          <h3 className="font-semibold">
             {profile.username}
           </h3>
           <span className="block text-gray-400 text-sm">
