@@ -8,13 +8,12 @@ export default function Carousel({ photoUrls }) {
   const isLastPhoto = photoIndex === photoUrls.length - 1;
 
   const photoList = photoUrls.map(photoUrl => (
-    <li key={photoUrl} className="w-full h-[450px] flex-none">
-      <img
-        src={photoUrl}
-        className="w-full h-full object-cover"
-        alt={photoUrl}
-      />
-    </li>
+    <img
+      key={photoUrl}
+      src={photoUrl}
+      className="w-full h-full flex-none object-cover"
+      alt={photoUrl}
+    />
   ))
 
   const dots = photoUrls.map((photoUrl, dotIndex) => (
@@ -27,10 +26,10 @@ export default function Carousel({ photoUrls }) {
   ))
 
   return (
-    <div className="overflow-x-hidden relative">
+    <div className="w-full h-[450px] overflow-x-hidden relative">
       {/* Photos */}
       <ul
-        className="flex transition"
+        className="w-full h-full flex transition"
         style={{ transform: `translateX(-${photoIndex * 100}%)`}}
       >
         {photoList}
