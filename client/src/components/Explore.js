@@ -10,6 +10,8 @@ export default function Explore() {
   const inputRef = useRef(null);
 
   useEffect(() => {
+    document.title = "Explore";
+    
     inputRef.current.focus();
   }, [])
 
@@ -38,10 +40,7 @@ export default function Explore() {
 
   const profileList = profiles.map(profile => (
     <li className="flex justify-between mb-2">
-      <Link
-        to={`/profiles/${profile.username}`}
-        className="flex"
-      >
+      <Link to={`/profiles/${profile.username}`} className="flex">
         <img
           src={profile.avatarUrl}
           className="w-10 h-10 object-cover rounded-full border"
@@ -57,11 +56,9 @@ export default function Explore() {
       </Link>
 
       {profile.isFollowing && (
-        <div className="flex items-center">
-          <span className="text-sm text-blue-500 font-semibold">
-            following
-          </span>
-        </div>
+        <span className="flex items-center text-sm text-blue-500 font-semibold">
+          following
+        </span>
       )}
     </li>
   ))

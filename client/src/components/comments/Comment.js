@@ -13,14 +13,12 @@ export default function Comment({
   return (
     <li className="py-4 flex">
       {/* User avatar */}
-      <div className="flex-none">
-        <Link to={`/profiles/${username}`}>
-          <img
-            src={avatarUrl}
-            className="w-8 h-8 object-cover border rounded-full"
-          />
-        </Link>
-      </div>
+      <Link to={`/profiles/${username}`} className="flex-none">
+        <img
+          src={avatarUrl}
+          className="w-8 h-8 object-cover border rounded-full"
+        />
+      </Link>
 
       {/* Comment Content */}
       <div className="grow ml-4">

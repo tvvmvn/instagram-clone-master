@@ -68,7 +68,7 @@ export default function Profile() {
   }
 
   const timeline = posts.map(post => (
-    <li>
+    <li key={post.id}>
       <Link to={`/p/${post.id}`} className="block h-40 relative">
         {/* Image */}
         <img

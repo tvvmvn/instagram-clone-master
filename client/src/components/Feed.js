@@ -20,7 +20,7 @@ export default function Feed() {
   console.log(posts);
 
   useEffect(() => {
-    fetchData()
+    fetchData();
   }, [skip])
 
   async function fetchData() {
@@ -30,7 +30,7 @@ export default function Feed() {
 
       const data = await getFeed(limit, skip);
 
-      const  updatedPosts = [...posts, ...data.posts];
+      const updatedPosts = [...posts, ...data.posts];
       
       setPosts(updatedPosts);
       setPostCount(data.postCount);
@@ -131,27 +131,20 @@ export default function Feed() {
       ) : (
           <div className="mt-12 h-[500px] flex justify-center items-center border border-black">
             <Link to="/explore">
-              <span className="text-2xl">
-                Explore
-              </span>
-              <img 
-                className="inline-block w-24 ml-2" 
-                src="/logo.png" 
-              />
+              <span className="text-2xl">Explore</span>
+              <img className="inline-block w-24 ml-2" src="/logo.png" />
             </Link>
         </div>
       )}
 
       {/* Show more button */}
       {postCount > posts.length && (
-        <div className="flex justify-center my-2">
-          <button
-            className="p-1 text-blue-500 font-semibold"
-            onClick={() => setSkip(skip + limit)}
-          >
-            Show more
-          </button>
-        </div>  
+        <button
+          className="w-full p-2 text-blue-500 font-semibold"
+          onClick={() => setSkip(skip + limit)}
+        >
+          Show more
+        </button>
       )}
 
       {!isLoaded && (
@@ -163,7 +156,9 @@ export default function Feed() {
         </div>
       )}
 
-      {error && <p className="text-red-500">{error.message}</p>}
+      {error && (
+        <p className="text-red-500">{error.message}</p>
+      )}
     </>  
   )
 }
